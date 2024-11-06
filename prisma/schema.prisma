@@ -14,15 +14,15 @@ datasource db {
 }
 
 model Transaction {
-  id            String              @id @default(uuid())
+  id            String                   @id @default(uuid())
   name          String
   type          TransactionType
-  amount        Decimal             @db.Decimal(10, 2)
+  amount        Decimal                  @db.Decimal(10, 2)
   category      TransactionCategory
-  paymentMethod PaymentMethod
+  paymentMethod TransactionPaymentMethod
   date          DateTime
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
   userId        String
 }
 
@@ -31,7 +31,6 @@ enum TransactionType {
   EXPENSE
   TRANSFER
   INVESTMENT
-  RESCUE
 }
 
 enum TransactionCategory {
@@ -43,14 +42,15 @@ enum TransactionCategory {
   GIFT
   GOALS
   HEALTH
-  INVESTMENT
+  INVESTMENT_DEPOSIT
+  INVESTMENT_RETURN
+  INVESTMENT_WITHDRAW
   LIVING
   LOAN
   OTHER
   PERSONAL
   PET
   REWARD
-  RETURN_ON_INVESTMENT
   SALE
   SALARY
   SUBSCRIPTION
@@ -60,7 +60,7 @@ enum TransactionCategory {
   VARIABLE
 }
 
-enum PaymentMethod {
+enum TransactionPaymentMethod {
   CREDIT
   DEBIT
 }

@@ -36,18 +36,9 @@ const TransactionTypeBadge = ({ transaction }: TransactionTypeBadgeProps) => {
 
   if (transaction.type === TransactionType.INVESTMENT) {
     return (
-      <Badge className="bg-yellow-500 bg-opacity-10 font-bold text-yellow-500 hover:bg-yellow-500 hover:bg-opacity-10">
-        <CircleIcon className="mr-2 fill-yellow-500" size={10} />
-        Aporte
-      </Badge>
-    );
-  }
-
-  if (transaction.type === TransactionType.RESCUE) {
-    return (
       <Badge className="bg-yellow-300 bg-opacity-10 font-bold text-yellow-300 hover:bg-yellow-300 hover:bg-opacity-10">
         <CircleIcon className="mr-2 fill-yellow-300" size={10} />
-        Resgate
+        Investimento
       </Badge>
     );
   }
