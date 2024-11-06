@@ -18,7 +18,7 @@ const TransactionTypeBadge = ({ transaction }: TransactionTypeBadgeProps) => {
 
   if (transaction.type === TransactionType.EXPENSE) {
     return (
-      <Badge className="bg-danger bg-opacity-10 font-bold text-danger">
+      <Badge className="bg-danger bg-opacity-10 font-bold text-danger hover:bg-danger hover:bg-opacity-10">
         <CircleIcon className="mr-2 fill-danger" size={10} />
         Despesa
       </Badge>
@@ -27,7 +27,7 @@ const TransactionTypeBadge = ({ transaction }: TransactionTypeBadgeProps) => {
 
   if (transaction.type === TransactionType.TRANSFER) {
     return (
-      <Badge className="bg-white bg-opacity-10 font-bold text-white">
+      <Badge className="bg-white bg-opacity-10 font-bold text-white hover:bg-white hover:bg-opacity-10">
         <CircleIcon className="mr-2 fill-white" size={10} />
         Transferência
       </Badge>
@@ -36,7 +36,7 @@ const TransactionTypeBadge = ({ transaction }: TransactionTypeBadgeProps) => {
 
   if (transaction.type === TransactionType.INVESTMENT) {
     return (
-      <Badge className="bg-yellow-500 bg-opacity-10 font-bold text-yellow-500">
+      <Badge className="bg-yellow-500 bg-opacity-10 font-bold text-yellow-500 hover:bg-yellow-500 hover:bg-opacity-10">
         <CircleIcon className="mr-2 fill-yellow-500" size={10} />
         Aporte
       </Badge>
@@ -45,7 +45,7 @@ const TransactionTypeBadge = ({ transaction }: TransactionTypeBadgeProps) => {
 
   if (transaction.type === TransactionType.RESCUE) {
     return (
-      <Badge className="bg-yellow-300 bg-opacity-10 font-bold text-yellow-300">
+      <Badge className="bg-yellow-300 bg-opacity-10 font-bold text-yellow-300 hover:bg-yellow-300 hover:bg-opacity-10">
         <CircleIcon className="mr-2 fill-yellow-300" size={10} />
         Resgate
       </Badge>
