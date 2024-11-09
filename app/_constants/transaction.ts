@@ -4,6 +4,11 @@ import {
   TransactionType,
 } from "@prisma/client";
 
+export const TRANSACTION_PAYMENT_METHOD_ICONS = {
+  [TransactionPaymentMethod.CREDIT]: "credit-card.svg",
+  [TransactionPaymentMethod.DEBIT]: "pix.svg",
+};
+
 export const TRANSACTION_TYPE_LABELS = {
   [TransactionType.EXPENSE]: "Despesa",
   [TransactionType.GAIN]: "Receita",
