@@ -13,6 +13,7 @@ import { TransactionType } from "@prisma/client";
 import { TransactionPercentagePerType } from "@/app/_data/get-dashboard/types";
 import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import PercentageItem from "./percentage-item";
+import EmptyListFeedback from "@/app/_components/empty-list-feedback";
 
 const chartConfig = {
   [TransactionType.INVESTMENT]: {
@@ -60,47 +61,53 @@ const TransactionsPieChart = ({
     },
   ];
 
+  const hasNoData = chartData.every((item) => item.amount === 0);
+
   return (
     <Card className="flex flex-col p-6">
-      <CardContent className="flex-1 pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+      {hasNoData ? (
+        <EmptyListFeedback message="Nenhuma transação registrada" />
+      ) : (
+        <CardContent className="flex-1 pb-0">
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto aspect-square max-h-[250px]"
+          >
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Pie
+                data={chartData}
+                dataKey="amount"
+                nameKey="type"
+                innerRadius={60}
+              />
+            </PieChart>
+          </ChartContainer>
+
+          <div className="space-y-2">
+            <PercentageItem
+              icon={<TrendingUpIcon size={16} className="text-primary" />}
+              title="Receita"
+              value={typesPercentage[TransactionType.GAIN]}
             />
-            <Pie
-              data={chartData}
-              dataKey="amount"
-              nameKey="type"
-              innerRadius={60}
+
+            <PercentageItem
+              icon={<TrendingDownIcon size={16} className="text-red-500" />}
+              title="Despesas"
+              value={typesPercentage[TransactionType.EXPENSE]}
             />
-          </PieChart>
-        </ChartContainer>
 
-        <div className="space-y-2">
-          <PercentageItem
-            icon={<TrendingUpIcon size={16} className="text-primary" />}
-            title="Receita"
-            value={typesPercentage[TransactionType.GAIN]}
-          />
-
-          <PercentageItem
-            icon={<TrendingDownIcon size={16} className="text-red-500" />}
-            title="Despesas"
-            value={typesPercentage[TransactionType.EXPENSE]}
-          />
-
-          <PercentageItem
-            icon={<PiggyBankIcon size={16} />}
-            title="Investido"
-            value={typesPercentage[TransactionType.INVESTMENT]}
-          />
-        </div>
-      </CardContent>
+            <PercentageItem
+              icon={<PiggyBankIcon size={16} />}
+              title="Investido"
+              value={typesPercentage[TransactionType.INVESTMENT]}
+            />
+          </div>
+        </CardContent>
+      )}
     </Card>
   );
 };

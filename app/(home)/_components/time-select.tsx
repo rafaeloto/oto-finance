@@ -12,7 +12,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 const MONTH_OPTIONS = [
   { value: "01", label: "Janeiro" },
   { value: "02", label: "Fevereiro" },
-  { value: "03", label: "Maro" },
+  { value: "03", label: "Março" },
   { value: "04", label: "Abril" },
   { value: "05", label: "Maio" },
   { value: "06", label: "Junho" },
