@@ -15,6 +15,7 @@ import { BotIcon, Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { generateAiReport } from "../_actions/generate-ai-report";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import Markdown from "react-markdown";
 import Link from "next/link";
 
 interface AiReportButtonProps {
@@ -30,7 +31,6 @@ const AiReportButton = ({ month, hasPremiumPlan }: AiReportButtonProps) => {
     try {
       setReportIsLoading(true);
       const report = await generateAiReport({ month });
-      console.log({ report });
       setReport(report);
     } catch (error) {
       console.error(error);
@@ -38,7 +38,6 @@ const AiReportButton = ({ month, hasPremiumPlan }: AiReportButtonProps) => {
       setReportIsLoading(false);
     }
   };
-  console.log({ report });
 
   return (
     <Dialog>
@@ -60,8 +59,8 @@ const AiReportButton = ({ month, hasPremiumPlan }: AiReportButtonProps) => {
               </DialogDescription>
             </DialogHeader>
 
-            <ScrollArea className="max-h-[450px] text-white">
-              {report}
+            <ScrollArea className="prose max-h-[450px] text-white prose-h2:text-white prose-h3:text-white prose-h4:text-white prose-strong:text-white">
+              <Markdown>{report}</Markdown>
             </ScrollArea>
 
             <DialogFooter>
