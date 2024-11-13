@@ -18,12 +18,16 @@ model Transaction {
   name          String
   type          TransactionType
   amount        Decimal                  @db.Decimal(10, 2)
-  category      TransactionCategory
   paymentMethod TransactionPaymentMethod
   date          DateTime
   createdAt     DateTime                 @default(now())
   updatedAt     DateTime                 @updatedAt
   userId        String
+
+  gainCategory       GainTransactionCategory?
+  expenseCategory    ExpenseTransactionCategory?
+  investmentCategory InvestmentTransactionCategory?
+  transferCategory   TransferTransactionCategory?
 }
 
 enum TransactionType {
@@ -33,8 +37,18 @@ enum TransactionType {
   INVESTMENT
 }
 
-enum TransactionCategory {
+enum GainTransactionCategory {
   CASHBACK
+  GIFT
+  LOAN
+  OTHER
+  REWARD
+  SALE
+  SALARY
+  VARIABLE
+}
+
+enum ExpenseTransactionCategory {
   CLOTHING
   EDUCATION
   ENTERTAINMENT
@@ -42,22 +56,26 @@ enum TransactionCategory {
   GIFT
   GOALS
   HEALTH
-  INVESTMENT_DEPOSIT
-  INVESTMENT_RETURN
-  INVESTMENT_WITHDRAW
   LIVING
   LOAN
   OTHER
   PERSONAL
   PET
-  REWARD
-  SALE
-  SALARY
   SUBSCRIPTION
   TAXES
   TRANSPORTATION
   TRAVEL
-  VARIABLE
+}
+
+enum InvestmentTransactionCategory {
+  INVESTMENT_DEPOSIT
+  INVESTMENT_NEGATIVE_RETURN
+  INVESTMENT_POSITIVE_RETURN
+  INVESTMENT_WITHDRAW
+}
+
+enum TransferTransactionCategory {
+  TRANSFER
 }
 
 enum TransactionPaymentMethod {

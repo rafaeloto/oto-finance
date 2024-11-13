@@ -1,7 +1,10 @@
 import {
-  TransactionPaymentMethod,
-  TransactionCategory,
   TransactionType,
+  GainTransactionCategory,
+  ExpenseTransactionCategory,
+  InvestmentTransactionCategory,
+  TransferTransactionCategory,
+  TransactionPaymentMethod,
 } from "@prisma/client";
 
 export const TRANSACTION_PAYMENT_METHOD_ICONS = {
@@ -21,31 +24,48 @@ export const TRANSACTION_PAYMENT_METHOD_LABELS = {
   [TransactionPaymentMethod.DEBIT]: "Débito",
 };
 
-export const TRANSACTION_CATEGORY_LABELS = {
-  [TransactionCategory.FOOD]: "Alimentação",
-  [TransactionCategory.INVESTMENT_DEPOSIT]: "Aporte de investimento",
-  [TransactionCategory.CASHBACK]: "Cashback",
-  [TransactionCategory.EDUCATION]: "Educação",
-  [TransactionCategory.GOALS]: "Metas",
-  [TransactionCategory.INVESTMENT_RETURN]: "Retorno de investimento",
-  [TransactionCategory.HEALTH]: "Saúde",
-  [TransactionCategory.TAXES]: "Imposto",
-  [TransactionCategory.ENTERTAINMENT]: "Lazer",
-  [TransactionCategory.LIVING]: "Moradia",
-  [TransactionCategory.LOAN]: "Empréstimo",
-  [TransactionCategory.PERSONAL]: "Pessoal",
-  [TransactionCategory.PET]: "Pet",
-  [TransactionCategory.REWARD]: "Prêmio",
-  [TransactionCategory.GIFT]: "Presente",
-  [TransactionCategory.SALE]: "Venda",
-  [TransactionCategory.SALARY]: "Salário",
-  [TransactionCategory.SUBSCRIPTION]: "Assinatura",
-  [TransactionCategory.CLOTHING]: "Roupa",
-  [TransactionCategory.OTHER]: "Outros",
-  [TransactionCategory.TRANSPORTATION]: "Transporte",
-  [TransactionCategory.TRAVEL]: "Viagem",
-  [TransactionCategory.INVESTMENT_WITHDRAW]: "Resgate de investimento",
-  [TransactionCategory.VARIABLE]: "Variável",
+export const GAIN_TRANSACTION_CATEGORY_LABELS = {
+  [GainTransactionCategory.CASHBACK]: "Cashback",
+  [GainTransactionCategory.LOAN]: "Empréstimo",
+  [GainTransactionCategory.REWARD]: "Prêmio",
+  [GainTransactionCategory.GIFT]: "Presente",
+  [GainTransactionCategory.SALE]: "Venda",
+  [GainTransactionCategory.SALARY]: "Salário",
+  [GainTransactionCategory.OTHER]: "Outros",
+  [GainTransactionCategory.VARIABLE]: "Variável",
+};
+
+export const EXPENSE_TRANSACTION_CATEGORY_LABELS = {
+  [ExpenseTransactionCategory.FOOD]: "Alimentação",
+  [ExpenseTransactionCategory.EDUCATION]: "Educação",
+  [ExpenseTransactionCategory.GOALS]: "Metas",
+  [ExpenseTransactionCategory.HEALTH]: "Saúde",
+  [ExpenseTransactionCategory.TAXES]: "Imposto",
+  [ExpenseTransactionCategory.ENTERTAINMENT]: "Lazer",
+  [ExpenseTransactionCategory.LIVING]: "Moradia",
+  [ExpenseTransactionCategory.LOAN]: "Empréstimo",
+  [ExpenseTransactionCategory.PERSONAL]: "Pessoal",
+  [ExpenseTransactionCategory.PET]: "Pet",
+  [ExpenseTransactionCategory.GIFT]: "Presente",
+  [ExpenseTransactionCategory.SUBSCRIPTION]: "Assinatura",
+  [ExpenseTransactionCategory.CLOTHING]: "Roupa",
+  [ExpenseTransactionCategory.OTHER]: "Outros",
+  [ExpenseTransactionCategory.TRANSPORTATION]: "Transporte",
+  [ExpenseTransactionCategory.TRAVEL]: "Viagem",
+};
+
+export const INVESTMENT_TRANSACTION_CATEGORY_LABELS = {
+  [InvestmentTransactionCategory.INVESTMENT_DEPOSIT]: "Aporte de investimento",
+  [InvestmentTransactionCategory.INVESTMENT_NEGATIVE_RETURN]:
+    "Retorno negativo de investimento",
+  [InvestmentTransactionCategory.INVESTMENT_POSITIVE_RETURN]:
+    "Retorno positivo de investimento",
+  [InvestmentTransactionCategory.INVESTMENT_WITHDRAW]:
+    "Resgate de investimento",
+};
+
+export const TRANSFER_TRANSACTION_CATEGORY_LABELS = {
+  [TransferTransactionCategory.TRANSFER]: "Transferência",
 };
 
 export const TRANSACTION_TYPE_OPTIONS = Object.entries(
@@ -62,8 +82,29 @@ export const TRANSACTION_PAYMENT_METHOD_OPTIONS = Object.entries(
   label,
 }));
 
-export const TRANSACTION_CATEGORY_OPTIONS = Object.entries(
-  TRANSACTION_CATEGORY_LABELS,
+export const GAIN_TRANSACTION_CATEGORY_OPTIONS = Object.entries(
+  GAIN_TRANSACTION_CATEGORY_LABELS,
+).map(([value, label]) => ({
+  value,
+  label,
+}));
+
+export const EXPENSE_TRANSACTION_CATEGORY_OPTIONS = Object.entries(
+  EXPENSE_TRANSACTION_CATEGORY_LABELS,
+).map(([value, label]) => ({
+  value,
+  label,
+}));
+
+export const INVESTMENT_TRANSACTION_CATEGORY_OPTIONS = Object.entries(
+  INVESTMENT_TRANSACTION_CATEGORY_LABELS,
+).map(([value, label]) => ({
+  value,
+  label,
+}));
+
+export const TRANSFER_TRANSACTION_CATEGORY_OPTIONS = Object.entries(
+  TRANSFER_TRANSACTION_CATEGORY_LABELS,
 ).map(([value, label]) => ({
   value,
   label,

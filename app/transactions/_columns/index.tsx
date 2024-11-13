@@ -4,8 +4,11 @@ import { Transaction } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import TransactionTypeBadge from "../_components/type-badge";
 import {
-  TRANSACTION_CATEGORY_LABELS,
   TRANSACTION_PAYMENT_METHOD_LABELS,
+  GAIN_TRANSACTION_CATEGORY_LABELS,
+  EXPENSE_TRANSACTION_CATEGORY_LABELS,
+  INVESTMENT_TRANSACTION_CATEGORY_LABELS,
+  TRANSFER_TRANSACTION_CATEGORY_LABELS,
 } from "@/app/_constants/transaction";
 import EditTransactionButton from "../_components/edit-transaction-button";
 import DeleteTransactionButton from "../_components/delete-transaction-button";
@@ -25,9 +28,37 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "category",
     header: "Categoria",
-    cell: ({ row: { original: transaction } }) => (
-      <p>{TRANSACTION_CATEGORY_LABELS[transaction.category]}</p>
-    ),
+    cell: ({ row: { original: transaction } }) => {
+      let categoryLabel = "";
+      switch (transaction.type) {
+        case "GAIN":
+          categoryLabel = transaction.gainCategory
+            ? GAIN_TRANSACTION_CATEGORY_LABELS[transaction.gainCategory]
+            : "Não especificado";
+          break;
+        case "EXPENSE":
+          categoryLabel = transaction.expenseCategory
+            ? EXPENSE_TRANSACTION_CATEGORY_LABELS[transaction.expenseCategory]
+            : "Não especificado";
+          break;
+        case "INVESTMENT":
+          categoryLabel = transaction.investmentCategory
+            ? INVESTMENT_TRANSACTION_CATEGORY_LABELS[
+                transaction.investmentCategory
+              ]
+            : "Não especificado";
+          break;
+        case "TRANSFER":
+          categoryLabel = transaction.transferCategory
+            ? TRANSFER_TRANSACTION_CATEGORY_LABELS[transaction.transferCategory]
+            : "Não especificado";
+          break;
+        default:
+          categoryLabel = "Não especificado";
+      }
+
+      return <p>{categoryLabel}</p>;
+    },
   },
   {
     accessorKey: "paymentMethod",

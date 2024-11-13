@@ -13,6 +13,26 @@ interface EditTransactionButtonProps {
 const EditTransactionButton = ({ transaction }: EditTransactionButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const {
+    gainCategory,
+    expenseCategory,
+    investmentCategory,
+    transferCategory,
+    ...restTransaction
+  } = transaction;
+
+  const defaultValues = {
+    ...restTransaction,
+    amount: Number(transaction.amount),
+    date: new Date(transaction.date),
+    category:
+      gainCategory ||
+      expenseCategory ||
+      investmentCategory ||
+      transferCategory ||
+      "",
+  };
+
   return (
     <>
       <Button
@@ -25,10 +45,7 @@ const EditTransactionButton = ({ transaction }: EditTransactionButtonProps) => {
       </Button>
 
       <UpsertTransactionDialog
-        defaultValues={{
-          ...transaction,
-          amount: Number(transaction.amount),
-        }}
+        defaultValues={defaultValues}
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         transactionId={transaction.id}

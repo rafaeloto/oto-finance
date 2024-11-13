@@ -12,7 +12,7 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import {
-  TransactionCategory,
+  ExpenseTransactionCategory,
   TransactionPaymentMethod,
   TransactionType,
 } from "@prisma/client";
@@ -34,9 +34,12 @@ import {
   SelectValue,
 } from "./ui/select";
 import {
-  TRANSACTION_CATEGORY_OPTIONS,
-  TRANSACTION_PAYMENT_METHOD_OPTIONS,
   TRANSACTION_TYPE_OPTIONS,
+  TRANSACTION_PAYMENT_METHOD_OPTIONS,
+  GAIN_TRANSACTION_CATEGORY_OPTIONS,
+  EXPENSE_TRANSACTION_CATEGORY_OPTIONS,
+  INVESTMENT_TRANSACTION_CATEGORY_OPTIONS,
+  TRANSFER_TRANSACTION_CATEGORY_OPTIONS,
 } from "../_constants/transaction";
 import { DatePicker } from "./ui/date-picker";
 import { upsertTransaction } from "../_actions/upsert-transaction";
@@ -62,8 +65,8 @@ const formSchema = z.object({
   type: z.nativeEnum(TransactionType, {
     required_error: "O tipo é obrigatório",
   }),
-  category: z.nativeEnum(TransactionCategory, {
-    required_error: "A categoria é obrigatória",
+  category: z.string().trim().min(1, {
+    message: "A categoria é obrigatória",
   }),
   paymentMethod: z.nativeEnum(TransactionPaymentMethod, {
     required_error: "O método de pagamento é obrigatório",
@@ -85,7 +88,7 @@ const UpsertTransactionDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues ?? {
       amount: 50,
-      category: TransactionCategory.FOOD,
+      category: ExpenseTransactionCategory.FOOD,
       date: new Date(),
       name: "",
       paymentMethod: TransactionPaymentMethod.DEBIT,
@@ -104,6 +107,21 @@ const UpsertTransactionDialog = ({
   };
 
   const isUpdate = !!transactionId;
+
+  const getCategoryOptions = () => {
+    switch (form.watch("type")) {
+      case TransactionType.GAIN:
+        return GAIN_TRANSACTION_CATEGORY_OPTIONS;
+      case TransactionType.EXPENSE:
+        return EXPENSE_TRANSACTION_CATEGORY_OPTIONS;
+      case TransactionType.INVESTMENT:
+        return INVESTMENT_TRANSACTION_CATEGORY_OPTIONS;
+      case TransactionType.TRANSFER:
+        return TRANSFER_TRANSACTION_CATEGORY_OPTIONS;
+      default:
+        return [];
+    }
+  };
 
   return (
     <Dialog
@@ -205,7 +223,7 @@ const UpsertTransactionDialog = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {TRANSACTION_CATEGORY_OPTIONS.map((option) => (
+                      {getCategoryOptions().map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>

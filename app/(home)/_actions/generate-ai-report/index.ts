@@ -41,10 +41,29 @@ export const generateAiReport = async ({ month }: GenerateAiReportSchema) => {
 
   const prompt = `Gere um relatório com insights sobre as minhas finanças, com dicas e orientações de como melhorar minha vida financeira. As transações estão divididas por ponto e vírgula. A estrutura de cada uma é {DATA}-{TIPO}-{VALOR}-{CATEGORIA}. São elas:
         ${transactions
-          .map(
-            (transaction) =>
-              `${transaction.date.toLocaleDateString("pt-BR")}-R$${transaction.amount}-${transaction.type}-${transaction.category}`,
-          )
+          .map((transaction) => {
+            // Identificar a categoria com base no tipo da transação
+            let category = "";
+            switch (transaction.type) {
+              case "GAIN":
+                category = transaction.gainCategory || "Não especificado";
+                break;
+              case "EXPENSE":
+                category = transaction.expenseCategory || "Não especificado";
+                break;
+              case "INVESTMENT":
+                category = transaction.investmentCategory || "Não especificado";
+                break;
+              case "TRANSFER":
+                category = transaction.transferCategory || "Não especificado";
+                break;
+              default:
+                category = "Não especificado";
+            }
+
+            // Gerar o formato de transação no formato esperado
+            return `${transaction.date.toLocaleDateString("pt-BR")}-R$${transaction.amount}-${transaction.type}-${category}`;
+          })
           .join(";")}`;
 
   const result = await model.generateContent(prompt);
