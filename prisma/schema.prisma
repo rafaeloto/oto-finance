@@ -13,6 +13,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Account {
+  id               String        @id @default(uuid())
+  name             String
+  type             AccountType
+  balance          Decimal       @db.Decimal(10, 2)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  userId           String
+  transactions     Transaction[] @relation("AccountTransaction")
+  fromTransactions Transaction[] @relation("AccountFromTransaction")
+  toTransactions   Transaction[] @relation("AccountToTransaction")
+}
+
 model Transaction {
   id            String                   @id @default(uuid())
   name          String
@@ -24,10 +37,23 @@ model Transaction {
   updatedAt     DateTime                 @updatedAt
   userId        String
 
+  accountId     String?
+  fromAccountId String?
+  toAccountId   String?
+
   gainCategory       GainTransactionCategory?
   expenseCategory    ExpenseTransactionCategory?
   investmentCategory InvestmentTransactionCategory?
   transferCategory   TransferTransactionCategory?
+
+  account     Account? @relation("AccountTransaction", fields: [accountId], references: [id])
+  fromAccount Account? @relation("AccountFromTransaction", fields: [fromAccountId], references: [id])
+  toAccount   Account? @relation("AccountToTransaction", fields: [toAccountId], references: [id])
+}
+
+enum AccountType {
+  CHECKING_ACCOUNT
+  INVESTMENT_ACCOUNT
 }
 
 enum TransactionType {
@@ -68,14 +94,14 @@ enum ExpenseTransactionCategory {
 }
 
 enum InvestmentTransactionCategory {
-  INVESTMENT_DEPOSIT
   INVESTMENT_NEGATIVE_RETURN
   INVESTMENT_POSITIVE_RETURN
-  INVESTMENT_WITHDRAW
 }
 
 enum TransferTransactionCategory {
   TRANSFER
+  INVESTMENT_DEPOSIT
+  INVESTMENT_WITHDRAW
 }
 
 enum TransactionPaymentMethod {
