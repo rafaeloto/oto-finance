@@ -33,6 +33,16 @@ const Navbar = () => {
           Transações
         </Link>
         <Link
+          href="/accounts"
+          className={
+            pathname === "/accounts"
+              ? "font-bold text-primary"
+              : "text-muted-foreground"
+          }
+        >
+          Contas
+        </Link>
+        <Link
           href="/subscription"
           className={
             pathname === "/subscription"

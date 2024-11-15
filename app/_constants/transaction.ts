@@ -5,26 +5,11 @@ import {
   InvestmentTransactionCategory,
   TransferTransactionCategory,
   TransactionPaymentMethod,
-  Bank,
 } from "@prisma/client";
 
 export const TRANSACTION_PAYMENT_METHOD_ICONS = {
   [TransactionPaymentMethod.CREDIT]: "credit-card.svg",
   [TransactionPaymentMethod.DEBIT]: "pix.svg",
-};
-
-export const BANK_LABELS = {
-  [Bank.PAY_99]: "99 Pay",
-  [Bank.BANCO_DO_BRASIL]: "Banco do Brasil",
-  [Bank.BRADESCO]: "Bradesco",
-  [Bank.CAIXA_ECONOMICA]: "Caixa Econômica",
-  [Bank.INTER]: "Inter",
-  [Bank.ITAU]: "Itaú",
-  [Bank.MERCADO_PAGO]: "Mercado Pago",
-  [Bank.NEON]: "Neon",
-  [Bank.NUBANK]: "Nubank",
-  [Bank.PICPAY]: "Picpay",
-  [Bank.SANTANDER]: "Santander",
 };
 
 export const TRANSACTION_TYPE_LABELS = {
@@ -81,13 +66,6 @@ export const TRANSFER_TRANSACTION_CATEGORY_LABELS = {
   [TransferTransactionCategory.INVESTMENT_DEPOSIT]: "Aporte de investimento",
   [TransferTransactionCategory.INVESTMENT_WITHDRAW]: "Resgate de investimento",
 };
-
-export const BANK_OPTIONS = Object.entries(BANK_LABELS).map(
-  ([value, label]) => ({
-    value,
-    label,
-  }),
-);
 
 export const TRANSACTION_TYPE_OPTIONS = Object.entries(
   TRANSACTION_TYPE_LABELS,
