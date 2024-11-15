@@ -7,6 +7,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ScrollArea } from "../_components/ui/scroll-area";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
+import EmptyListFeedback from "../_components/empty-list-feedback";
 
 const TransactionsPage = async () => {
   const { userId } = await auth();
@@ -26,6 +27,8 @@ const TransactionsPage = async () => {
 
   const userCanAddTransaction = await canUserAddTransaction();
 
+  const hasNoData = transactions.length === 0;
+
   return (
     <>
       <Navbar />
@@ -37,12 +40,16 @@ const TransactionsPage = async () => {
           <AddTransactionButton userCanAddTransaction={userCanAddTransaction} />
         </div>
 
-        <ScrollArea className="h-full">
-          <DataTable
-            columns={transactionColumns}
-            data={JSON.parse(JSON.stringify(transactions))}
-          />
-        </ScrollArea>
+        {hasNoData ? (
+          <EmptyListFeedback message="Nenhuma transação registrada" />
+        ) : (
+          <ScrollArea className="h-full">
+            <DataTable
+              columns={transactionColumns}
+              data={JSON.parse(JSON.stringify(transactions))}
+            />
+          </ScrollArea>
+        )}
       </div>
     </>
   );
