@@ -31,6 +31,7 @@ import {
 } from "@/app/_components/ui/select";
 import { BANK_OPTIONS } from "@/app/_constants/account";
 import { createAccount } from "@/app/_actions/create-account";
+import { toast } from "sonner";
 
 interface CreateAccountDialogProps {
   isOpen: boolean;
@@ -65,10 +66,12 @@ const CreateAccountDialog = ({
   const onSubmit = async (data: FormSchema) => {
     try {
       await createAccount({ ...data });
+      toast.success("Conta criada com sucesso!");
       setIsOpen(false);
       form.reset();
     } catch (error) {
       console.error(error);
+      toast.error("Erro ao criar conta!");
     }
   };
 
