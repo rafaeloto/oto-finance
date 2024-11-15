@@ -16,7 +16,7 @@ datasource db {
 model Account {
   id               String        @id @default(uuid())
   name             String
-  type             AccountType
+  bank             Bank
   balance          Decimal       @db.Decimal(10, 2)
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
@@ -51,9 +51,18 @@ model Transaction {
   toAccount   Account? @relation("AccountToTransaction", fields: [toAccountId], references: [id])
 }
 
-enum AccountType {
-  CHECKING_ACCOUNT
-  INVESTMENT_ACCOUNT
+enum Bank {
+  PAY_99
+  BANCO_DO_BRASIL
+  BRADESCO
+  CAIXA_ECONOMICA
+  INTER
+  ITAU
+  MERCADO_PAGO
+  NEON
+  NUBANK
+  PICPAY
+  SANTANDER
 }
 
 enum TransactionType {
