@@ -1,3 +1,4 @@
+import { leagueSpartan } from "@/app/_styles/fonts";
 import Image from "next/image";
 import { Button } from "../_components/ui/button";
 import { LogInIcon } from "lucide-react";
@@ -18,7 +19,11 @@ const LoginPage = async () => {
       <div className="mx-auto flex h-full max-w-[550px] flex-col justify-center p-8">
         <div className="mb-6 flex items-center gap-3">
           <Image src="/favicon.ico" alt="Oto Finance" width={60} height={60} />
-          <h1 className="text-4xl font-bold">Oto Finance</h1>
+          <h1
+            className={`${leagueSpartan.className} font-spartan text-4xl font-bold`}
+          >
+            Oto Finance
+          </h1>
         </div>
         <h1 className="mb-3 text-4xl font-bold">Bem-vindo</h1>
         <p className="mb-8 text-muted-foreground">

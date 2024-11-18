@@ -1,5 +1,6 @@
 "use client";
 
+import { leagueSpartan } from "@/app/_styles/fonts";
 import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,7 +20,9 @@ const Navbar = () => {
               width={40}
               height={40}
             />
-            <h1 className="text-2xl font-bold">Oto Finance</h1>
+            <h1 className={`${leagueSpartan.className} text-2xl font-bold`}>
+              Oto Finance
+            </h1>
           </div>
         </Link>
 
