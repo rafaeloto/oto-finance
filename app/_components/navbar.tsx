@@ -11,7 +11,18 @@ const Navbar = () => {
   return (
     <nav className="flex justify-between border-b border-solid px-8 py-4">
       <div className="flex items-center gap-10">
-        <Image src="/logo.svg" alt="Oto Finance" width={173} height={39} />
+        <Link href="/">
+          <div className="flex items-center gap-2">
+            <Image
+              src="/favicon.ico"
+              alt="Oto Finance"
+              width={40}
+              height={40}
+            />
+            <h1 className="text-2xl font-bold">Oto Finance</h1>
+          </div>
+        </Link>
+
         <Link
           href="/"
           className={
@@ -22,6 +33,7 @@ const Navbar = () => {
         >
           Dashboard
         </Link>
+
         <Link
           href="/transactions"
           className={
@@ -32,6 +44,7 @@ const Navbar = () => {
         >
           Transações
         </Link>
+
         <Link
           href="/accounts"
           className={
@@ -42,6 +55,7 @@ const Navbar = () => {
         >
           Contas
         </Link>
+
         <Link
           href="/subscription"
           className={
