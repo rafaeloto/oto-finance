@@ -1,3 +1,4 @@
+import { useAccounts } from "@/app/_contexts/AccountsContext";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -54,6 +55,8 @@ const CreateAccountDialog = ({
   isOpen,
   setIsOpen,
 }: CreateAccountDialogProps) => {
+  const { reloadAccounts } = useAccounts();
+
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -66,6 +69,7 @@ const CreateAccountDialog = ({
   const onSubmit = async (data: FormSchema) => {
     try {
       await createAccount({ ...data });
+      await reloadAccounts();
       toast.success("Conta criada com sucesso!");
       setIsOpen(false);
       form.reset();

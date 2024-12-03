@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Mulish } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { AccountsProvider } from "./_contexts/AccountsContext";
 import { dark } from "@clerk/themes";
 import { Toaster } from "sonner";
 
@@ -23,7 +24,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${mulish.className} dark backdrop:antialiased`}>
         <ClerkProvider appearance={{ baseTheme: dark }}>
-          <div className="flex h-full flex-col overflow-hidden">{children}</div>
+          <AccountsProvider>
+            <div className="flex h-full flex-col overflow-hidden">
+              {children}
+            </div>
+          </AccountsProvider>
         </ClerkProvider>
 
         <Toaster />

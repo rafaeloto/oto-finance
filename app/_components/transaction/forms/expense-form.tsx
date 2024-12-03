@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchemas } from "./formSchema";
+import { useAccounts } from "@/app/_contexts/AccountsContext";
 import {
-  Account,
   ExpenseTransactionCategory,
   TransactionPaymentMethod,
 } from "@prisma/client";
@@ -40,16 +40,16 @@ interface ExpenseFormProps {
   setIsOpen: (open: boolean) => void;
   defaultValues?: FormSchema;
   transactionId?: string;
-  accounts?: Account[];
 }
 
 const ExpenseForm = ({
   defaultValues,
   transactionId,
-  accounts,
   setIsOpen,
 }: ExpenseFormProps) => {
   const isUpdate = !!transactionId;
+
+  const { accounts, loading, error } = useAccounts();
 
   const form = useForm({
     resolver: zodResolver(formSchemas.expense),
@@ -76,6 +76,9 @@ const ExpenseForm = ({
       toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
     }
   };
+
+  if (loading) return <div>Carregando contas...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <Form {...form}>

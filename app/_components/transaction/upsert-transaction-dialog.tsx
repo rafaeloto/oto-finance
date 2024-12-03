@@ -9,7 +9,6 @@ import {
 } from "../ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import ExpenseForm from "./forms/expense-form";
-import { Account } from "@prisma/client";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
@@ -17,7 +16,6 @@ interface UpsertTransactionDialogProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultValues?: any;
   transactionId?: string;
-  accounts?: Account[];
 }
 
 const UpsertTransactionDialog = ({
@@ -25,7 +23,6 @@ const UpsertTransactionDialog = ({
   setIsOpen,
   defaultValues,
   transactionId,
-  accounts,
 }: UpsertTransactionDialogProps) => {
   const isUpdate = !!transactionId;
 
@@ -56,7 +53,6 @@ const UpsertTransactionDialog = ({
             <ExpenseForm
               defaultValues={defaultValues}
               transactionId={transactionId}
-              accounts={accounts}
               setIsOpen={setIsOpen}
             />
           </TabsContent>

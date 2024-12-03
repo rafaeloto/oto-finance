@@ -1,5 +1,5 @@
 import { DataTable } from "../_components/ui/data-table";
-import { getTransactionColumns } from "./_columns";
+import { transactionColumns } from "./_columns";
 import { db } from "../_lib/prisma";
 import AddTransactionButton from "../_components/transaction/add-transaction-button";
 import Navbar from "../_components/navbar";
@@ -8,7 +8,6 @@ import { redirect } from "next/navigation";
 import { ScrollArea } from "../_components/ui/scroll-area";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import EmptyListFeedback from "../_components/empty-list-feedback";
-import { getAccounts } from "../_data/get-accounts";
 
 const TransactionsPage = async () => {
   const { userId } = await auth();
@@ -28,8 +27,6 @@ const TransactionsPage = async () => {
 
   const userCanAddTransaction = await canUserAddTransaction();
 
-  const accounts = await getAccounts();
-
   const hasNoData = transactions.length === 0;
 
   return (
@@ -40,10 +37,7 @@ const TransactionsPage = async () => {
         {/* TÍTULO E BOTAO */}
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl font-bold">Transações</h1>
-          <AddTransactionButton
-            userCanAddTransaction={userCanAddTransaction}
-            accounts={accounts}
-          />
+          <AddTransactionButton userCanAddTransaction={userCanAddTransaction} />
         </div>
 
         {hasNoData ? (
@@ -51,7 +45,7 @@ const TransactionsPage = async () => {
         ) : (
           <ScrollArea className="h-full">
             <DataTable
-              columns={getTransactionColumns(accounts)}
+              columns={transactionColumns}
               data={JSON.parse(JSON.stringify(transactions))}
             />
           </ScrollArea>

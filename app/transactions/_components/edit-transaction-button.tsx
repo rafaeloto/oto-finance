@@ -3,18 +3,14 @@
 import { useState } from "react";
 import { Button } from "@/app/_components/ui/button";
 import { PencilIcon } from "lucide-react";
-import { Account, Transaction } from "@prisma/client";
+import { Transaction } from "@prisma/client";
 import UpsertTransactionDialog from "@/app/_components/transaction/upsert-transaction-dialog";
 
 interface EditTransactionButtonProps {
   transaction: Transaction;
-  accounts?: Account[];
 }
 
-const EditTransactionButton = ({
-  transaction,
-  accounts,
-}: EditTransactionButtonProps) => {
+const EditTransactionButton = ({ transaction }: EditTransactionButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const {
@@ -53,7 +49,6 @@ const EditTransactionButton = ({
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         transactionId={transaction.id}
-        accounts={accounts}
       />
     </>
   );

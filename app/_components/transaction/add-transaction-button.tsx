@@ -10,16 +10,14 @@ import {
 } from "../ui/tooltip";
 import UpsertTransactionDialog from "./upsert-transaction-dialog";
 import { ArrowDownUpIcon } from "lucide-react";
-import { Account } from "@prisma/client";
 
 interface AddTransactionButtonProps {
   userCanAddTransaction?: boolean;
-  accounts?: Account[];
 }
 
-const AddTransactionButton = (props: AddTransactionButtonProps) => {
-  const { userCanAddTransaction, accounts } = props;
-
+const AddTransactionButton = ({
+  userCanAddTransaction,
+}: AddTransactionButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
@@ -47,7 +45,6 @@ const AddTransactionButton = (props: AddTransactionButtonProps) => {
       <UpsertTransactionDialog
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
-        accounts={accounts}
       />
     </>
   );
