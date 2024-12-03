@@ -35,6 +35,7 @@ const EditTransactionButton = ({ transaction }: EditTransactionButtonProps) => {
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         transactionId={transaction.id}
+        transactionType={transaction.type}
       />
     </>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { TransactionType } from "@prisma/client";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +18,7 @@ interface UpsertTransactionDialogProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultValues?: any;
   transactionId?: string;
+  transactionType?: TransactionType;
 }
 
 const UpsertTransactionDialog = ({
@@ -24,8 +26,16 @@ const UpsertTransactionDialog = ({
   setIsOpen,
   defaultValues,
   transactionId,
+  transactionType,
 }: UpsertTransactionDialogProps) => {
   const isUpdate = !!transactionId;
+
+  const tabValueMap = {
+    EXPENSE: "expense",
+    GAIN: "gain",
+    TRANSFER: "transfer",
+    INVESTMENT: "investment",
+  };
 
   return (
     <Dialog
@@ -42,12 +52,35 @@ const UpsertTransactionDialog = ({
           <DialogDescription>Insira as informações abaixo</DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="expense">
+        <Tabs defaultValue={tabValueMap[transactionType || "EXPENSE"]}>
           <TabsList>
-            <TabsTrigger value="expense">Despesa</TabsTrigger>
-            <TabsTrigger value="gain">Receita</TabsTrigger>
-            <TabsTrigger value="transfer">Transferência</TabsTrigger>
-            <TabsTrigger value="investment">Investimento</TabsTrigger>
+            <TabsTrigger
+              value="expense"
+              disabled={isUpdate && transactionType !== "EXPENSE"}
+            >
+              Despesa
+            </TabsTrigger>
+
+            <TabsTrigger
+              value="gain"
+              disabled={isUpdate && transactionType !== "GAIN"}
+            >
+              Receita
+            </TabsTrigger>
+
+            <TabsTrigger
+              value="transfer"
+              disabled={isUpdate && transactionType !== "TRANSFER"}
+            >
+              Transferência
+            </TabsTrigger>
+
+            <TabsTrigger
+              value="investment"
+              disabled={isUpdate && transactionType !== "INVESTMENT"}
+            >
+              Investimento
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="expense">
