@@ -36,5 +36,6 @@ export const formSchemas = {
     amount: z.number().positive("O valor deve ser positivo"),
     investmentCategory: z.nativeEnum(InvestmentTransactionCategory),
     accountId: z.string().min(1, "A conta é obrigatória"),
+    date: z.date({ required_error: "A data é obrigatória" }),
   }),
 };

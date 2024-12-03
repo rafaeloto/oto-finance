@@ -6,12 +6,14 @@ import {
   ExpenseTransactionCategory,
   GainTransactionCategory,
   TransferTransactionCategory,
+  InvestmentTransactionCategory,
   TransactionPaymentMethod,
 } from "@prisma/client";
 import {
   upsertExpenseTransactionSchema,
   upsertGainTransactionSchema,
   upsertTransferTransactionSchema,
+  upsertInvestmentTransactionSchema,
 } from "./schema";
 import { revalidatePath } from "next/cache";
 
@@ -104,6 +106,38 @@ export const upsertTransferTransaction = async (
   await db.transaction.upsert({
     update: { ...params, userId, type: "TRANSFER", paymentMethod: "DEBIT" },
     create: { ...params, userId, type: "TRANSFER", paymentMethod: "DEBIT" },
+    where: {
+      id: params?.id ?? "",
+    },
+  });
+
+  revalidatePath("/transactions");
+  revalidatePath("/");
+};
+
+interface UpsertInvestmentTransactionParams {
+  id?: string;
+  name: string;
+  amount: number;
+  investmentCategory: InvestmentTransactionCategory;
+  accountId: string;
+  date: Date;
+}
+
+export const upsertInvestmentTransaction = async (
+  params: UpsertInvestmentTransactionParams,
+) => {
+  upsertInvestmentTransactionSchema.parse(params);
+
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  await db.transaction.upsert({
+    update: { ...params, userId, type: "INVESTMENT", paymentMethod: "DEBIT" },
+    create: { ...params, userId, type: "INVESTMENT", paymentMethod: "DEBIT" },
     where: {
       id: params?.id ?? "",
     },
