@@ -3,27 +3,24 @@
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import {
-  // TransactionType,
-  // GainTransactionCategory,
   ExpenseTransactionCategory,
-  // InvestmentTransactionCategory,
-  // TransferTransactionCategory,
   TransactionPaymentMethod,
 } from "@prisma/client";
 import { upsertExpenseTransactionSchema } from "./schema";
 import { revalidatePath } from "next/cache";
 
-interface UpsertTransactionParams {
+interface UpsertExpenseTransactionParams {
   id?: string;
   name: string;
   amount: number;
   expenseCategory: ExpenseTransactionCategory;
+  accountId: string;
   paymentMethod: TransactionPaymentMethod;
   date: Date;
 }
 
 export const upsertExpenseTransaction = async (
-  params: UpsertTransactionParams,
+  params: UpsertExpenseTransactionParams,
 ) => {
   upsertExpenseTransactionSchema.parse(params);
 

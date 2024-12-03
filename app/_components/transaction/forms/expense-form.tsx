@@ -57,7 +57,7 @@ const ExpenseForm = ({
       name: "",
       amount: 0,
       expenseCategory: ExpenseTransactionCategory.FOOD,
-      account: "",
+      accountId: "",
       paymentMethod: TransactionPaymentMethod.DEBIT,
       date: new Date(),
     },
@@ -76,6 +76,7 @@ const ExpenseForm = ({
       toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
     }
   };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -140,7 +141,7 @@ const ExpenseForm = ({
 
         <FormField
           control={form.control}
-          name="account"
+          name="accountId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Conta</FormLabel>
