@@ -13,24 +13,10 @@ interface EditTransactionButtonProps {
 const EditTransactionButton = ({ transaction }: EditTransactionButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const {
-    gainCategory,
-    expenseCategory,
-    investmentCategory,
-    transferCategory,
-    ...restTransaction
-  } = transaction;
-
   const defaultValues = {
-    ...restTransaction,
+    ...transaction,
     amount: Number(transaction.amount),
     date: new Date(transaction.date),
-    category:
-      gainCategory ||
-      expenseCategory ||
-      investmentCategory ||
-      transferCategory ||
-      "",
   };
 
   return (
