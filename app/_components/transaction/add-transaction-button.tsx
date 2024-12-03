@@ -1,22 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
+} from "../ui/tooltip";
 import UpsertTransactionDialog from "./upsert-transaction-dialog";
 import { ArrowDownUpIcon } from "lucide-react";
+import { Account } from "@prisma/client";
 
 interface AddTransactionButtonProps {
   userCanAddTransaction?: boolean;
+  accounts?: Account[];
 }
 
 const AddTransactionButton = (props: AddTransactionButtonProps) => {
-  const { userCanAddTransaction } = props;
+  const { userCanAddTransaction, accounts } = props;
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -45,6 +47,7 @@ const AddTransactionButton = (props: AddTransactionButtonProps) => {
       <UpsertTransactionDialog
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
+        accounts={accounts}
       />
     </>
   );

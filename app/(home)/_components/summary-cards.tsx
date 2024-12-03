@@ -5,6 +5,7 @@ import {
   WalletIcon,
 } from "lucide-react";
 import SummaryCard from "./summary-card";
+import { Account } from "@prisma/client";
 
 interface SummaryCardsProps {
   month: string;
@@ -13,6 +14,7 @@ interface SummaryCardsProps {
   gainsTotal: number;
   expensesTotal: number;
   userCanAddTransaction?: boolean;
+  accounts?: Account[];
 }
 
 const SummaryCards = async ({
@@ -21,6 +23,7 @@ const SummaryCards = async ({
   gainsTotal,
   expensesTotal,
   userCanAddTransaction,
+  accounts,
 }: SummaryCardsProps) => {
   return (
     <div className="space-y-6">
@@ -30,6 +33,7 @@ const SummaryCards = async ({
         amount={balance}
         size="large"
         userCanAddTransaction={userCanAddTransaction}
+        accounts={accounts}
       />
 
       <div className="grid grid-cols-3 gap-6">

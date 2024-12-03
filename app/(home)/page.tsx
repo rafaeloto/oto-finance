@@ -10,6 +10,7 @@ import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import AiReportButton from "./_components/ai-report-button";
+import { getAccounts } from "../_data/get-accounts";
 
 interface HomeProps {
   searchParams: {
@@ -36,6 +37,8 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
 
   const user = await clerkClient().users.getUser(userId);
 
+  const accounts = await getAccounts();
+
   return (
     <>
       <Navbar />
@@ -58,6 +61,7 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
               month={month}
               {...dashboard}
               userCanAddTransaction={userCanAddTransaction}
+              accounts={accounts}
             />
             <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
               <TransactionsPieChart {...dashboard} />
