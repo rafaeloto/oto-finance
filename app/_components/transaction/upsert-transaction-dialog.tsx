@@ -11,6 +11,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import ExpenseForm from "./forms/expense-form";
 import GainForm from "./forms/gain-form";
+import TransferForm from "./forms/transfer-form";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
@@ -93,6 +94,14 @@ const UpsertTransactionDialog = ({
 
           <TabsContent value="gain">
             <GainForm
+              defaultValues={defaultValues}
+              transactionId={transactionId}
+              setIsOpen={setIsOpen}
+            />
+          </TabsContent>
+
+          <TabsContent value="transfer">
+            <TransferForm
               defaultValues={defaultValues}
               transactionId={transactionId}
               setIsOpen={setIsOpen}
