@@ -3,9 +3,9 @@ import Navbar from "../_components/navbar";
 import { ScrollArea } from "../_components/ui/scroll-area";
 import AddAccountButton from "./_components/add-account-button";
 import { redirect } from "next/navigation";
-import { db } from "../_lib/prisma";
 import AccountCard from "./_components/account-card";
 import EmptyListFeedback from "../_components/empty-list-feedback";
+import { getAccounts } from "../_data/get-accounts";
 
 const Accounts = async () => {
   const { userId } = await auth();
@@ -14,11 +14,7 @@ const Accounts = async () => {
     redirect("/login");
   }
 
-  const accounts = await db.account.findMany({
-    where: {
-      userId,
-    },
-  });
+  const accounts = await getAccounts();
 
   const hasNoData = accounts.length === 0;
 
