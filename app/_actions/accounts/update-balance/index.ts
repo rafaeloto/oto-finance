@@ -28,7 +28,7 @@ interface UpdateAccountsBalancesParams {
   amount: number;
   fromAccountId: string;
   toAccountId: string;
-  transaction?: typeof db;
+  transaction?: Omit<Prisma.TransactionClient, "$transaction">;
 }
 
 // Action to update the balance of both accounts in a transfer

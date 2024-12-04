@@ -46,9 +46,6 @@ export const upsertExpenseTransaction = async (
     if (existingTransaction?.accountId) {
       const difference = params.amount - Number(existingTransaction.amount);
 
-      console.log("existingTransaction", existingTransaction);
-      console.log("params", params);
-
       // If the selected account has changed, we adjust the balance of the previous and new account.
       if (existingTransaction.accountId !== params.accountId) {
         // Revert the balance of the previous account

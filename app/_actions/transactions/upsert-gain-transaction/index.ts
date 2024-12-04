@@ -30,31 +30,54 @@ export const upsertGainTransaction = async (
 
   const existingTransaction = await getTransaction(params.id);
 
-  await db.transaction.upsert({
-    update: { ...params, userId, type: "GAIN", paymentMethod: "DEBIT" },
-    create: { ...params, userId, type: "GAIN", paymentMethod: "DEBIT" },
-    where: {
-      id: params?.id ?? "",
-    },
-  });
+  // Group all operations in a single transaction, to apply transactional processing.
+  await db.$transaction(async (transaction) => {
+    await transaction.transaction.upsert({
+      update: { ...params, userId, type: "GAIN", paymentMethod: "DEBIT" },
+      create: { ...params, userId, type: "GAIN", paymentMethod: "DEBIT" },
+      where: { id: params?.id ?? "" },
+    });
 
-  if (existingTransaction) {
-    const difference = params.amount - Number(existingTransaction.amount);
+    // If there is an existing transaction, we must correct the accounts amount.
+    if (existingTransaction?.accountId) {
+      const difference = params.amount - Number(existingTransaction.amount);
 
-    if (difference !== 0) {
+      // If the selected account has changed, we adjust the balance of the previous and new account.
+      if (existingTransaction.accountId !== params.accountId) {
+        // Revert the balance of the previous account
+        await updateSingleAccountBalance({
+          operation: "decrement",
+          amount: Number(existingTransaction.amount),
+          accountId: existingTransaction.accountId,
+          transaction,
+        });
+
+        // Update the balance of the new account
+        await updateSingleAccountBalance({
+          operation: "increment",
+          amount: params.amount,
+          accountId: params.accountId,
+          transaction,
+        });
+      } else if (difference !== 0) {
+        // Update the only the balance of the account, if the ammount has changed.
+        await updateSingleAccountBalance({
+          operation: difference > 0 ? "increment" : "decrement",
+          amount: Math.abs(difference),
+          accountId: params.accountId,
+          transaction,
+        });
+      }
+    } else {
+      // Update the balance of the account, if it's a new transaction.
       await updateSingleAccountBalance({
-        operation: difference > 0 ? "increment" : "decrement",
-        amount: Math.abs(difference),
+        operation: "increment",
+        amount: params.amount,
         accountId: params.accountId,
+        transaction,
       });
     }
-  } else {
-    await updateSingleAccountBalance({
-      operation: "increment",
-      amount: params.amount,
-      accountId: params.accountId,
-    });
-  }
+  });
 
   revalidatePath("/");
   revalidatePath("/transactions");
