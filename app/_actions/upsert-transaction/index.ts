@@ -20,6 +20,7 @@ import {
   updateAccountBalance,
   updateAccountsBalances,
 } from "../update-balance";
+import getTransaction from "@/app/_data/get-transaction";
 
 interface UpsertExpenseTransactionParams {
   id?: string;
@@ -42,6 +43,8 @@ export const upsertExpenseTransaction = async (
     throw new Error("Unauthorized");
   }
 
+  const existingTransaction = await getTransaction(params.id);
+
   await db.transaction.upsert({
     update: { ...params, userId, type: "EXPENSE" },
     create: { ...params, userId, type: "EXPENSE" },
@@ -50,11 +53,20 @@ export const upsertExpenseTransaction = async (
     },
   });
 
-  await updateAccountBalance({
-    operation: "decrement",
-    amount: params.amount,
-    accountId: params.accountId,
-  });
+  if (existingTransaction) {
+    const difference = params.amount - Number(existingTransaction.amount);
+    await updateAccountBalance({
+      operation: difference > 0 ? "decrement" : "increment",
+      amount: Math.abs(difference),
+      accountId: params.accountId,
+    });
+  } else {
+    await updateAccountBalance({
+      operation: "decrement",
+      amount: params.amount,
+      accountId: params.accountId,
+    });
+  }
 
   revalidatePath("/");
   revalidatePath("/transactions");
@@ -81,6 +93,8 @@ export const upsertGainTransaction = async (
     throw new Error("Unauthorized");
   }
 
+  const existingTransaction = await getTransaction(params.id);
+
   await db.transaction.upsert({
     update: { ...params, userId, type: "GAIN", paymentMethod: "DEBIT" },
     create: { ...params, userId, type: "GAIN", paymentMethod: "DEBIT" },
@@ -89,11 +103,20 @@ export const upsertGainTransaction = async (
     },
   });
 
-  await updateAccountBalance({
-    operation: "increment",
-    amount: params.amount,
-    accountId: params.accountId,
-  });
+  if (existingTransaction) {
+    const difference = params.amount - Number(existingTransaction.amount);
+    await updateAccountBalance({
+      operation: difference > 0 ? "increment" : "decrement",
+      amount: Math.abs(difference),
+      accountId: params.accountId,
+    });
+  } else {
+    await updateAccountBalance({
+      operation: "increment",
+      amount: params.amount,
+      accountId: params.accountId,
+    });
+  }
 
   revalidatePath("/");
   revalidatePath("/transactions");
@@ -121,6 +144,8 @@ export const upsertTransferTransaction = async (
     throw new Error("Unauthorized");
   }
 
+  const existingTransaction = await getTransaction(params.id);
+
   await db.transaction.upsert({
     update: { ...params, userId, type: "TRANSFER", paymentMethod: "DEBIT" },
     create: { ...params, userId, type: "TRANSFER", paymentMethod: "DEBIT" },
@@ -129,11 +154,28 @@ export const upsertTransferTransaction = async (
     },
   });
 
-  await updateAccountsBalances({
-    amount: params.amount,
-    fromAccountId: params.fromAccountId,
-    toAccountId: params.toAccountId,
-  });
+  if (existingTransaction) {
+    const difference = params.amount - Number(existingTransaction.amount);
+
+    await Promise.all([
+      updateAccountBalance({
+        operation: difference > 0 ? "decrement" : "increment",
+        amount: Math.abs(difference),
+        accountId: params.fromAccountId,
+      }),
+      updateAccountBalance({
+        operation: difference > 0 ? "increment" : "decrement",
+        amount: Math.abs(difference),
+        accountId: params.toAccountId,
+      }),
+    ]);
+  } else {
+    await updateAccountsBalances({
+      amount: params.amount,
+      fromAccountId: params.fromAccountId,
+      toAccountId: params.toAccountId,
+    });
+  }
 
   revalidatePath("/");
   revalidatePath("/transactions");
@@ -160,6 +202,8 @@ export const upsertInvestmentTransaction = async (
     throw new Error("Unauthorized");
   }
 
+  const existingTransaction = await getTransaction(params.id);
+
   await db.transaction.upsert({
     update: { ...params, userId, type: "INVESTMENT", paymentMethod: "DEBIT" },
     create: { ...params, userId, type: "INVESTMENT", paymentMethod: "DEBIT" },
@@ -173,11 +217,26 @@ export const upsertInvestmentTransaction = async (
       ? "decrement"
       : "increment";
 
-  await updateAccountBalance({
-    operation,
-    amount: params.amount,
-    accountId: params.accountId,
-  });
+  if (existingTransaction) {
+    const difference = params.amount - Number(existingTransaction.amount);
+
+    await updateAccountBalance({
+      operation:
+        difference > 0
+          ? operation
+          : operation === "increment"
+            ? "decrement"
+            : "increment",
+      amount: Math.abs(difference),
+      accountId: params.accountId,
+    });
+  } else {
+    await updateAccountBalance({
+      operation,
+      amount: params.amount,
+      accountId: params.accountId,
+    });
+  }
 
   revalidatePath("/");
   revalidatePath("/transactions");
