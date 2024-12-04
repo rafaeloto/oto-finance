@@ -85,7 +85,7 @@ export const upsertTransferTransaction = async (
           transaction,
         }),
       ]);
-    } else if (existingTransaction) {
+    } else if (!existingTransaction) {
       // Update the balance of the account, if it's a new transaction.
       await updateAccountsBalances({
         amount: params.amount,
