@@ -16,6 +16,10 @@ import {
   upsertInvestmentTransactionSchema,
 } from "./schema";
 import { revalidatePath } from "next/cache";
+import {
+  updateAccountBalance,
+  updateAccountsBalances,
+} from "../update-balance";
 
 interface UpsertExpenseTransactionParams {
   id?: string;
@@ -46,8 +50,15 @@ export const upsertExpenseTransaction = async (
     },
   });
 
-  revalidatePath("/transactions");
+  await updateAccountBalance({
+    operation: "decrement",
+    amount: params.amount,
+    accountId: params.accountId,
+  });
+
   revalidatePath("/");
+  revalidatePath("/transactions");
+  revalidatePath("/accounts");
 };
 
 interface UpsertGainTransactionParams {
@@ -78,8 +89,15 @@ export const upsertGainTransaction = async (
     },
   });
 
-  revalidatePath("/transactions");
+  await updateAccountBalance({
+    operation: "increment",
+    amount: params.amount,
+    accountId: params.accountId,
+  });
+
   revalidatePath("/");
+  revalidatePath("/transactions");
+  revalidatePath("/accounts");
 };
 
 interface UpsertTransferTransactionParams {
@@ -111,8 +129,15 @@ export const upsertTransferTransaction = async (
     },
   });
 
-  revalidatePath("/transactions");
+  await updateAccountsBalances({
+    amount: params.amount,
+    fromAccountId: params.fromAccountId,
+    toAccountId: params.toAccountId,
+  });
+
   revalidatePath("/");
+  revalidatePath("/transactions");
+  revalidatePath("/accounts");
 };
 
 interface UpsertInvestmentTransactionParams {
@@ -143,6 +168,18 @@ export const upsertInvestmentTransaction = async (
     },
   });
 
-  revalidatePath("/transactions");
+  const operation =
+    params.investmentCategory === "INVESTMENT_NEGATIVE_RETURN"
+      ? "decrement"
+      : "increment";
+
+  await updateAccountBalance({
+    operation,
+    amount: params.amount,
+    accountId: params.accountId,
+  });
+
   revalidatePath("/");
+  revalidatePath("/transactions");
+  revalidatePath("/accounts");
 };
