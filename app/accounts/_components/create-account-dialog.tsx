@@ -31,7 +31,7 @@ import {
   SelectValue,
 } from "@/app/_components/ui/select";
 import { BANK_OPTIONS } from "@/app/_constants/account";
-import { createAccount } from "@/app/_actions/create-account";
+import { createAccount } from "@/app/_actions/accounts/create-account";
 import { toast } from "sonner";
 
 interface CreateAccountDialogProps {

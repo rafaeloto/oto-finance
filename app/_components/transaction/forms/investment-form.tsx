@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { formSchemas } from "./formSchema";
 import { useAccounts } from "@/app/_contexts/AccountsContext";
 import { z } from "zod";
-import { upsertInvestmentTransaction } from "@/app/_actions/upsert-transaction";
+import { upsertInvestmentTransaction } from "@/app/_actions/transactions/upsert-investment-transaction";
 import { toast } from "sonner";
 import {
   Form,

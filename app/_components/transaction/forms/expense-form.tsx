@@ -7,7 +7,7 @@ import {
   TransactionPaymentMethod,
 } from "@prisma/client";
 import { z } from "zod";
-import { upsertExpenseTransaction } from "@/app/_actions/upsert-transaction";
+import { upsertExpenseTransaction } from "@/app/_actions/transactions/upsert-expense-transaction";
 import { toast } from "sonner";
 import {
   Form,
