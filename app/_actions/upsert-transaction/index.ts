@@ -17,7 +17,7 @@ import {
 } from "./schema";
 import { revalidatePath } from "next/cache";
 import {
-  updateAccountBalance,
+  updateSingleAccountBalance,
   updateAccountsBalances,
 } from "../update-balance";
 import getTransaction from "@/app/_data/get-transaction";
@@ -45,28 +45,57 @@ export const upsertExpenseTransaction = async (
 
   const existingTransaction = await getTransaction(params.id);
 
-  await db.transaction.upsert({
-    update: { ...params, userId, type: "EXPENSE" },
-    create: { ...params, userId, type: "EXPENSE" },
-    where: {
-      id: params?.id ?? "",
-    },
-  });
+  // Group all operations in a single transaction, to apply transactional processing.
+  await db.$transaction(async (transaction) => {
+    await transaction.transaction.upsert({
+      update: { ...params, userId, type: "EXPENSE" },
+      create: { ...params, userId, type: "EXPENSE" },
+      where: { id: params?.id ?? "" },
+    });
 
-  if (existingTransaction) {
-    const difference = params.amount - Number(existingTransaction.amount);
-    await updateAccountBalance({
-      operation: difference > 0 ? "decrement" : "increment",
-      amount: Math.abs(difference),
-      accountId: params.accountId,
-    });
-  } else {
-    await updateAccountBalance({
-      operation: "decrement",
-      amount: params.amount,
-      accountId: params.accountId,
-    });
-  }
+    // If there is an existing transaction, we must correct the accounts amount.
+    if (existingTransaction?.accountId) {
+      const difference = params.amount - Number(existingTransaction.amount);
+
+      console.log("existingTransaction", existingTransaction);
+      console.log("params", params);
+
+      // If the selected account has changed, we adjust the balance of the previous and new account.
+      if (existingTransaction.accountId !== params.accountId) {
+        // Revert the balance of the previous account
+        await updateSingleAccountBalance({
+          operation: "increment",
+          amount: Number(existingTransaction.amount),
+          accountId: existingTransaction.accountId,
+          transaction,
+        });
+
+        // Update the balance of the new account
+        await updateSingleAccountBalance({
+          operation: "decrement",
+          amount: params.amount,
+          accountId: params.accountId,
+          transaction,
+        });
+      } else if (difference !== 0) {
+        // Update the only the balance of the account, if the ammount has changed.
+        await updateSingleAccountBalance({
+          operation: difference > 0 ? "decrement" : "increment",
+          amount: Math.abs(difference),
+          accountId: params.accountId,
+          transaction,
+        });
+      }
+    } else {
+      // Update the balance of the account, if it's a new transaction.
+      await updateSingleAccountBalance({
+        operation: "decrement",
+        amount: params.amount,
+        accountId: params.accountId,
+        transaction,
+      });
+    }
+  });
 
   revalidatePath("/");
   revalidatePath("/transactions");
@@ -105,13 +134,16 @@ export const upsertGainTransaction = async (
 
   if (existingTransaction) {
     const difference = params.amount - Number(existingTransaction.amount);
-    await updateAccountBalance({
-      operation: difference > 0 ? "increment" : "decrement",
-      amount: Math.abs(difference),
-      accountId: params.accountId,
-    });
+
+    if (difference !== 0) {
+      await updateSingleAccountBalance({
+        operation: difference > 0 ? "increment" : "decrement",
+        amount: Math.abs(difference),
+        accountId: params.accountId,
+      });
+    }
   } else {
-    await updateAccountBalance({
+    await updateSingleAccountBalance({
       operation: "increment",
       amount: params.amount,
       accountId: params.accountId,
@@ -157,18 +189,20 @@ export const upsertTransferTransaction = async (
   if (existingTransaction) {
     const difference = params.amount - Number(existingTransaction.amount);
 
-    await Promise.all([
-      updateAccountBalance({
-        operation: difference > 0 ? "decrement" : "increment",
-        amount: Math.abs(difference),
-        accountId: params.fromAccountId,
-      }),
-      updateAccountBalance({
-        operation: difference > 0 ? "increment" : "decrement",
-        amount: Math.abs(difference),
-        accountId: params.toAccountId,
-      }),
-    ]);
+    if (difference !== 0) {
+      await Promise.all([
+        updateSingleAccountBalance({
+          operation: difference > 0 ? "decrement" : "increment",
+          amount: Math.abs(difference),
+          accountId: params.fromAccountId,
+        }),
+        updateSingleAccountBalance({
+          operation: difference > 0 ? "increment" : "decrement",
+          amount: Math.abs(difference),
+          accountId: params.toAccountId,
+        }),
+      ]);
+    }
   } else {
     await updateAccountsBalances({
       amount: params.amount,
@@ -220,18 +254,20 @@ export const upsertInvestmentTransaction = async (
   if (existingTransaction) {
     const difference = params.amount - Number(existingTransaction.amount);
 
-    await updateAccountBalance({
-      operation:
-        difference > 0
-          ? operation
-          : operation === "increment"
-            ? "decrement"
-            : "increment",
-      amount: Math.abs(difference),
-      accountId: params.accountId,
-    });
+    if (difference !== 0) {
+      await updateSingleAccountBalance({
+        operation:
+          difference > 0
+            ? operation
+            : operation === "increment"
+              ? "decrement"
+              : "increment",
+        amount: Math.abs(difference),
+        accountId: params.accountId,
+      });
+    }
   } else {
-    await updateAccountBalance({
+    await updateSingleAccountBalance({
       operation,
       amount: params.amount,
       accountId: params.accountId,

@@ -1,58 +1,54 @@
 import { db } from "@/app/_lib/prisma";
+import { Prisma } from "@prisma/client";
 
-interface UpdateAccountBalanceParams {
+interface updateSingleAccountBalanceParams {
   amount: number;
   accountId: string;
   operation: "increment" | "decrement";
+  transaction?: Omit<Prisma.TransactionClient, "$transaction">;
 }
 
-// Função genérica para atualizar saldo de uma única conta
-const updateSingleAccountBalance = async (
-  params: UpdateAccountBalanceParams,
+// Action to update the balance of a single account
+export const updateSingleAccountBalance = async (
+  params: updateSingleAccountBalanceParams,
 ) => {
-  await db.account.update({
-    where: {
-      id: params.accountId,
-    },
+  const { amount, accountId, operation, transaction } = params;
+
+  const prismaClient = transaction || db;
+
+  await prismaClient.account.update({
+    where: { id: accountId },
     data: {
-      balance: {
-        [params.operation]: params.amount,
-      },
+      balance: { [operation]: amount },
     },
   });
-};
-
-// Action to update the balance of a single account
-export const updateAccountBalance = async (
-  params: UpdateAccountBalanceParams,
-) => {
-  const { amount, accountId, operation } = params;
-
-  await updateSingleAccountBalance({ accountId, amount, operation });
 };
 
 interface UpdateAccountsBalancesParams {
   amount: number;
   fromAccountId: string;
   toAccountId: string;
+  transaction?: typeof db;
 }
 
 // Action to update the balance of both accounts in a transfer
 export const updateAccountsBalances = async (
   params: UpdateAccountsBalancesParams,
 ) => {
-  const { amount, fromAccountId, toAccountId } = params;
+  const { amount, fromAccountId, toAccountId, transaction } = params;
 
   await Promise.all([
     updateSingleAccountBalance({
       accountId: fromAccountId,
       amount,
       operation: "decrement",
+      transaction,
     }),
     updateSingleAccountBalance({
       accountId: toAccountId,
       amount,
       operation: "increment",
+      transaction,
     }),
   ]);
 };
