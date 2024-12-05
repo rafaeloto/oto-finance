@@ -23,7 +23,7 @@ const Accounts = async () => {
     <>
       <Navbar />
 
-      <div className="flex flex-col space-y-6 overflow-hidden p-6">
+      <div className="flex h-screen flex-col space-y-6 overflow-hidden px-20 py-10">
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl font-bold">Contas</h1>
           <div className="space-x-3">
@@ -36,7 +36,7 @@ const Accounts = async () => {
           <EmptyListFeedback message="Nenhuma conta registrada" />
         ) : (
           <ScrollArea className="h-full">
-            <div className="flex justify-center">
+            <div className="flex justify-start">
               <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {accounts.map((account) => (
                   <AccountCard key={account.id} account={account} />
