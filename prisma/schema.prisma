@@ -21,6 +21,7 @@ model Account {
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
   userId           String
+
   transactions     Transaction[] @relation("AccountTransaction")
   fromTransactions Transaction[] @relation("AccountFromTransaction")
   toTransactions   Transaction[] @relation("AccountToTransaction")
@@ -54,6 +55,7 @@ model Invoice {
   creditCardId    String
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+  userId          String
 
   creditCard      CreditCard      @relation("CreditCardInvoices", fields: [creditCardId], references: [id])
   transactions    Transaction[]   @relation("InvoiceTransactions")
