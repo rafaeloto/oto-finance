@@ -60,6 +60,17 @@ const Navbar = () => {
         </Link>
 
         <Link
+          href="/credit-cards"
+          className={
+            pathname === "/credit-cards"
+              ? "font-bold text-primary"
+              : "text-muted-foreground"
+          }
+        >
+          Cartões
+        </Link>
+
+        <Link
           href="/subscription"
           className={
             pathname === "/subscription"

@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { CreditCardFlag } from "@prisma/client";
 import { createCreditCardSchema } from "./schema";
 import { createInvoice } from "../create-invoice";
-// import { revalidatePath } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 interface CreateCreditCardParams {
   name: string;
@@ -71,5 +71,5 @@ export const createCreditCard = async (params: CreateCreditCardParams) => {
     });
   });
 
-  // revalidatePath("/credit-cards"); TODO: Uncomment when the page is ready.
+  revalidatePath("/credit-cards");
 };

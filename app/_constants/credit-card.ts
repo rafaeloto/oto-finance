@@ -10,7 +10,7 @@ export const CREDIT_CARD_LABELS = {
   [CreditCardFlag.VISA]: "Visa",
 };
 
-export const BANK_OPTIONS = Object.entries(CREDIT_CARD_LABELS).map(
+export const CREDIT_CARD_OPTIONS = Object.entries(CREDIT_CARD_LABELS).map(
   ([value, label]) => ({
     value,
     label,
