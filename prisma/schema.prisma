@@ -108,7 +108,7 @@ enum Bank {
 enum CreditCardFlag {
   ALELO
   AMEX
-  DINNERS
+  DINERS
   ELO
   HIPERCARD
   MASTERCARD
