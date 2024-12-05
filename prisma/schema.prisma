@@ -24,6 +24,40 @@ model Account {
   transactions     Transaction[] @relation("AccountTransaction")
   fromTransactions Transaction[] @relation("AccountFromTransaction")
   toTransactions   Transaction[] @relation("AccountToTransaction")
+  invoicesPaidFor  Invoice[]     @relation("PaidByAccount")
+}
+
+model CreditCard {
+  id          String          @id @default(uuid())
+  name        String
+  limit       Decimal         @db.Decimal(10, 2)
+  closingDate Int
+  dueDate     Int
+  flag        CreditCardFlag
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  userId      String
+
+  invoices    Invoice[]       @relation("CreditCardInvoices")
+  transactions Transaction[]  @relation("CreditCardTransactions")
+}
+
+model Invoice {
+  id              String          @id @default(uuid())
+  month           Int
+  year            Int
+  status          InvoiceStatus
+  totalAmount     Decimal         @default(0) @db.Decimal(10, 2)
+  paymentAmount   Decimal?        @db.Decimal(10, 2)
+  paymentDate     DateTime?
+  paidByAccountId String?
+  creditCardId    String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  creditCard      CreditCard      @relation("CreditCardInvoices", fields: [creditCardId], references: [id])
+  transactions    Transaction[]   @relation("InvoiceTransactions")
+  paidByAccount   Account?        @relation("PaidByAccount", fields: [paidByAccountId], references: [id])
 }
 
 model Transaction {
@@ -40,6 +74,8 @@ model Transaction {
   accountId     String?
   fromAccountId String?
   toAccountId   String?
+  cardId        String?
+  invoiceId     String?
 
   gainCategory       GainTransactionCategory?
   expenseCategory    ExpenseTransactionCategory?
@@ -49,6 +85,8 @@ model Transaction {
   account     Account? @relation("AccountTransaction", fields: [accountId], references: [id])
   fromAccount Account? @relation("AccountFromTransaction", fields: [fromAccountId], references: [id])
   toAccount   Account? @relation("AccountToTransaction", fields: [toAccountId], references: [id])
+  creditCard  CreditCard? @relation("CreditCardTransactions", fields: [cardId], references: [id])
+  invoice     Invoice?    @relation("InvoiceTransactions", fields: [invoiceId], references: [id])
 }
 
 enum Bank {
@@ -63,6 +101,22 @@ enum Bank {
   NUBANK
   PICPAY
   SANTANDER
+}
+
+enum CreditCardFlag {
+  ALELO
+  AMEX
+  DINNERS
+  ELO
+  HIPERCARD
+  MASTERCARD
+  VISA
+}
+
+enum InvoiceStatus {
+  OPEN
+  CLOSED
+  PAID
 }
 
 enum TransactionType {
