@@ -7,4 +7,5 @@ export const createCreditCardSchema = z.object({
   closingDate: z.number().int().min(1).max(31),
   dueDate: z.number().int().min(1).max(31),
   flag: z.nativeEnum(CreditCardFlag),
+  color: z.string().min(1),
 });

@@ -25,24 +25,9 @@ const CreditCardUnity = async ({ creditCard }: CreditCardUnityProps) => {
     return format(date, "dd/MM");
   };
 
-  // List of possible gradients
-  const gradients = [
-    "from-black via-gray-950 to-black",
-    "from-gray-700 via-gray-800 to-gray-900",
-    "from-red-700 via-red-800 to-red-900",
-    "from-blue-700 via-blue-800 to-blue-900",
-    "from-green-700 via-green-800 to-green-900",
-    "from-purple-700 via-purple-800 to-purple-900",
-    "from-yellow-700 via-yellow-800 to-yellow-900",
-  ];
-
-  // Random gradient selection
-  const randomGradient =
-    gradients[Math.floor(Math.random() * gradients.length)];
-
   return (
     <Card
-      className={`flex h-[220px] w-[400px] flex-col justify-between rounded-2xl bg-gradient-to-r p-5 ${randomGradient}`}
+      className={`flex h-[220px] w-[400px] flex-col justify-between rounded-2xl bg-gradient-to-r p-5 ${creditCard.color}`}
     >
       {/* Cart name and flag logo*/}
       <div className="flex items-center justify-between">

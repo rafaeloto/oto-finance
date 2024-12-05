@@ -13,6 +13,7 @@ interface CreateCreditCardParams {
   closingDate: number;
   dueDate: number;
   flag: CreditCardFlag;
+  color: string;
 }
 
 export const createCreditCard = async (params: CreateCreditCardParams) => {

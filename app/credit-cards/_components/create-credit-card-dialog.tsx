@@ -30,7 +30,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/_components/ui/select";
-import { CREDIT_CARD_OPTIONS } from "@/app/_constants/credit-card";
+import {
+  CARD_COLORS_OPTIONS,
+  CREDIT_CARD_OPTIONS,
+} from "@/app/_constants/credit-card";
 import { createCreditCard } from "@/app/_actions/credit-cards/create-credit-card";
 import { toast } from "sonner";
 
@@ -68,6 +71,10 @@ const formSchema = z.object({
 
   flag: z.nativeEnum(CreditCardFlag, {
     required_error: "A bandeira do cartão é obrigatória",
+  }),
+
+  color: z.string().min(1, {
+    message: "Selecione uma cor para o cartão.",
   }),
 });
 
@@ -214,6 +221,39 @@ const CreateCreditCardDialog = ({
                       {CREDIT_CARD_OPTIONS.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cor</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione a cor do cartão..." />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {CARD_COLORS_OPTIONS.map((color) => (
+                        <SelectItem key={color.value} value={color.value}>
+                          <div className="flex items-center gap-3">
+                            <span
+                              className={`h-5 w-5 rounded-full bg-gradient-to-r ${color.value}`}
+                            />
+                            <span>{color.label}</span>
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
