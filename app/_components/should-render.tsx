@@ -1,16 +1,12 @@
 import React from "react";
 
-interface ShouldRenderProps {
-  condition: boolean;
+interface Props {
+  if: boolean;
   children: React.ReactNode;
 }
 
-const ShouldRender = ({ condition, children }: ShouldRenderProps) => {
-  if (condition) {
-    return { children };
-  }
-
-  return null;
-};
+const ShouldRender: React.FC<Props> = ({ if: condition, children }) => (
+  <>{condition ? children : null}</>
+);
 
 export default ShouldRender;

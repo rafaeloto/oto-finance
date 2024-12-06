@@ -16,8 +16,10 @@ interface UpsertExpenseTransactionParams {
   name: string;
   amount: number;
   expenseCategory: ExpenseTransactionCategory;
-  accountId: string;
   paymentMethod: TransactionPaymentMethod;
+  accountId?: string;
+  cardId?: string;
+  invoiceId?: string;
   date: Date;
 }
 
@@ -57,12 +59,14 @@ export const upsertExpenseTransaction = async (
         });
 
         // Update the balance of the new account
-        await updateSingleAccountBalance({
-          operation: "decrement",
-          amount: params.amount,
-          accountId: params.accountId,
-          transaction,
-        });
+        if (params.accountId) {
+          await updateSingleAccountBalance({
+            operation: "decrement",
+            amount: params.amount,
+            accountId: params.accountId,
+            transaction,
+          });
+        }
       } else if (difference !== 0) {
         // Update the only the balance of the account, if the ammount has changed.
         await updateSingleAccountBalance({
@@ -74,12 +78,14 @@ export const upsertExpenseTransaction = async (
       }
     } else {
       // Update the balance of the account, if it's a new transaction.
-      await updateSingleAccountBalance({
-        operation: "decrement",
-        amount: params.amount,
-        accountId: params.accountId,
-        transaction,
-      });
+      if (params.accountId) {
+        await updateSingleAccountBalance({
+          operation: "decrement",
+          amount: params.amount,
+          accountId: params.accountId,
+          transaction,
+        });
+      }
     }
   });
 

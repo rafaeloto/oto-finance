@@ -2,6 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchemas } from "./formSchema";
 import { useAccounts } from "@/app/_contexts/AccountsContext";
+import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
+import { useInvoices } from "@/app/_contexts/InvoicesContext";
 import {
   ExpenseTransactionCategory,
   TransactionPaymentMethod,
@@ -33,6 +35,7 @@ import {
 import { DatePicker } from "../../ui/date-picker";
 import { DialogClose, DialogFooter } from "../../ui/dialog";
 import { Button } from "../../ui/button";
+import ShouldRender from "../../should-render";
 
 type FormSchema = z.infer<typeof formSchemas.expense>;
 
@@ -49,7 +52,24 @@ const ExpenseForm = ({
 }: ExpenseFormProps) => {
   const isUpdate = !!transactionId;
 
-  const { accounts, loading, error } = useAccounts();
+  const {
+    accounts,
+    loading: loadingAccounts,
+    error: accountsError,
+  } = useAccounts();
+  const {
+    creditCards,
+    loading: loadingCreditCards,
+    error: creditCardsError,
+  } = useCreditCards();
+  const {
+    invoices,
+    loading: loadingInvoices,
+    error: invoicesError,
+  } = useInvoices();
+
+  const loading = loadingAccounts || loadingCreditCards || loadingInvoices;
+  const error = accountsError || creditCardsError || invoicesError;
 
   const form = useForm({
     resolver: zodResolver(formSchemas.expense),
@@ -57,14 +77,29 @@ const ExpenseForm = ({
       name: "",
       amount: 0,
       expenseCategory: ExpenseTransactionCategory.FOOD,
-      accountId: "",
       paymentMethod: TransactionPaymentMethod.DEBIT,
+      accountId: "",
+      cardId: "",
+      invoiceId: "",
       date: new Date(),
     },
   });
 
+  const paymentMethod = form.watch("paymentMethod");
+  const isCreditCard = paymentMethod === TransactionPaymentMethod.CREDIT;
+  const selectedCardId = form.watch("cardId");
+  const filteredInvoices = invoices?.filter(
+    (invoice) => invoice.creditCardId === selectedCardId,
+  );
+
   const onSubmit = async (data: FormSchema) => {
     try {
+      if (isCreditCard) {
+        delete data.accountId;
+      } else {
+        delete data.cardId;
+        delete data.invoiceId;
+      }
       await upsertExpenseTransaction({ ...data, id: transactionId });
       toast.success(
         `Transação ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
@@ -77,7 +112,6 @@ const ExpenseForm = ({
     }
   };
 
-  if (loading) return <div>Carregando contas...</div>;
   if (error) return <div>{error}</div>;
 
   return (
@@ -144,31 +178,6 @@ const ExpenseForm = ({
 
         <FormField
           control={form.control}
-          name="accountId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Conta</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o conta..." />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {accounts?.map((option) => (
-                    <SelectItem key={option.id} value={option.id}>
-                      {option.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="paymentMethod"
           render={({ field }) => (
             <FormItem>
@@ -192,6 +201,97 @@ const ExpenseForm = ({
           )}
         />
 
+        <ShouldRender if={!isCreditCard}>
+          <FormField
+            control={form.control}
+            name="accountId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Conta</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  disabled={loadingAccounts}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o conta..." />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {accounts?.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        {option.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </ShouldRender>
+
+        <ShouldRender if={isCreditCard}>
+          <FormField
+            control={form.control}
+            name="cardId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Cartão de crédito</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  disabled={loadingCreditCards}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o cartão..." />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {creditCards?.map((card) => (
+                      <SelectItem key={card.id} value={card.id}>
+                        {card.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="invoiceId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Fatura</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  disabled={loadingInvoices || !selectedCardId}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione a fatura..." />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {filteredInvoices?.map((invoice) => (
+                      <SelectItem key={invoice.id} value={invoice.id}>
+                        {`${invoice.month}/${invoice.year}`}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </ShouldRender>
+
         <FormField
           control={form.control}
           name="date"
@@ -210,7 +310,9 @@ const ExpenseForm = ({
               Cancelar
             </Button>
           </DialogClose>
-          <Button type="submit">{isUpdate ? "Atualizar" : "Adicionar"}</Button>
+          <Button type="submit" disabled={loading || !!error}>
+            {isUpdate ? "Atualizar" : "Adicionar"}
+          </Button>
         </DialogFooter>
       </form>
     </Form>

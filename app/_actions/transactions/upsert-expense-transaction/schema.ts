@@ -6,9 +6,11 @@ import {
 
 export const upsertExpenseTransactionSchema = z.object({
   name: z.string().trim().min(1),
-  amount: z.number(),
+  amount: z.number().min(1),
   expenseCategory: z.nativeEnum(ExpenseTransactionCategory),
-  accountId: z.string().trim().min(1),
   paymentMethod: z.nativeEnum(TransactionPaymentMethod),
+  accountId: z.string().optional(),
+  cardId: z.string().optional(),
+  invoiceId: z.string().optional(),
   date: z.date(),
 });
