@@ -6,6 +6,7 @@ import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
 import { useInvoices } from "@/app/_contexts/InvoicesContext";
 import {
   ExpenseTransactionCategory,
+  Transaction,
   TransactionPaymentMethod,
 } from "@prisma/client";
 import { z } from "zod";
@@ -41,15 +42,12 @@ type FormSchema = z.infer<typeof formSchemas.expense>;
 
 interface ExpenseFormProps {
   setIsOpen: (open: boolean) => void;
-  defaultValues?: FormSchema;
-  transactionId?: string;
+  transaction?: Transaction;
 }
 
-const ExpenseForm = ({
-  defaultValues,
-  transactionId,
-  setIsOpen,
-}: ExpenseFormProps) => {
+const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
+  const transactionId = transaction?.id;
+
   const isUpdate = !!transactionId;
 
   const {
@@ -57,11 +55,13 @@ const ExpenseForm = ({
     loading: loadingAccounts,
     error: accountsError,
   } = useAccounts();
+
   const {
     creditCards,
     loading: loadingCreditCards,
     error: creditCardsError,
   } = useCreditCards();
+
   const {
     invoices,
     loading: loadingInvoices,
@@ -71,18 +71,21 @@ const ExpenseForm = ({
   const loading = loadingAccounts || loadingCreditCards || loadingInvoices;
   const error = accountsError || creditCardsError || invoicesError;
 
+  const defaultValues = {
+    name: transaction?.name || "",
+    amount: Number(transaction?.amount) || 0,
+    expenseCategory:
+      transaction?.expenseCategory || ExpenseTransactionCategory.FOOD,
+    paymentMethod: transaction?.paymentMethod || TransactionPaymentMethod.DEBIT,
+    accountId: transaction?.accountId || "",
+    cardId: transaction?.cardId || "",
+    invoiceId: transaction?.invoiceId || "",
+    date: transaction?.date ? new Date(transaction?.date) : new Date(),
+  };
+
   const form = useForm({
     resolver: zodResolver(formSchemas.expense),
-    defaultValues: defaultValues ?? {
-      name: "",
-      amount: 0,
-      expenseCategory: ExpenseTransactionCategory.FOOD,
-      paymentMethod: TransactionPaymentMethod.DEBIT,
-      accountId: "",
-      cardId: "",
-      invoiceId: "",
-      date: new Date(),
-    },
+    defaultValues,
   });
 
   const paymentMethod = form.watch("paymentMethod");

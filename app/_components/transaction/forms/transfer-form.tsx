@@ -26,35 +26,35 @@ import { DatePicker } from "../../ui/date-picker";
 import { DialogClose, DialogFooter } from "../../ui/dialog";
 import { Button } from "../../ui/button";
 import { TRANSFER_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction";
-import { TransferTransactionCategory } from "@prisma/client";
+import { Transaction, TransferTransactionCategory } from "@prisma/client";
 
 type FormSchema = z.infer<typeof formSchemas.transfer>;
 
 interface TransferFormProps {
   setIsOpen: (open: boolean) => void;
-  defaultValues?: FormSchema;
-  transactionId?: string;
+  transaction?: Transaction;
 }
 
-const TransferForm = ({
-  defaultValues,
-  transactionId,
-  setIsOpen,
-}: TransferFormProps) => {
+const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
+  const transactionId = transaction?.id;
+
   const isUpdate = !!transactionId;
 
   const { accounts, loading, error } = useAccounts();
 
+  const defaultValues = {
+    name: transaction?.name || "",
+    amount: Number(transaction?.amount) || 0,
+    transferCategory:
+      transaction?.transferCategory || TransferTransactionCategory.TRANSFER,
+    fromAccountId: transaction?.fromAccountId || "",
+    toAccountId: transaction?.toAccountId || "",
+    date: transaction?.date ? new Date(transaction?.date) : new Date(),
+  };
+
   const form = useForm({
     resolver: zodResolver(formSchemas.transfer),
-    defaultValues: defaultValues ?? {
-      name: "",
-      amount: 0,
-      transferCategory: TransferTransactionCategory.TRANSFER,
-      fromAccountId: "",
-      toAccountId: "",
-      date: new Date(),
-    },
+    defaultValues,
   });
 
   const onSubmit = async (data: FormSchema) => {

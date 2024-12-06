@@ -1,6 +1,6 @@
 "use client";
 
-import { TransactionType } from "@prisma/client";
+import { Transaction } from "@prisma/client";
 import {
   Dialog,
   DialogContent,
@@ -17,19 +17,15 @@ import InvestmentForm from "./forms/investment-form";
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  defaultValues?: any;
-  transactionId?: string;
-  transactionType?: TransactionType;
+  transaction?: Transaction;
 }
 
 const UpsertTransactionDialog = ({
   isOpen,
   setIsOpen,
-  defaultValues,
-  transactionId,
-  transactionType,
+  transaction,
 }: UpsertTransactionDialogProps) => {
+  const { id: transactionId, type: transactionType } = transaction || {};
   const isUpdate = !!transactionId;
 
   const tabValueMap = {
@@ -86,35 +82,19 @@ const UpsertTransactionDialog = ({
           </TabsList>
 
           <TabsContent value="expense">
-            <ExpenseForm
-              defaultValues={defaultValues}
-              transactionId={transactionId}
-              setIsOpen={setIsOpen}
-            />
+            <ExpenseForm setIsOpen={setIsOpen} transaction={transaction} />
           </TabsContent>
 
           <TabsContent value="gain">
-            <GainForm
-              defaultValues={defaultValues}
-              transactionId={transactionId}
-              setIsOpen={setIsOpen}
-            />
+            <GainForm setIsOpen={setIsOpen} transaction={transaction} />
           </TabsContent>
 
           <TabsContent value="transfer">
-            <TransferForm
-              defaultValues={defaultValues}
-              transactionId={transactionId}
-              setIsOpen={setIsOpen}
-            />
+            <TransferForm setIsOpen={setIsOpen} transaction={transaction} />
           </TabsContent>
 
           <TabsContent value="investment">
-            <InvestmentForm
-              defaultValues={defaultValues}
-              transactionId={transactionId}
-              setIsOpen={setIsOpen}
-            />
+            <InvestmentForm setIsOpen={setIsOpen} transaction={transaction} />
           </TabsContent>
         </Tabs>
       </DialogContent>

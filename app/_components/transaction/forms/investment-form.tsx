@@ -26,35 +26,35 @@ import { DatePicker } from "../../ui/date-picker";
 import { DialogClose, DialogFooter } from "../../ui/dialog";
 import { Button } from "../../ui/button";
 import { INVESTMENT_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction";
-import { InvestmentTransactionCategory } from "@prisma/client";
+import { InvestmentTransactionCategory, Transaction } from "@prisma/client";
 
 type FormSchema = z.infer<typeof formSchemas.investment>;
 
 interface InvestmentFormProps {
   setIsOpen: (open: boolean) => void;
-  defaultValues?: FormSchema;
-  transactionId?: string;
+  transaction?: Transaction;
 }
 
-const InvestmentForm = ({
-  defaultValues,
-  transactionId,
-  setIsOpen,
-}: InvestmentFormProps) => {
+const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
+  const transactionId = transaction?.id;
+
   const isUpdate = !!transactionId;
 
   const { accounts, loading, error } = useAccounts();
 
+  const defaultValues = {
+    name: transaction?.name || "",
+    amount: Number(transaction?.amount) || 0,
+    investmentCategory:
+      transaction?.investmentCategory ||
+      InvestmentTransactionCategory.INVESTMENT_POSITIVE_RETURN,
+    accountId: transaction?.accountId || "",
+    date: transaction?.date ? new Date(transaction?.date) : new Date(),
+  };
+
   const form = useForm({
     resolver: zodResolver(formSchemas.investment),
-    defaultValues: defaultValues ?? {
-      name: "",
-      amount: 0,
-      investmentCategory:
-        InvestmentTransactionCategory.INVESTMENT_POSITIVE_RETURN,
-      accountId: "",
-      date: new Date(),
-    },
+    defaultValues,
   });
 
   const onSubmit = async (data: FormSchema) => {

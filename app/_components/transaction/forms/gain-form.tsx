@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchemas } from "./formSchema";
 import { useAccounts } from "@/app/_contexts/AccountsContext";
-import { GainTransactionCategory } from "@prisma/client";
+import { GainTransactionCategory, Transaction } from "@prisma/client";
 import { z } from "zod";
 import { upsertGainTransaction } from "@/app/_actions/transactions/upsert-gain-transaction";
 import { toast } from "sonner";
@@ -32,28 +32,27 @@ type FormSchema = z.infer<typeof formSchemas.gain>;
 
 interface GainFormProps {
   setIsOpen: (open: boolean) => void;
-  defaultValues?: FormSchema;
-  transactionId?: string;
+  transaction?: Transaction;
 }
 
-const GainForm = ({
-  defaultValues,
-  transactionId,
-  setIsOpen,
-}: GainFormProps) => {
+const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
+  const transactionId = transaction?.id;
+
   const isUpdate = !!transactionId;
 
   const { accounts, loading, error } = useAccounts();
 
+  const defaultValues = {
+    name: transaction?.name || "",
+    amount: Number(transaction?.amount) || 0,
+    gainCategory: transaction?.gainCategory || GainTransactionCategory.SALARY,
+    accountId: transaction?.accountId || "",
+    date: transaction?.date ? new Date(transaction?.date) : new Date(),
+  };
+
   const form = useForm({
     resolver: zodResolver(formSchemas.gain),
-    defaultValues: defaultValues ?? {
-      name: "",
-      amount: 0,
-      gainCategory: GainTransactionCategory.SALARY,
-      accountId: "",
-      date: new Date(),
-    },
+    defaultValues,
   });
 
   const onSubmit = async (data: FormSchema) => {
