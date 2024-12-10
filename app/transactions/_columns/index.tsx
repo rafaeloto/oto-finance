@@ -73,8 +73,8 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     cell: ({ row: { original: transaction } }) =>
       new Date(transaction.date).toLocaleDateString("pt-BR", {
         day: "2-digit",
-        month: "long",
-        year: "numeric",
+        month: "2-digit",
+        year: "2-digit",
       }),
   },
   {
