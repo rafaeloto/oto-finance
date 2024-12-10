@@ -8,6 +8,7 @@ import {
   updateAccountsBalances,
   updateSingleAccountBalance,
 } from "@/app/_actions/accounts/update-balance";
+import { updateInvoiceAmount } from "@/app/_actions/invoices/update-amount";
 
 export const deleteTransaction = async ({
   transactionId,
@@ -19,8 +20,14 @@ export const deleteTransaction = async ({
     throw new Error("Transaction not found");
   }
 
-  const { amount, accountId, fromAccountId, toAccountId, investmentCategory } =
-    transaction;
+  const {
+    amount,
+    accountId,
+    fromAccountId,
+    toAccountId,
+    invoiceId,
+    investmentCategory,
+  } = transaction;
 
   // Group all operations in a single transaction to ensure atomicity
   await db.$transaction(async (prismaClient) => {
@@ -32,6 +39,15 @@ export const deleteTransaction = async ({
             operation: "increment",
             amount: Number(amount),
             accountId,
+            transaction: prismaClient,
+          });
+        }
+
+        if (invoiceId) {
+          await updateInvoiceAmount({
+            operation: "decrement",
+            amount: Number(amount),
+            invoiceId,
             transaction: prismaClient,
           });
         }
