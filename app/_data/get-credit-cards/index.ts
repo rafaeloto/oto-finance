@@ -12,5 +12,8 @@ export const getCreditCards = async () => {
     where: {
       userId,
     },
+    orderBy: {
+      createdAt: "asc",
+    },
   });
 };

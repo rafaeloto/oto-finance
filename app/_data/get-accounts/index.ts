@@ -12,5 +12,8 @@ export const getAccounts = async () => {
     where: {
       userId,
     },
+    orderBy: {
+      createdAt: "asc",
+    },
   });
 };
