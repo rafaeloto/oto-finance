@@ -32,8 +32,9 @@ export const deleteTransaction = async ({
   // Group all operations in a single transaction to ensure atomicity
   await db.$transaction(async (prismaClient) => {
     switch (transaction.type) {
-      // Reverting the expense: add the amount back to the account
+      // Reverting the expense impact
       case "EXPENSE":
+        // Reverting the debit expense: add the amount back to the account
         if (accountId) {
           await updateSingleAccountBalance({
             operation: "increment",
@@ -41,9 +42,8 @@ export const deleteTransaction = async ({
             accountId,
             transaction: prismaClient,
           });
-        }
-
-        if (invoiceId) {
+        } else if (invoiceId) {
+          // Reverting the credit expense: remove the amount from the invoice total
           await updateInvoiceAmount({
             operation: "decrement",
             amount: Number(amount),
