@@ -37,6 +37,7 @@ import { DatePicker } from "../../ui/date-picker";
 import { DialogClose, DialogFooter } from "../../ui/dialog";
 import { Button } from "../../ui/button";
 import ShouldRender from "../../should-render";
+import Image from "next/image";
 
 type FormSchema = z.infer<typeof formSchemas.expense>;
 
@@ -224,7 +225,15 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
                   <SelectContent>
                     {accounts?.map((option) => (
                       <SelectItem key={option.id} value={option.id}>
-                        {option.name}
+                        <div className="flex items-center space-x-5">
+                          <Image
+                            src={`/banks/${option.bank}.svg`}
+                            alt={option.bank || "Banco"}
+                            width={20}
+                            height={20}
+                          />
+                          <span>{option.name}</span>
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -255,7 +264,15 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
                   <SelectContent>
                     {creditCards?.map((card) => (
                       <SelectItem key={card.id} value={card.id}>
-                        {card.name}
+                        <div className="flex items-center space-x-5">
+                          <Image
+                            src={`/credit-cards/${card.flag}.svg`}
+                            alt={card.flag || "Cartão"}
+                            width={20}
+                            height={20}
+                          />
+                          <span>{card.name}</span>
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>

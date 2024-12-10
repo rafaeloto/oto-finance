@@ -56,9 +56,9 @@ export const EXPENSE_TRANSACTION_CATEGORY_LABELS = {
 
 export const INVESTMENT_TRANSACTION_CATEGORY_LABELS = {
   [InvestmentTransactionCategory.INVESTMENT_NEGATIVE_RETURN]:
-    "Retorno negativo de investimento",
+    "Retorno negativo",
   [InvestmentTransactionCategory.INVESTMENT_POSITIVE_RETURN]:
-    "Retorno positivo de investimento",
+    "Retorno positivo",
 };
 
 export const TRANSFER_TRANSACTION_CATEGORY_LABELS = {

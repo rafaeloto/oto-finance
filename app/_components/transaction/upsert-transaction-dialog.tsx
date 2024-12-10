@@ -63,7 +63,7 @@ const UpsertTransactionDialog = ({
               value="gain"
               disabled={isUpdate && transactionType !== "GAIN"}
             >
-              Receita
+              Ganho
             </TabsTrigger>
 
             <TabsTrigger

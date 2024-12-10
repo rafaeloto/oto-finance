@@ -27,6 +27,7 @@ import { GAIN_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction"
 import { DatePicker } from "../../ui/date-picker";
 import { DialogClose, DialogFooter } from "../../ui/dialog";
 import { Button } from "../../ui/button";
+import Image from "next/image";
 
 type FormSchema = z.infer<typeof formSchemas.gain>;
 
@@ -149,7 +150,15 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
                 <SelectContent>
                   {accounts?.map((option) => (
                     <SelectItem key={option.id} value={option.id}>
-                      {option.name}
+                      <div className="flex items-center space-x-5">
+                        <Image
+                          src={`/banks/${option.bank}.svg`}
+                          alt={option.bank || "Banco"}
+                          width={20}
+                          height={20}
+                        />
+                        <span>{option.name}</span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
