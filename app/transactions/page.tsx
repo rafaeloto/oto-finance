@@ -1,5 +1,3 @@
-import { DataTable } from "../_components/ui/data-table";
-import { transactionColumns } from "./_columns";
 import { db } from "../_lib/prisma";
 import AddTransactionButton from "../_components/transaction/add-transaction-button";
 import Navbar from "../_components/navbar";
@@ -8,6 +6,9 @@ import { redirect } from "next/navigation";
 import { ScrollArea } from "../_components/ui/scroll-area";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import EmptyListFeedback from "../_components/empty-list-feedback";
+import { getCreditCards } from "../_data/get-credit-cards";
+import { TransactionsTable } from "./_table";
+import { getAccounts } from "../_data/get-accounts";
 
 const TransactionsPage = async () => {
   const { userId } = await auth();
@@ -29,6 +30,9 @@ const TransactionsPage = async () => {
 
   const hasNoData = transactions.length === 0;
 
+  const creditCards = await getCreditCards();
+  const accounts = await getAccounts();
+
   return (
     <>
       <Navbar />
@@ -44,9 +48,10 @@ const TransactionsPage = async () => {
           <EmptyListFeedback message="Nenhuma transação registrada" />
         ) : (
           <ScrollArea className="h-full">
-            <DataTable
-              columns={transactionColumns}
-              data={JSON.parse(JSON.stringify(transactions))}
+            <TransactionsTable
+              transactions={transactions}
+              creditCards={creditCards}
+              accounts={accounts}
             />
           </ScrollArea>
         )}
