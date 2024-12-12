@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/app/_components/ui/button";
+import Image from "next/image";
 import {
   Dialog,
   DialogClose,
@@ -37,6 +38,7 @@ import {
 import { createCreditCard } from "@/app/_actions/credit-cards/create-credit-card";
 import { toast } from "sonner";
 import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
+import { useInvoices } from "@/app/_contexts/InvoicesContext";
 
 interface CreateCreditCardDialogProps {
   isOpen: boolean;
@@ -86,6 +88,7 @@ const CreateCreditCardDialog = ({
   setIsOpen,
 }: CreateCreditCardDialogProps) => {
   const { reloadCreditCards } = useCreditCards();
+  const { reloadInvoices } = useInvoices();
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -102,6 +105,7 @@ const CreateCreditCardDialog = ({
     try {
       await createCreditCard({ ...data });
       await reloadCreditCards();
+      await reloadInvoices();
       toast.success("Cartão criado com sucesso!");
       setIsOpen(false);
       form.reset();
@@ -221,7 +225,15 @@ const CreateCreditCardDialog = ({
                     <SelectContent>
                       {CREDIT_CARD_OPTIONS.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
-                          {option.label}
+                          <div className="flex items-center space-x-5">
+                            <Image
+                              src={`/credit-cards/${option.value}.svg`}
+                              alt={option.label || "Cartão"}
+                              width={20}
+                              height={20}
+                            />
+                            <span>{option.label}</span>
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
