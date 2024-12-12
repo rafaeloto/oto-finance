@@ -2,7 +2,7 @@ import { CreditCard } from "@prisma/client";
 import { Card } from "@/app/_components/ui/card";
 import Image from "next/image";
 import { clerkClient } from "@clerk/nextjs/server";
-import { format } from "date-fns";
+import { calculateClosingAndDueDates } from "@/app/_utils/date";
 import { Button } from "@/app/_components/ui/button";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
@@ -14,19 +14,10 @@ interface CreditCardUnityProps {
 const CreditCardUnity = async ({ creditCard }: CreditCardUnityProps) => {
   const user = await clerkClient().users.getUser(creditCard.userId);
 
-  // Helper function to calculate closing and due dates
-  const calculateDate = (day: number): string => {
-    const today = new Date();
-    const currentMonth = today.getMonth();
-    const year = today.getFullYear();
-    const month =
-      day >= today.getDate()
-        ? currentMonth // Dia está no futuro: mês atual
-        : currentMonth + 1; // Dia já passou: próximo mês
-
-    const date = new Date(year, month, day);
-    return format(date, "dd/MM");
-  };
+  const { closingDate, dueDate } = calculateClosingAndDueDates(
+    creditCard.closingDate,
+    creditCard.dueDate,
+  );
 
   return (
     <Card className="relative flex flex-col items-center rounded-2xl border-transparent pb-3 duration-150 hover:border-gray-600">
@@ -65,16 +56,12 @@ const CreditCardUnity = async ({ creditCard }: CreditCardUnityProps) => {
           <div className="flex gap-5">
             <div className="flex flex-col items-center justify-center">
               <p className="text-xs">Fechamento</p>
-              <p className="text-sm font-semibold">
-                {calculateDate(creditCard.closingDate)}
-              </p>
+              <p className="text-sm font-semibold">{closingDate}</p>
             </div>
 
             <div className="flex flex-col items-center justify-center">
               <p className="text-xs">Vencimento</p>
-              <p className="text-sm font-semibold">
-                {calculateDate(creditCard.dueDate)}
-              </p>
+              <p className="text-sm font-semibold">{dueDate}</p>
             </div>
           </div>
         </div>
