@@ -36,6 +36,7 @@ import {
 } from "@/app/_constants/credit-card";
 import { createCreditCard } from "@/app/_actions/credit-cards/create-credit-card";
 import { toast } from "sonner";
+import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
 
 interface CreateCreditCardDialogProps {
   isOpen: boolean;
@@ -84,7 +85,7 @@ const CreateCreditCardDialog = ({
   isOpen,
   setIsOpen,
 }: CreateCreditCardDialogProps) => {
-  // const { reloadAccounts } = useAccounts(); // TODO: include this when the context is implemented
+  const { reloadCreditCards } = useCreditCards();
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -100,7 +101,7 @@ const CreateCreditCardDialog = ({
   const onSubmit = async (data: FormSchema) => {
     try {
       await createCreditCard({ ...data });
-      // await reloadCreditCards(); // TODO: include this when the context is implemented
+      await reloadCreditCards();
       toast.success("Cartão criado com sucesso!");
       setIsOpen(false);
       form.reset();
