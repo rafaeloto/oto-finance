@@ -13,7 +13,7 @@ import {
 import EditTransactionButton from "../_components/edit-transaction-button";
 import DeleteTransactionButton from "../_components/delete-transaction-button";
 import Image from "next/image";
-import { ArrowDown } from "lucide-react";
+import { Redo2 } from "lucide-react";
 
 interface Props {
   creditCards: CreditCard[];
@@ -92,28 +92,30 @@ export function getTransactionColumns({
             (account) => account.id === transaction.toAccountId,
           );
           return (
-            <div className="space-y-1">
-              <div className="flex items-center space-x-5">
-                <Image
-                  src={`/banks/${fromAccount?.bank}.svg`}
-                  alt={fromAccount?.bank || "Cartão de crédito"}
-                  width={20}
-                  height={20}
-                />
-                <p>{fromAccount?.name}</p>
+            <div className="flex items-center space-x-5">
+              <div className="space-y-3">
+                <div className="flex items-center space-x-5">
+                  <Image
+                    src={`/banks/${fromAccount?.bank}.svg`}
+                    alt={fromAccount?.bank || "Cartão de crédito"}
+                    width={20}
+                    height={20}
+                  />
+                  <p>{fromAccount?.name}</p>
+                </div>
+
+                <div className="flex items-center space-x-5">
+                  <Image
+                    src={`/banks/${toAcount?.bank}.svg`}
+                    alt={toAcount?.bank || "Cartão de crédito"}
+                    width={20}
+                    height={20}
+                  />
+                  <p>{toAcount?.name}</p>
+                </div>
               </div>
 
-              <ArrowDown size={15} />
-
-              <div className="flex items-center space-x-5">
-                <Image
-                  src={`/banks/${toAcount?.bank}.svg`}
-                  alt={toAcount?.bank || "Cartão de crédito"}
-                  width={20}
-                  height={20}
-                />
-                <p>{toAcount?.name}</p>
-              </div>
+              <Redo2 size={20} className="rotate-180" />
             </div>
           );
         }
