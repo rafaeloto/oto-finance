@@ -6,12 +6,17 @@ import { calculateClosingAndDueDates } from "@/app/_utils/date";
 import { Button } from "@/app/_components/ui/button";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
+import ShouldRender from "@/app/_components/should-render";
 
 interface CreditCardUnityProps {
   creditCard: CreditCard;
+  complete?: boolean;
 }
 
-const CreditCardUnity = async ({ creditCard }: CreditCardUnityProps) => {
+const CreditCardUnity = async ({
+  creditCard,
+  complete = true,
+}: CreditCardUnityProps) => {
   const user = await clerkClient().users.getUser(creditCard.userId);
 
   const { closingDate, dueDate } = calculateClosingAndDueDates(
@@ -20,7 +25,9 @@ const CreditCardUnity = async ({ creditCard }: CreditCardUnityProps) => {
   );
 
   return (
-    <Card className="relative flex flex-col items-center rounded-2xl border-transparent pb-3 duration-150 hover:border-gray-600">
+    <Card
+      className={`relative flex flex-col items-center rounded-2xl border-transparent pb-3 ${complete && "duration-150 hover:border-gray-600"}`}
+    >
       <Card
         className={`flex h-[220px] w-[400px] flex-col justify-between rounded-2xl bg-gradient-to-r p-5 ${creditCard.color}`}
       >
@@ -43,7 +50,7 @@ const CreditCardUnity = async ({ creditCard }: CreditCardUnityProps) => {
           </p>
 
           <div className="flex h-8 w-10 items-center justify-center rounded-sm bg-gradient-to-b from-yellow-500 to-yellow-700 shadow-inner">
-            <Image src="chip.svg" alt="chip" width={40} height={32} />
+            <Image src="/chip.svg" alt="chip" width={40} height={32} />
           </div>
         </div>
 
@@ -67,16 +74,18 @@ const CreditCardUnity = async ({ creditCard }: CreditCardUnityProps) => {
         </div>
       </Card>
 
-      <Button
-        variant="ghost"
-        className="mt-3 flex items-center space-x-1"
-        asChild
-      >
-        <Link href={`/credit-cards/details?id=${creditCard.id}`}>
-          <span>Ver detalhes</span>
-          <ArrowRightIcon />
-        </Link>
-      </Button>
+      <ShouldRender if={complete}>
+        <Button
+          variant="ghost"
+          className="mt-3 flex items-center space-x-1"
+          asChild
+        >
+          <Link href={`/credit-cards/details?id=${creditCard.id}`}>
+            <span>Ver detalhes</span>
+            <ArrowRightIcon />
+          </Link>
+        </Button>
+      </ShouldRender>
     </Card>
   );
 };

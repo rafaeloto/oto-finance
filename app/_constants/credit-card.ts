@@ -1,4 +1,4 @@
-import { CreditCardFlag } from "@prisma/client";
+import { CreditCardFlag, InvoiceStatus } from "@prisma/client";
 
 export const CREDIT_CARD_LABELS = {
   [CreditCardFlag.ALELO]: "Alelo",
@@ -27,3 +27,9 @@ export const CARD_COLORS_OPTIONS = [
   { label: "Laranja", value: "from-orange-500 via-orange-600 to-orange-700" },
   { label: "Vermelho", value: "from-red-700 via-red-800 to-red-900" },
 ];
+
+export const INVOICE_STATUS_LABELS = {
+  [InvoiceStatus.PAID]: "Paga",
+  [InvoiceStatus.CLOSED]: "Fechada",
+  [InvoiceStatus.OPEN]: "Aberta",
+};
