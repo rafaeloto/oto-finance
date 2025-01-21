@@ -196,5 +196,5 @@ export const upsertExpenseTransaction = async (
   revalidatePath("/");
   revalidatePath("/transactions");
   revalidatePath("/accounts");
-  revalidatePath("/credit-cards");
+  revalidatePath("/credit-cards/details");
 };

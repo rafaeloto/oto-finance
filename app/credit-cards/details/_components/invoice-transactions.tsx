@@ -10,6 +10,8 @@ import {
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@/app/_constants/transaction";
 import { formatCurrency } from "@/app/_utils/currency";
+import EditTransactionButton from "@/app/transactions/_components/edit-transaction-button";
+import DeleteTransactionButton from "@/app/transactions/_components/delete-transaction-button";
 import { Transaction } from "@prisma/client";
 import Image from "next/image";
 
@@ -36,7 +38,7 @@ const InvoiceTransactions = ({ transactions }: InvoiceTransactionsProps) => {
                 key={transaction.id}
                 className="border-b-1 flex items-center justify-between border-b pb-4"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex w-[20%] items-center gap-3">
                   <div className="rounded-lg bg-white bg-opacity-[3%] p-3 text-white">
                     <Image
                       src={`/${TRANSACTION_PAYMENT_METHOD_ICONS[transaction.paymentMethod]}`}
@@ -45,20 +47,22 @@ const InvoiceTransactions = ({ transactions }: InvoiceTransactionsProps) => {
                       alt={transaction.paymentMethod}
                     />
                   </div>
-                  <div>
-                    <p className="text-sm font-bold">{transaction.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {new Date(transaction.date).toLocaleDateString("pt-BR", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </p>
-                  </div>
+                  <p className="text-sm font-bold">{transaction.name}</p>
                 </div>
+                <p className="text-sm text-muted-foreground">
+                  {new Date(transaction.date).toLocaleDateString("pt-BR", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </p>
                 <p className="text-sm font-bold">
                   {formatCurrency(Number(transaction.amount))}
                 </p>
+                <div className="space-x-1">
+                  <EditTransactionButton transaction={transaction} />
+                  <DeleteTransactionButton transactionId={transaction.id} />
+                </div>
               </div>
             ))}
           </CardContent>

@@ -113,4 +113,5 @@ export const deleteTransaction = async ({
   revalidatePath("/");
   revalidatePath("/transactions");
   revalidatePath("/accounts");
+  revalidatePath("/credit-cards/details");
 };
