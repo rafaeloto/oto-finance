@@ -22,6 +22,15 @@ export const recalculateBalances = async () => {
     where: { userId },
   });
 
+  // Retrieves all paid invoices
+  const paidInvoices = await db.invoice.findMany({
+    where: {
+      userId,
+      status: "PAID",
+      paidByAccountId: { not: null },
+    },
+  });
+
   // Retrieves all user accounts
   const accounts = await getAccounts();
 
@@ -35,6 +44,18 @@ export const recalculateBalances = async () => {
         accountId: account.id,
         transaction: prismaClient,
       });
+    }
+
+    // Remove the amountPaid of paid invoices from the accounts balances
+    for (const invoice of paidInvoices) {
+      if (invoice.paidByAccountId && invoice.paymentAmount) {
+        await updateSingleAccountBalance({
+          operation: "decrement",
+          amount: Number(invoice.paymentAmount),
+          accountId: invoice.paidByAccountId,
+          transaction: prismaClient,
+        });
+      }
     }
 
     // Groups transactions by account and recalculates the balance
