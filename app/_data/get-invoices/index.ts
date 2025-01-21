@@ -1,24 +1,24 @@
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { InvoiceStatus } from "@prisma/client";
 
 type params = {
-  creditCardId: string;
+  creditCardId?: string;
+  status?: InvoiceStatus;
 };
 
-export const getInvoices = async ({ creditCardId }: params) => {
+export const getInvoices = async ({ creditCardId, status }: params = {}) => {
   const { userId } = await auth();
 
   if (!userId) {
     throw new Error("Unauthorized");
   }
 
-  if (!creditCardId) {
-    throw new Error("Missing 'creditCardId'");
-  }
-
   return db.invoice.findMany({
     where: {
-      creditCardId,
+      userId,
+      ...(creditCardId && { creditCardId }),
+      ...(status && { status }),
     },
   });
 };

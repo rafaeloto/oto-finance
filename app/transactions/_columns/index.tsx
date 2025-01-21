@@ -1,6 +1,6 @@
 "use client";
 
-import { Account, CreditCard, Transaction } from "@prisma/client";
+import { Account, CreditCard, Invoice, Transaction } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import TransactionTypeBadge from "../_components/type-badge";
 import {
@@ -18,11 +18,13 @@ import { Redo2 } from "lucide-react";
 interface Props {
   creditCards: CreditCard[];
   accounts: Account[];
+  paidInvoices: Invoice[];
 }
 
 export function getTransactionColumns({
   creditCards,
   accounts,
+  paidInvoices,
 }: Props): ColumnDef<Transaction>[] {
   return [
     {
@@ -178,8 +180,15 @@ export function getTransactionColumns({
       accessorKey: "actions",
       header: "",
       cell: ({ row: { original: transaction } }) => {
+        const isEditableTransaction =
+          !transaction.invoiceId ||
+          !paidInvoices?.some(({ id }) => id === transaction.invoiceId);
+
         return (
-          <div className="space-x-1">
+          <div
+            className="space-x-1"
+            style={{ display: isEditableTransaction ? "block" : "none" }}
+          >
             <EditTransactionButton transaction={transaction} />
             <DeleteTransactionButton transactionId={transaction.id} />
           </div>

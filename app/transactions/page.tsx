@@ -9,6 +9,7 @@ import EmptyListFeedback from "../_components/empty-list-feedback";
 import { getCreditCards } from "../_data/get-credit-cards";
 import { TransactionsTable } from "./_table";
 import { getAccounts } from "../_data/get-accounts";
+import { getInvoices } from "../_data/get-invoices";
 
 const TransactionsPage = async () => {
   const { userId } = await auth();
@@ -32,6 +33,7 @@ const TransactionsPage = async () => {
 
   const creditCards = await getCreditCards();
   const accounts = await getAccounts();
+  const paidInvoices = await getInvoices({ status: "PAID" });
 
   return (
     <>
@@ -52,6 +54,7 @@ const TransactionsPage = async () => {
               transactions={transactions}
               creditCards={creditCards}
               accounts={accounts}
+              paidInvoices={paidInvoices}
             />
           </ScrollArea>
         )}
