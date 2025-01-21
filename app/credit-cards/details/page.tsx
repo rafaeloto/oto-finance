@@ -19,10 +19,13 @@ const CreditCardDetails = async ({
 
   const foundCreditCard = !!creditCard;
 
+  // Gets all invoices from the credit card
   const invoices = await getInvoices({ creditCardId: id });
 
+  // Gets all invoice ids
   const invoiceIds = invoices.map((invoice) => invoice.id);
 
+  // Creates an array of objects with the invoice id and its transactions
   const transactionsByInvoice = await Promise.all(
     invoiceIds.map(async (invoiceId) => ({
       id: invoiceId,

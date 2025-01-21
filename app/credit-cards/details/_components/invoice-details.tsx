@@ -43,6 +43,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
     string | undefined
   >(getFilteredInvoices("OPEN")[0]?.id);
 
+  // Function to get transactions in a given invoice
   const getInvoiceTransactions = useCallback(
     (invoiceId: string) => {
       return transactionsByInvoice.find((invoice) => invoice.id === invoiceId)
@@ -51,6 +52,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
     [transactionsByInvoice],
   );
 
+  // Gets the transactions in the selected invoice
   const selectedInvoiceTransactions = useMemo(() => {
     if (selectedInvoiceId) {
       return getInvoiceTransactions(selectedInvoiceId);
@@ -58,6 +60,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
     return undefined;
   }, [getInvoiceTransactions, selectedInvoiceId]);
 
+  // Function to handle invoice selection, updating the state
   const onSelectInvoice = useCallback((invoiceId: string) => {
     setSelectedInvoiceId(invoiceId);
   }, []);
