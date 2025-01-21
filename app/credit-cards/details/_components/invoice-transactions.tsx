@@ -14,12 +14,17 @@ import EditTransactionButton from "@/app/transactions/_components/edit-transacti
 import DeleteTransactionButton from "@/app/transactions/_components/delete-transaction-button";
 import { Transaction } from "@prisma/client";
 import Image from "next/image";
+import ShouldRender from "@/app/_components/should-render";
 
-interface InvoiceTransactionsProps {
+type InvoiceTransactionsProps = {
   transactions: Transaction[] | undefined;
-}
+  canChangeTransactions: boolean;
+};
 
-const InvoiceTransactions = ({ transactions }: InvoiceTransactionsProps) => {
+const InvoiceTransactions = ({
+  transactions,
+  canChangeTransactions,
+}: InvoiceTransactionsProps) => {
   const hasNoData = !transactions?.length;
 
   return (
@@ -59,10 +64,13 @@ const InvoiceTransactions = ({ transactions }: InvoiceTransactionsProps) => {
                 <p className="text-sm font-bold">
                   {formatCurrency(Number(transaction.amount))}
                 </p>
-                <div className="space-x-1">
-                  <EditTransactionButton transaction={transaction} />
-                  <DeleteTransactionButton transactionId={transaction.id} />
-                </div>
+
+                <ShouldRender if={canChangeTransactions}>
+                  <div className="space-x-1">
+                    <EditTransactionButton transaction={transaction} />
+                    <DeleteTransactionButton transactionId={transaction.id} />
+                  </div>
+                </ShouldRender>
               </div>
             ))}
           </CardContent>
