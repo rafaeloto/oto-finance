@@ -96,7 +96,6 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
               <InvoiceList
                 invoices={getFilteredInvoices("PAID")}
                 onSelectInvoice={onSelectInvoice}
-                creditCard={creditCard}
                 selectedInvoiceId={selectedInvoiceId}
               />
             </TabsContent>
@@ -104,7 +103,6 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
               <InvoiceList
                 invoices={getFilteredInvoices("CLOSED")}
                 onSelectInvoice={onSelectInvoice}
-                creditCard={creditCard}
                 selectedInvoiceId={selectedInvoiceId}
               />
             </TabsContent>
@@ -112,7 +110,6 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
               <InvoiceList
                 invoices={getFilteredInvoices("OPEN")}
                 onSelectInvoice={onSelectInvoice}
-                creditCard={creditCard}
                 selectedInvoiceId={selectedInvoiceId}
               />
             </TabsContent>
