@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import CreditCardUnity from "./_components/credit-card-unity";
 import EmptyListFeedback from "../_components/empty-list-feedback";
 import { getCreditCards } from "../_data/get-credit-cards";
+import { getUser } from "../_data/get-user";
 
 const CreditCards = async () => {
   const { userId } = await auth();
@@ -15,6 +16,8 @@ const CreditCards = async () => {
   }
 
   const creditCards = await getCreditCards();
+
+  const { fullName: userName } = await getUser();
 
   const hasNoData = creditCards.length === 0;
 
@@ -34,9 +37,15 @@ const CreditCards = async () => {
           <ScrollArea className="h-full">
             <div className="flex justify-center">
               <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {creditCards.map((card) => (
-                  <CreditCardUnity key={card.id} creditCard={card} />
-                ))}
+                {creditCards.map(async (card) => {
+                  return (
+                    <CreditCardUnity
+                      key={card.id}
+                      creditCard={card}
+                      userName={userName || undefined}
+                    />
+                  );
+                })}
               </div>
             </div>
           </ScrollArea>

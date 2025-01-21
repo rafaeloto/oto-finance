@@ -21,5 +21,8 @@ export const getTransactionsByInvoice = async ({ invoiceId }: params) => {
       invoiceId,
       userId,
     },
+    orderBy: {
+      date: "desc",
+    },
   });
 };

@@ -1,7 +1,6 @@
 import { CreditCard } from "@prisma/client";
 import { Card } from "@/app/_components/ui/card";
 import Image from "next/image";
-import { clerkClient } from "@clerk/nextjs/server";
 import { calculateClosingAndDueDates } from "@/app/_utils/date";
 import { Button } from "@/app/_components/ui/button";
 import Link from "next/link";
@@ -10,15 +9,15 @@ import ShouldRender from "@/app/_components/should-render";
 
 interface CreditCardUnityProps {
   creditCard: CreditCard;
+  userName?: string;
   complete?: boolean;
 }
 
-const CreditCardUnity = async ({
+const CreditCardUnity = ({
   creditCard,
+  userName,
   complete = true,
 }: CreditCardUnityProps) => {
-  const user = await clerkClient().users.getUser(creditCard.userId);
-
   const { closingDate, dueDate } = calculateClosingAndDueDates(
     creditCard.closingDate,
     creditCard.dueDate,
@@ -57,7 +56,7 @@ const CreditCardUnity = async ({
         {/* User name, closing and due date of the invoice */}
         <div className="flex items-center justify-between">
           <p className="mt-2 text-base font-semibold uppercase">
-            {user.fullName || "USUÁRIO DESCONHECIDO"}
+            {userName || "USUÁRIO"}
           </p>
 
           <div className="flex gap-5">

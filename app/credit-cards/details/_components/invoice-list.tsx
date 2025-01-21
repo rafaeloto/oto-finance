@@ -1,13 +1,23 @@
+"use client";
+
 import EmptyListFeedback from "@/app/_components/empty-list-feedback";
-import { INVOICE_STATUS_LABELS } from "@/app/_constants/credit-card";
 import { formatCurrency } from "@/app/_utils/currency";
-import { Invoice } from "@prisma/client";
+import { CreditCard, Invoice } from "@prisma/client";
+import clsx from "clsx";
 
 type params = {
   invoices: Invoice[];
+  onSelectInvoice: (id: string) => void;
+  creditCard: CreditCard;
+  selectedInvoiceId?: string;
 };
 
-const InvoiceList = ({ invoices }: params) => {
+const InvoiceList = ({
+  invoices,
+  onSelectInvoice,
+  creditCard,
+  selectedInvoiceId,
+}: params) => {
   if (invoices.length === 0) {
     return <EmptyListFeedback message="Nenhuma fatura encontrada" />;
   }
@@ -17,17 +27,18 @@ const InvoiceList = ({ invoices }: params) => {
       {invoices.map((invoice) => (
         <div
           key={invoice.id}
-          className="flex items-center justify-between rounded-md border p-4 shadow-sm"
+          className={clsx(
+            "flex cursor-pointer items-center justify-between rounded-md border p-4 shadow-sm",
+            invoice.id === selectedInvoiceId && "border-green-700", // Estilo condicional
+          )}
+          onClick={() => onSelectInvoice(invoice.id)}
         >
-          <div>
-            <p className="text-sm font-medium">
-              {invoice.month}/{invoice.year}
-            </p>
-            <p className="text-xs text-gray-500">
-              Status: {INVOICE_STATUS_LABELS[invoice.status]}
-            </p>
-          </div>
-          <p className="text-sm font-semibold text-green-500">
+          <p className="w-[10%] text-lg font-medium">
+            {invoice.month}/{invoice.year}
+          </p>
+          <p className="text-sm">Dia de Fechamento: {creditCard.closingDate}</p>
+          <p className="text-sm">Dia de Vencimento: {creditCard.dueDate}</p>
+          <p className="w-[10%] text-lg font-semibold">
             {formatCurrency(Number(invoice.totalAmount))}
           </p>
         </div>
