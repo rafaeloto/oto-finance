@@ -127,7 +127,7 @@ const CreateCreditCardDialog = ({
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Adicionar Conta</DialogTitle>
+          <DialogTitle>Adicionar Cartão</DialogTitle>
           <DialogDescription>Insira as informações abaixo</DialogDescription>
         </DialogHeader>
 

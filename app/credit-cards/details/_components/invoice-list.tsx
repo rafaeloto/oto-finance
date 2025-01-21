@@ -5,6 +5,7 @@ import { INVOICE_STATUS_LABELS } from "@/app/_constants/credit-card";
 import { formatCurrency } from "@/app/_utils/currency";
 import { Invoice } from "@prisma/client";
 import clsx from "clsx";
+import InvoiceButtons from "./invoice-buttons";
 
 type params = {
   invoices: Invoice[];
@@ -33,11 +34,10 @@ const InvoiceList = ({
         <div
           key={invoice.id}
           className={clsx(
-            "flex cursor-pointer items-center justify-between rounded-md border p-4 shadow-sm",
+            "flex items-center justify-between rounded-md border p-4 shadow-sm",
             invoice.id === selectedInvoiceId &&
               "border-muted-foreground bg-muted",
           )}
-          onClick={() => onSelectInvoice(invoice.id)}
         >
           <p className="min-w-[20%] text-lg font-medium">
             {invoice.month}/{invoice.year}
@@ -48,6 +48,11 @@ const InvoiceList = ({
           <p className="min-w-[20%] text-lg font-semibold">
             {formatCurrency(Number(invoice.totalAmount))}
           </p>
+          <InvoiceButtons
+            onClickSee={() => onSelectInvoice(invoice.id)}
+            canBePaid={invoice.status === "CLOSED"}
+            invoice={invoice}
+          />
         </div>
       ))}
     </div>
