@@ -34,6 +34,18 @@ import { useAccounts } from "@/app/_contexts/AccountsContext";
 import { DatePicker } from "@/app/_components/ui/date-picker";
 import { Loader2Icon } from "lucide-react";
 import { formatCurrency } from "@/app/_utils/currency";
+import { payInvoice } from "@/app/_actions/invoices/pay-invoice";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/app/_components/ui/alert-dialog";
 
 interface PayInvoiceDialogProps {
   isOpen: boolean;
@@ -61,6 +73,8 @@ const PayInvoiceDialog = ({
   invoice,
 }: PayInvoiceDialogProps) => {
   const { accounts, loading: loadingAccounts } = useAccounts();
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [formData, setFormData] = useState<FormSchema | null>(null);
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -71,10 +85,19 @@ const PayInvoiceDialog = ({
     },
   });
 
-  const onSubmit = async (data: FormSchema) => {
+  const handleFormSubmit = (data: FormSchema) => {
+    setFormData(data);
+    setIsConfirmDialogOpen(true);
+  };
+
+  const handleConfirmPayment = async () => {
+    if (!formData) return;
+
     try {
-      // TODO: Add action to handle invoice payment.
-      console.log(data);
+      payInvoice({
+        invoiceId: invoice.id,
+        ...formData,
+      });
 
       toast.success("Pagamento realizado com sucesso!");
       setIsOpen(false);
@@ -82,125 +105,154 @@ const PayInvoiceDialog = ({
     } catch (error) {
       console.error(error);
       toast.error("Erro ao registrar o pagamento!");
+    } finally {
+      setIsConfirmDialogOpen(false);
     }
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(open) => {
-        setIsOpen(open);
-        if (!open) {
-          form.reset();
-        }
-      }}
-    >
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            <div className="flex flex-col gap-4 pb-4">
-              Pagar Fatura: {invoice.month}/{invoice.year}
-              <p className="text-2xl text-danger">
-                {formatCurrency(Number(invoice.totalAmount))}
-              </p>
-            </div>
-          </DialogTitle>
-          <DialogDescription>
-            Insira as informações do pagamento abaixo
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog
+        open={isOpen}
+        onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) {
+            form.reset();
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              <div className="flex flex-col gap-4 pb-4">
+                Pagar Fatura: {invoice.month}/{invoice.year}
+                <p className="text-2xl text-danger">
+                  {formatCurrency(Number(invoice.totalAmount))}
+                </p>
+              </div>
+            </DialogTitle>
+            <DialogDescription>
+              Insira as informações do pagamento abaixo
+            </DialogDescription>
+          </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="paymentAmount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Valor do pagamento</FormLabel>
-                  <FormControl>
-                    <MoneyInput
-                      placeholder="Digite o valor..."
-                      value={field.value}
-                      onValueChange={({ floatValue }) =>
-                        field.onChange(floatValue)
-                      }
-                      onBlur={field.onBlur}
-                      disabled={field.disabled}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="paymentDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Data do pagamento</FormLabel>
-                  <DatePicker value={field.value} onChange={field.onChange} />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="paidByAccountId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Conta</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={loadingAccounts}
-                  >
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleFormSubmit)}
+              className="space-y-8"
+            >
+              <FormField
+                control={form.control}
+                name="paymentAmount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Valor do pagamento</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione a conta..." />
-                      </SelectTrigger>
+                      <MoneyInput
+                        placeholder="Digite o valor..."
+                        value={field.value}
+                        onValueChange={({ floatValue }) =>
+                          field.onChange(floatValue)
+                        }
+                        onBlur={field.onBlur}
+                        disabled={field.disabled}
+                      />
                     </FormControl>
-                    <SelectContent>
-                      {loadingAccounts && (
-                        <Loader2Icon className="animate-spin" />
-                      )}
-                      {!loadingAccounts &&
-                        accounts?.map((option) => (
-                          <SelectItem key={option.id} value={option.id}>
-                            <div className="flex items-center space-x-5">
-                              <Image
-                                src={`/banks/${option.bank}.svg`}
-                                alt={option.bank || "Banco"}
-                                width={20}
-                                height={20}
-                              />
-                              <span>{option.name}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="outline">
-                  Cancelar
+              <FormField
+                control={form.control}
+                name="paymentDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data do pagamento</FormLabel>
+                    <DatePicker value={field.value} onChange={field.onChange} />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="paidByAccountId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Conta</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      disabled={loadingAccounts}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione a conta..." />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {loadingAccounts && (
+                          <Loader2Icon className="animate-spin" />
+                        )}
+                        {!loadingAccounts &&
+                          accounts?.map((option) => (
+                            <SelectItem key={option.id} value={option.id}>
+                              <div className="flex items-center space-x-5">
+                                <Image
+                                  src={`/banks/${option.bank}.svg`}
+                                  alt={option.bank || "Banco"}
+                                  width={20}
+                                  height={20}
+                                />
+                                <span>{option.name}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="button" variant="outline">
+                    Cancelar
+                  </Button>
+                </DialogClose>
+                <Button disabled={loadingAccounts} type="submit">
+                  Registrar Pagamento
                 </Button>
-              </DialogClose>
-              <Button disabled={loadingAccounts} type="submit">
-                Registrar Pagamento
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog
+        open={isConfirmDialogOpen}
+        onOpenChange={setIsConfirmDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar pagamento da fatura</AlertDialogTitle>
+            <AlertDialogDescription>
+              Você está prestes a pagar a fatura no valor de{" "}
+              <strong>{formatCurrency(formData?.paymentAmount || 0)}</strong>.
+              Deseja continuar? Essa ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmPayment}>
+              Confirmar Pagamento
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
 
