@@ -68,7 +68,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
   }, []);
 
   return (
-    <div className="grid h-full grid-cols-2 gap-6">
+    <div className="grid h-full grid-cols-2 gap-10">
       {/* Parte esquerda */}
       <div className="flex flex-col space-y-6">
         {/* Cartão */}

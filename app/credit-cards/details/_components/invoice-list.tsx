@@ -23,9 +23,9 @@ const InvoiceList = ({
   }
 
   const statusColorMap = {
-    OPEN: "yellow-400",
-    PAID: "green-500",
-    CLOSED: "red-500",
+    OPEN: "text-yellow-400",
+    PAID: "text-green-500",
+    CLOSED: "text-red-500",
   };
 
   return (
@@ -34,25 +34,27 @@ const InvoiceList = ({
         <div
           key={invoice.id}
           className={clsx(
-            "flex items-center justify-between rounded-md border p-4 shadow-sm",
+            "rounded-md border px-6 py-4 shadow-sm",
             invoice.id === selectedInvoiceId &&
               "border-muted-foreground bg-muted",
           )}
         >
-          <p className="min-w-[20%] text-lg font-medium">
-            {invoice.month}/{invoice.year}
-          </p>
-          <p className={`text-${statusColorMap[invoice.status]} font-bold`}>
-            {INVOICE_STATUS_LABELS[invoice.status]}
-          </p>
-          <p className="min-w-[20%] text-lg font-semibold">
-            {formatCurrency(Number(invoice.totalAmount))}
-          </p>
-          <InvoiceButtons
-            onClickSee={() => onSelectInvoice(invoice.id)}
-            canBePaid={invoice.status === "CLOSED"}
-            invoice={invoice}
-          />
+          <div className="flex w-full items-center justify-between">
+            <p className="w-1/4 text-lg font-medium">
+              {invoice.month}/{invoice.year}
+            </p>
+            <p className={`w-1/4 ${statusColorMap[invoice.status]} font-bold`}>
+              {INVOICE_STATUS_LABELS[invoice.status]}
+            </p>
+            <p className="w-1/4 text-lg font-semibold">
+              {formatCurrency(Number(invoice.totalAmount))}
+            </p>
+            <InvoiceButtons
+              onClickSee={() => onSelectInvoice(invoice.id)}
+              canBePaid={invoice.status === "CLOSED"}
+              invoice={invoice}
+            />
+          </div>
         </div>
       ))}
     </div>
