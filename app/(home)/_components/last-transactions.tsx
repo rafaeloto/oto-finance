@@ -1,4 +1,4 @@
-import EmptyListFeedback from "@/app/_components/empty-list-feedback";
+import EmptyListFeedback from "@/app/_components/_atoms/empty-list-feedback";
 import { Button } from "@/app/_components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/app/_components/ui/card";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";

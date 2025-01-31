@@ -13,7 +13,7 @@ import { TransactionType } from "@prisma/client";
 import { TransactionPercentagePerType } from "@/app/_data/get-dashboard/types";
 import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import PercentageItem from "./percentage-item";
-import EmptyListFeedback from "@/app/_components/empty-list-feedback";
+import EmptyListFeedback from "@/app/_components/_atoms/empty-list-feedback";
 
 const chartConfig = {
   [TransactionType.INVESTMENT]: {

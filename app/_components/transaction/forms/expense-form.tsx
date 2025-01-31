@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from "../../ui/form";
 import { Input } from "../../ui/input";
-import { MoneyInput } from "../../money-input";
+import { MoneyInput } from "../../_atoms/money-input";
 import {
   Select,
   SelectContent,
@@ -36,7 +36,7 @@ import {
 import { DatePicker } from "../../ui/date-picker";
 import { DialogClose, DialogFooter } from "../../ui/dialog";
 import { Button } from "../../ui/button";
-import ShouldRender from "../../should-render";
+import ShouldRender from "../../_atoms/should-render";
 import Image from "next/image";
 
 type FormSchema = z.infer<typeof formSchemas.expense>;

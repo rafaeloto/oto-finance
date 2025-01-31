@@ -35,8 +35,8 @@ export const createCreditCard = async (params: CreateCreditCardParams) => {
   let firstInvoiceMonth = currentMonth;
   let firstInvoiceYear = currentYear;
 
-  if (currentDay > params.closingDate) {
-    // If the closing date has already passed, the first invoice will be for the next month.
+  if (currentDay > params.dueDate) {
+    // If the due date has already passed, the first invoice will be for the next month.
     firstInvoiceMonth = currentMonth === 12 ? 1 : currentMonth + 1;
     firstInvoiceYear = currentMonth === 12 ? currentYear + 1 : currentYear;
   }
@@ -73,4 +73,5 @@ export const createCreditCard = async (params: CreateCreditCardParams) => {
   });
 
   revalidatePath("/credit-cards");
+  revalidatePath("/credit-cards/details");
 };

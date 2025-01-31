@@ -3,17 +3,23 @@
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { createInvoiceSchema } from "./schema";
-import { Prisma } from "@prisma/client";
+import { InvoiceStatus, Prisma } from "@prisma/client";
 
-interface CreateInvoiceParams {
+type CreateInvoiceParams = {
   creditCardId: string;
   month: number;
   year: number;
+  status?: Omit<InvoiceStatus, "PAID">;
   transaction?: Omit<Prisma.TransactionClient, "$transaction">;
-}
+};
 
 export const createInvoice = async (params: CreateInvoiceParams) => {
-  const { creditCardId, month, year } = createInvoiceSchema.parse(params);
+  const {
+    creditCardId,
+    month,
+    year,
+    status = "OPEN",
+  } = createInvoiceSchema.parse(params);
 
   const { transaction } = params;
 
@@ -24,8 +30,9 @@ export const createInvoice = async (params: CreateInvoiceParams) => {
   const creditCard = await prismaClient.creditCard.findUnique({
     where: { id: creditCardId },
   });
+
   if (!creditCard) {
-    throw new Error("Cartão de crédito não encontrado.");
+    throw new Error("Credit card not found");
   }
 
   // Checks if the invoice already exists for the given month/year and credit card.
@@ -36,8 +43,9 @@ export const createInvoice = async (params: CreateInvoiceParams) => {
       year,
     },
   });
+
   if (existingInvoice) {
-    throw new Error("Já existe uma fatura para este cartão neste mês e ano.");
+    throw new Error("There is already an invoice for this month and year");
   }
 
   const { userId } = await auth();
@@ -52,7 +60,7 @@ export const createInvoice = async (params: CreateInvoiceParams) => {
       month,
       year,
       userId,
-      status: "OPEN",
+      status,
       totalAmount: 0,
     },
   });

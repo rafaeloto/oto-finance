@@ -5,7 +5,7 @@ import { calculateClosingAndDueDates } from "@/app/_utils/date";
 import { Button } from "@/app/_components/ui/button";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
-import ShouldRender from "@/app/_components/should-render";
+import ShouldRender from "@/app/_components/_atoms/should-render";
 
 interface CreditCardUnityProps {
   creditCard: CreditCard;

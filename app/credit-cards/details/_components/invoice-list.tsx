@@ -1,6 +1,6 @@
 "use client";
 
-import EmptyListFeedback from "@/app/_components/empty-list-feedback";
+import EmptyListFeedback from "@/app/_components/_atoms/empty-list-feedback";
 import { INVOICE_STATUS_LABELS } from "@/app/_constants/credit-card";
 import { formatCurrency } from "@/app/_utils/currency";
 import { Invoice } from "@prisma/client";

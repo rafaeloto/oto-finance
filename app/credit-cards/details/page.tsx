@@ -1,5 +1,5 @@
-import EmptyListFeedback from "@/app/_components/empty-list-feedback";
-import Navbar from "@/app/_components/navbar";
+import EmptyListFeedback from "@/app/_components/_atoms/empty-list-feedback";
+import Navbar from "@/app/_components/_molecules/navbar";
 import { getCreditCardById } from "@/app/_data/get-credit-card-by-id";
 import { getInvoices } from "@/app/_data/get-invoices";
 import { getTransactionsByInvoice } from "@/app/_data/get-transactions-by-invoice";

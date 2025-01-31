@@ -1,6 +1,6 @@
 "use client";
 
-import EmptyListFeedback from "@/app/_components/empty-list-feedback";
+import EmptyListFeedback from "@/app/_components/_atoms/empty-list-feedback";
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import EditTransactionButton from "@/app/transactions/_components/edit-transacti
 import DeleteTransactionButton from "@/app/transactions/_components/delete-transaction-button";
 import { Transaction } from "@prisma/client";
 import Image from "next/image";
-import ShouldRender from "@/app/_components/should-render";
+import ShouldRender from "@/app/_components/_atoms/should-render";
 
 type InvoiceTransactionsProps = {
   transactions: Transaction[] | undefined;

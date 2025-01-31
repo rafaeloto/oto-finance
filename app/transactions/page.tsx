@@ -1,11 +1,11 @@
 import { db } from "../_lib/prisma";
 import AddTransactionButton from "../_components/transaction/add-transaction-button";
-import Navbar from "../_components/navbar";
+import Navbar from "../_components/_molecules/navbar";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ScrollArea } from "../_components/ui/scroll-area";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
-import EmptyListFeedback from "../_components/empty-list-feedback";
+import EmptyListFeedback from "../_components/_atoms/empty-list-feedback";
 import { getCreditCards } from "../_data/get-credit-cards";
 import { TransactionsTable } from "./_table";
 import { getAccounts } from "../_data/get-accounts";

@@ -1,11 +1,11 @@
 import { auth } from "@clerk/nextjs/server";
-import Navbar from "../_components/navbar";
+import Navbar from "../_components/_molecules/navbar";
 import { ScrollArea } from "../_components/ui/scroll-area";
 import AddAccountButton from "./_components/add-account-button";
 import RecalculateBalancesButton from "./_components/recalculate-balances-button";
 import { redirect } from "next/navigation";
 import AccountCard from "./_components/account-card";
-import EmptyListFeedback from "../_components/empty-list-feedback";
+import EmptyListFeedback from "../_components/_atoms/empty-list-feedback";
 import { getAccounts } from "../_data/get-accounts";
 
 const Accounts = async () => {
