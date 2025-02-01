@@ -70,6 +70,11 @@ export const updateCardInvoices = async (creditCardId: string) => {
         OR: [
           { year: { lt: currentYear } },
           { year: currentYear, month: { lt: currentMonth } },
+          {
+            year: currentYear,
+            month: currentMonth,
+            closingDate: { lt: currentDay },
+          },
         ],
       },
       data: { status: "CLOSED" },

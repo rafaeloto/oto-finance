@@ -29,6 +29,7 @@ export const createInvoice = async (params: CreateInvoiceParams) => {
   // Checks if the credit card exists
   const creditCard = await prismaClient.creditCard.findUnique({
     where: { id: creditCardId },
+    select: { closingDate: true, dueDate: true },
   });
 
   if (!creditCard) {
@@ -59,6 +60,8 @@ export const createInvoice = async (params: CreateInvoiceParams) => {
       creditCardId,
       month,
       year,
+      closingDate: creditCard.closingDate,
+      dueDate: creditCard.dueDate,
       userId,
       status,
       totalAmount: 0,
