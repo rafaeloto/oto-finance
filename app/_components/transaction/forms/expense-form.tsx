@@ -38,6 +38,9 @@ import { DialogClose, DialogFooter } from "../../ui/dialog";
 import { Button } from "../../ui/button";
 import ShouldRender from "../../_atoms/should-render";
 import Image from "next/image";
+import { useMemo, useState } from "react";
+import { createInvoice } from "@/app/_actions/credit-cards/create-invoice";
+import { Card } from "../../ui/card";
 
 type FormSchema = z.infer<typeof formSchemas.expense>;
 
@@ -48,7 +51,6 @@ interface ExpenseFormProps {
 
 const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
   const transactionId = transaction?.id;
-
   const isUpdate = !!transactionId;
 
   const {
@@ -72,6 +74,27 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
   const loading = loadingAccounts || loadingCreditCards || loadingInvoices;
   const error = accountsError || creditCardsError || invoicesError;
 
+  const today = new Date();
+  const currentMonth = today.getMonth() + 1;
+  const currentYear = today.getFullYear();
+  const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+
+  const defaultInvoice = useMemo(() => {
+    const invoice = invoices.find(
+      (invoice) => invoice.id === transaction?.invoiceId,
+    );
+    if (!invoice) return;
+
+    return {
+      month: invoice.month,
+      year: invoice.year,
+    };
+  }, [invoices, transaction]);
+
+  const [selectedYear, setSelectedYear] = useState<number>(
+    defaultInvoice?.year || currentYear,
+  );
+
   const defaultValues = {
     name: transaction?.name || "",
     amount: Number(transaction?.amount) || 0,
@@ -80,7 +103,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
     paymentMethod: transaction?.paymentMethod || TransactionPaymentMethod.DEBIT,
     accountId: transaction?.accountId || "",
     cardId: transaction?.cardId || "",
-    invoiceId: transaction?.invoiceId || "",
+    invoiceMonth: defaultInvoice?.month || currentMonth,
     date: transaction?.date ? new Date(transaction?.date) : new Date(),
   };
 
@@ -92,19 +115,68 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
   const paymentMethod = form.watch("paymentMethod");
   const isCreditCard = paymentMethod === TransactionPaymentMethod.CREDIT;
   const selectedCardId = form.watch("cardId");
-  const filteredInvoices = invoices?.filter(
-    (invoice) => invoice.creditCardId === selectedCardId,
-  );
+  const selectedDate = form.watch("date");
+
+  // Function to generate the invoice options based on the selected date
+  const invoiceOptions = useMemo(() => {
+    if (!selectedDate) return [currentMonth, nextMonth];
+
+    const selectedDateMonth = selectedDate.getMonth() + 1;
+    const selectedDatenextMonth =
+      selectedDateMonth === 12 ? 1 : selectedDateMonth + 1;
+
+    return [selectedDateMonth, selectedDatenextMonth];
+  }, [currentMonth, nextMonth, selectedDate]);
+
+  const handleMonthChange = (value: string) => {
+    const selectedMonth = Number(value);
+    const selectedDateYear = selectedDate.getFullYear();
+    const selectedDateNextYear = selectedDateYear + 1;
+
+    setSelectedYear(() => {
+      if (invoiceOptions.includes(12) && invoiceOptions.includes(1)) {
+        return selectedMonth === 12 ? selectedDateYear : selectedDateNextYear;
+      }
+      return selectedDateYear;
+    });
+  };
 
   const onSubmit = async (data: FormSchema) => {
     try {
-      if (isCreditCard) {
+      let invoiceId: string | undefined;
+
+      if (isCreditCard && data?.invoiceMonth) {
+        // If it's a credit card transaction, remove the accountId
         delete data.accountId;
+
+        // Checks if the invoice for the selected month and year already exists
+        let invoice = invoices?.find(
+          (inv) =>
+            inv.creditCardId === data.cardId &&
+            inv.month === data.invoiceMonth &&
+            inv.year === selectedYear,
+        );
+
+        if (!invoice) {
+          // Creates the invoice if it doesn't exist
+          invoice = await createInvoice({
+            creditCardId: selectedCardId,
+            month: data.invoiceMonth,
+            year: selectedYear,
+          });
+        }
+
+        // Updates the invoiceId with the newly created or found invoice
+        invoiceId = invoice.id;
       } else {
+        // If it's not a credit card transaction, remove the cardId and invoiceId
         delete data.cardId;
-        delete data.invoiceId;
+        invoiceId = undefined;
       }
-      await upsertExpenseTransaction({ ...data, id: transactionId });
+      // Removes the invoiceMonth from the data, because it was already parsed
+      delete data.invoiceMonth;
+
+      await upsertExpenseTransaction({ ...data, invoiceId, id: transactionId });
       toast.success(
         `Transação ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
       );
@@ -205,6 +277,18 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Data</FormLabel>
+              <DatePicker value={field.value} onChange={field.onChange} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <ShouldRender if={!isCreditCard}>
           <FormField
             control={form.control}
@@ -282,47 +366,46 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="invoiceId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Fatura</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  disabled={loadingInvoices || !selectedCardId}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione a fatura..." />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {filteredInvoices?.map((invoice) => (
-                      <SelectItem key={invoice.id} value={invoice.id}>
-                        {`${invoice.month}/${invoice.year}`}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </ShouldRender>
+          <div className="flex w-full space-x-4">
+            <FormField
+              control={form.control}
+              name="invoiceMonth"
+              render={({ field }) => (
+                <FormItem className="flex-grow">
+                  <FormLabel>Fatura</FormLabel>
+                  <Select
+                    onValueChange={(value) => {
+                      handleMonthChange(value);
+                      field.onChange(Number(value));
+                    }}
+                    defaultValue={field.value.toString()}
+                    disabled={
+                      loadingInvoices || !selectedCardId || !selectedDate
+                    }
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione a fatura..." />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {invoiceOptions?.map((value) => (
+                        <SelectItem key={value} value={value.toString()}>
+                          {value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Data</FormLabel>
-              <DatePicker value={field.value} onChange={field.onChange} />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <Card className="mt-auto flex h-10 w-1/4 items-center justify-center">
+              {selectedYear}
+            </Card>
+          </div>
+        </ShouldRender>
 
         <DialogFooter>
           <DialogClose asChild>

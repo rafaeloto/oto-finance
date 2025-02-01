@@ -55,7 +55,7 @@ export const createInvoice = async (params: CreateInvoiceParams) => {
     throw new Error("Unauthorized");
   }
 
-  await prismaClient.invoice.create({
+  const invoice = await prismaClient.invoice.create({
     data: {
       creditCardId,
       month,
@@ -67,4 +67,6 @@ export const createInvoice = async (params: CreateInvoiceParams) => {
       totalAmount: 0,
     },
   });
+
+  return invoice;
 };
