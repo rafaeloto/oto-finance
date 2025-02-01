@@ -48,6 +48,8 @@ model Invoice {
   id              String        @id @default(uuid())
   month           Int
   year            Int
+  closingDate     Int
+  dueDate         Int
   status          InvoiceStatus
   totalAmount     Decimal       @default(0) @db.Decimal(10, 2)
   paymentAmount   Decimal?      @db.Decimal(10, 2)
