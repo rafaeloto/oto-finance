@@ -158,6 +158,14 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
             inv.year === selectedYear,
         );
 
+        // If the invoice exists and is already paid, prevents the creation of the transaction
+        if (invoice && invoice.status === "PAID") {
+          toast.error(
+            "Não é possível adicionar transações a uma fatura já paga.",
+          );
+          return;
+        }
+
         if (!invoice) {
           // Creates the invoice if it doesn't exist
           invoice = await createInvoice({
