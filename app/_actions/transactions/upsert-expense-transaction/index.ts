@@ -4,6 +4,7 @@ import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import {
   ExpenseTransactionCategory,
+  Prisma,
   TransactionPaymentMethod,
 } from "@prisma/client";
 import { upsertExpenseTransactionSchema } from "./schema";
@@ -26,8 +27,12 @@ interface UpsertExpenseTransactionParams {
 
 export const upsertExpenseTransaction = async (
   params: UpsertExpenseTransactionParams,
+  client?: Omit<Prisma.TransactionClient, "$transaction">,
 ) => {
   upsertExpenseTransactionSchema.parse(params);
+
+  // Uses the transactional client, if provided, or the default client.
+  const prismaClient = client ?? db;
 
   const { userId } = await auth();
 
@@ -35,7 +40,10 @@ export const upsertExpenseTransaction = async (
     throw new Error("Unauthorized");
   }
 
-  const existingTransaction = await getTransaction(params.id);
+  const existingTransaction = await getTransaction({
+    id: params.id,
+    client: prismaClient,
+  });
 
   const isExistingDebit =
     existingTransaction?.paymentMethod === TransactionPaymentMethod.DEBIT;
@@ -44,153 +52,155 @@ export const upsertExpenseTransaction = async (
   const isNewDebit = params?.paymentMethod === TransactionPaymentMethod.DEBIT;
   const isNewCredit = params?.paymentMethod === TransactionPaymentMethod.CREDIT;
 
-  await db.$transaction(async (transaction) => {
-    // If there is no previous transaction
-    if (!existingTransaction) {
-      if (isNewCredit && params.invoiceId) {
-        await updateInvoiceAmount({
-          operation: "increment",
-          amount: params.amount,
-          invoiceId: params.invoiceId,
-          transaction,
-        });
-      } else if (isNewDebit && params.accountId) {
-        await updateSingleAccountBalance({
-          operation: "decrement",
-          amount: params.amount,
-          accountId: params.accountId,
-          transaction,
-        });
-      }
+  // Create a copy of `params` to avoid direct mutation
+  const updatedParams = { ...params };
 
-      // Criar a transação
-      await transaction.transaction.create({
-        data: { ...params, userId, type: "EXPENSE" },
+  // If there is no previous transaction
+  if (!existingTransaction) {
+    if (isNewCredit && updatedParams.invoiceId) {
+      await updateInvoiceAmount({
+        operation: "increment",
+        amount: updatedParams.amount,
+        invoiceId: updatedParams.invoiceId,
+        transaction: prismaClient,
       });
-      return;
+    } else if (isNewDebit && updatedParams.accountId) {
+      await updateSingleAccountBalance({
+        operation: "decrement",
+        amount: updatedParams.amount,
+        accountId: updatedParams.accountId,
+        transaction: prismaClient,
+      });
     }
 
-    // If the previous transaction is debit and the new one is credit
-    if (isExistingDebit && isNewCredit) {
-      // Reverse the impact on the account balance
-      if (existingTransaction.accountId) {
-        await updateSingleAccountBalance({
-          operation: "increment",
-          amount: Number(existingTransaction.amount),
-          accountId: existingTransaction.accountId,
-          transaction,
-        });
-      }
-
-      // Apply the impact on the credit card invoice
-      if (params.invoiceId) {
-        await updateInvoiceAmount({
-          operation: "increment",
-          amount: params.amount,
-          invoiceId: params.invoiceId!,
-          transaction,
-        });
-      }
-
-      // Ensure the removal of the the `accountId` field
-      params.accountId = undefined;
-    }
-    // If the previous transaction is credit and the new one is debit
-    else if (isExistingCredit && isNewDebit) {
-      // Reverse the impact on the invoice amount
-      if (existingTransaction.invoiceId) {
-        await updateInvoiceAmount({
-          operation: "decrement",
-          amount: Number(existingTransaction.amount),
-          invoiceId: existingTransaction.invoiceId,
-          transaction,
-        });
-      }
-
-      // Apply the impact on the account balance
-      if (params.accountId) {
-        await updateSingleAccountBalance({
-          operation: "decrement",
-          amount: params.amount,
-          accountId: params.accountId!,
-          transaction,
-        });
-      }
-
-      // Ensure the removal of the `cardId` and `invoiceId` fields
-      params.cardId = undefined;
-      params.invoiceId = undefined;
-    }
-    // If the payment method has not changed, apply normal adjustments
-    else {
-      const difference = params.amount - Number(existingTransaction?.amount);
-
-      if (isNewCredit) {
-        // If the invoice has changed
-        if (existingTransaction?.invoiceId !== params.invoiceId) {
-          // Reverse the impact on the old invoice
-          if (existingTransaction?.invoiceId) {
-            await updateInvoiceAmount({
-              operation: "decrement",
-              amount: Number(existingTransaction.amount),
-              invoiceId: existingTransaction.invoiceId,
-              transaction,
-            });
-          }
-
-          // Apply the impact on the new invoice
-          await updateInvoiceAmount({
-            operation: "increment",
-            amount: params.amount,
-            invoiceId: params.invoiceId!,
-            transaction,
-          });
-        } else if (difference !== 0) {
-          // If it's the same invoice but the amount has changed
-          await updateInvoiceAmount({
-            operation: difference > 0 ? "increment" : "decrement",
-            amount: Math.abs(difference),
-            invoiceId: params.invoiceId!,
-            transaction,
-          });
-        }
-      } else if (isNewDebit) {
-        // If the account has changed
-        if (existingTransaction?.accountId !== params.accountId) {
-          // Reverse the balance on old account
-          if (existingTransaction?.accountId) {
-            await updateSingleAccountBalance({
-              operation: "increment",
-              amount: Number(existingTransaction.amount),
-              accountId: existingTransaction.accountId,
-              transaction,
-            });
-          }
-
-          // Apply the impact on the new account
-          await updateSingleAccountBalance({
-            operation: "decrement",
-            amount: params.amount,
-            accountId: params.accountId!,
-            transaction,
-          });
-        } else if (difference !== 0) {
-          // If it's the same account but the amount has changed
-          await updateSingleAccountBalance({
-            operation: difference > 0 ? "decrement" : "increment",
-            amount: Math.abs(difference),
-            accountId: params.accountId!,
-            transaction,
-          });
-        }
-      }
-    }
-
-    // Atualizar a transação
-    await transaction.transaction.update({
-      where: { id: params.id },
-      data: { ...params, userId, type: "EXPENSE" },
+    // Criar a transação
+    await prismaClient.transaction.create({
+      data: { ...updatedParams, userId, type: "EXPENSE" },
     });
+    return;
+  }
+
+  // If the previous transaction is debit and the new one is credit
+  if (isExistingDebit && isNewCredit) {
+    // Reverse the impact on the account balance
+    if (existingTransaction.accountId) {
+      await updateSingleAccountBalance({
+        operation: "increment",
+        amount: Number(existingTransaction.amount),
+        accountId: existingTransaction.accountId,
+        transaction: prismaClient,
+      });
+    }
+
+    // Apply the impact on the credit card invoice
+    if (updatedParams.invoiceId) {
+      await updateInvoiceAmount({
+        operation: "increment",
+        amount: updatedParams.amount,
+        invoiceId: updatedParams.invoiceId!,
+        transaction: prismaClient,
+      });
+    }
+
+    // Ensure the removal of the the `accountId` field
+    updatedParams.accountId = undefined;
+  }
+  // If the previous transaction is credit and the new one is debit
+  else if (isExistingCredit && isNewDebit) {
+    // Reverse the impact on the invoice amount
+    if (existingTransaction.invoiceId) {
+      await updateInvoiceAmount({
+        operation: "decrement",
+        amount: Number(existingTransaction.amount),
+        invoiceId: existingTransaction.invoiceId,
+        transaction: prismaClient,
+      });
+    }
+
+    // Apply the impact on the account balance
+    if (updatedParams.accountId) {
+      await updateSingleAccountBalance({
+        operation: "decrement",
+        amount: updatedParams.amount,
+        accountId: updatedParams.accountId!,
+        transaction: prismaClient,
+      });
+    }
+
+    // Ensure the removal of the `cardId` and `invoiceId` fields
+    updatedParams.cardId = undefined;
+    updatedParams.invoiceId = undefined;
+  }
+  // If the payment method has not changed, apply normal adjustments
+  else {
+    const difference =
+      updatedParams.amount - Number(existingTransaction?.amount);
+
+    if (isNewCredit) {
+      // If the invoice has changed
+      if (existingTransaction?.invoiceId !== updatedParams.invoiceId) {
+        // Reverse the impact on the old invoice
+        if (existingTransaction?.invoiceId) {
+          await updateInvoiceAmount({
+            operation: "decrement",
+            amount: Number(existingTransaction.amount),
+            invoiceId: existingTransaction.invoiceId,
+            transaction: prismaClient,
+          });
+        }
+
+        // Apply the impact on the new invoice
+        await updateInvoiceAmount({
+          operation: "increment",
+          amount: updatedParams.amount,
+          invoiceId: updatedParams.invoiceId!,
+          transaction: prismaClient,
+        });
+      } else if (difference !== 0) {
+        // If it's the same invoice but the amount has changed
+        await updateInvoiceAmount({
+          operation: difference > 0 ? "increment" : "decrement",
+          amount: Math.abs(difference),
+          invoiceId: updatedParams.invoiceId!,
+          transaction: prismaClient,
+        });
+      }
+    } else if (isNewDebit) {
+      // If the account has changed
+      if (existingTransaction?.accountId !== updatedParams.accountId) {
+        // Reverse the balance on old account
+        if (existingTransaction?.accountId) {
+          await updateSingleAccountBalance({
+            operation: "increment",
+            amount: Number(existingTransaction.amount),
+            accountId: existingTransaction.accountId,
+            transaction: prismaClient,
+          });
+        }
+
+        // Apply the impact on the new account
+        await updateSingleAccountBalance({
+          operation: "decrement",
+          amount: updatedParams.amount,
+          accountId: updatedParams.accountId!,
+          transaction: prismaClient,
+        });
+      } else if (difference !== 0) {
+        // If it's the same account but the amount has changed
+        await updateSingleAccountBalance({
+          operation: difference > 0 ? "decrement" : "increment",
+          amount: Math.abs(difference),
+          accountId: updatedParams.accountId!,
+          transaction: prismaClient,
+        });
+      }
+    }
+  }
+
+  // Atualizar a transação
+  await prismaClient.transaction.update({
+    where: { id: updatedParams.id },
+    data: { ...updatedParams, userId, type: "EXPENSE" },
   });
 
   revalidatePath("/");

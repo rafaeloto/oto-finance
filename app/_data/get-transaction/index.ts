@@ -1,9 +1,18 @@
 import { db } from "@/app/_lib/prisma";
+import { Prisma } from "@prisma/client";
 
-const getTransaction = async (id?: string) => {
+type params = {
+  id?: string;
+  client?: Omit<Prisma.TransactionClient, "$transaction">;
+};
+
+const getTransaction = async ({ id, client }: params) => {
   if (!id) return null;
 
-  return db.transaction.findUnique({
+  // Uses the transactional client, if provided, or the default client.
+  const prismaClient = client ?? db;
+
+  return prismaClient.transaction.findUnique({
     where: { id },
   });
 };
