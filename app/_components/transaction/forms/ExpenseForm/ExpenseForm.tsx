@@ -1,8 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { formSchemas } from "./formSchema";
+import { formSchemas } from "../formSchema";
 import { useAccounts } from "@/app/_contexts/AccountsContext";
-import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
 import { useInvoices } from "@/app/_contexts/InvoicesContext";
 import {
   ExpenseTransactionCategory,
@@ -19,29 +18,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/form";
-import { Input } from "../../ui/input";
-import { MoneyInput } from "../../_atoms/money-input";
+} from "../../../ui/form";
+import { Input } from "../../../ui/input";
+import { MoneyInput } from "../../../_atoms/money-input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../ui/select";
+} from "../../../ui/select";
 import {
   EXPENSE_TRANSACTION_CATEGORY_OPTIONS,
   TRANSACTION_PAYMENT_METHOD_OPTIONS,
 } from "@/app/_constants/transaction";
-import { DatePicker } from "../../ui/date-picker";
-import { DialogClose, DialogFooter } from "../../ui/dialog";
-import { Button } from "../../ui/button";
-import ShouldRender from "../../_atoms/should-render";
+import { DatePicker } from "../../../ui/date-picker";
+import { DialogClose, DialogFooter } from "../../../ui/dialog";
+import { Button } from "../../../ui/button";
+import ShouldRender from "../../../_atoms/should-render";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { createInvoice } from "@/app/_actions/credit-cards/create-invoice";
-import { Card } from "../../ui/card";
 import { getImportantDates } from "@/app/_utils/date";
+import CreditCardFields from "./CreditCardFields";
 
 type FormSchema = z.infer<typeof formSchemas.expense>;
 
@@ -61,25 +60,17 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
   } = useAccounts();
 
   const {
-    creditCards,
-    loading: loadingCreditCards,
-    error: creditCardsError,
-  } = useCreditCards();
-
-  const {
     invoices,
     loading: loadingInvoices,
     error: invoicesError,
   } = useInvoices();
 
-  const loading = loadingAccounts || loadingCreditCards || loadingInvoices;
-  const error = accountsError || creditCardsError || invoicesError;
+  const loading = loadingAccounts || loadingInvoices;
+  const error = accountsError || invoicesError;
 
-  const {
-    month: currentMonth,
-    year: currentYear,
-    nextMonth,
-  } = getImportantDates(new Date());
+  const { month: currentMonth, year: currentYear } = getImportantDates(
+    new Date(),
+  );
 
   const defaultInvoice = useMemo(() => {
     const invoice = invoices.find(
@@ -116,37 +107,12 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
 
   const paymentMethod = form.watch("paymentMethod");
   const isCreditCard = paymentMethod === TransactionPaymentMethod.CREDIT;
-  const selectedCardId = form.watch("cardId");
-  const selectedDate = form.watch("date");
-
-  // Function to generate the invoice options based on the selected date
-  const invoiceOptions = useMemo(() => {
-    if (!selectedDate) return [currentMonth, nextMonth];
-
-    const { month: selectedDateMonth, nextMonth: selectedDatenextMonth } =
-      getImportantDates(selectedDate);
-
-    return [selectedDateMonth, selectedDatenextMonth];
-  }, [currentMonth, nextMonth, selectedDate]);
-
-  const handleMonthChange = (value: string) => {
-    const selectedMonth = Number(value);
-    const { year: selectedDateYear, nextYear: selectedDateNextYear } =
-      getImportantDates(selectedDate);
-
-    setSelectedYear(() => {
-      if (invoiceOptions.includes(12) && invoiceOptions.includes(1)) {
-        return selectedMonth === 12 ? selectedDateYear : selectedDateNextYear;
-      }
-      return selectedDateYear;
-    });
-  };
 
   const onSubmit = async (data: FormSchema) => {
     try {
       let invoiceId: string | undefined;
 
-      if (isCreditCard && data?.invoiceMonth) {
+      if (isCreditCard && data?.invoiceMonth && data?.cardId) {
         // If it's a credit card transaction, remove the accountId
         delete data.accountId;
 
@@ -169,7 +135,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
         if (!invoice) {
           // Creates the invoice if it doesn't exist
           invoice = await createInvoice({
-            creditCardId: selectedCardId,
+            creditCardId: data.cardId,
             month: data.invoiceMonth,
             year: selectedYear,
           });
@@ -338,82 +304,10 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
         </ShouldRender>
 
         <ShouldRender if={isCreditCard}>
-          <FormField
-            control={form.control}
-            name="cardId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Cartão de crédito</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  disabled={loadingCreditCards}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o cartão..." />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {creditCards?.map((card) => (
-                      <SelectItem key={card.id} value={card.id}>
-                        <div className="flex items-center space-x-5">
-                          <Image
-                            src={`/credit-cards/${card.flag}.svg`}
-                            alt={card.flag || "Cartão"}
-                            width={20}
-                            height={20}
-                          />
-                          <span>{card.name}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
+          <CreditCardFields
+            selectedYear={selectedYear}
+            setSelectedYear={setSelectedYear}
           />
-
-          <div className="flex w-full space-x-4">
-            <FormField
-              control={form.control}
-              name="invoiceMonth"
-              render={({ field }) => (
-                <FormItem className="flex-grow">
-                  <FormLabel>Fatura</FormLabel>
-                  <Select
-                    onValueChange={(value) => {
-                      handleMonthChange(value);
-                      field.onChange(Number(value));
-                    }}
-                    defaultValue={field.value.toString()}
-                    disabled={
-                      loadingInvoices || !selectedCardId || !selectedDate
-                    }
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione a fatura..." />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {invoiceOptions?.map((value) => (
-                        <SelectItem key={value} value={value.toString()}>
-                          {value}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Card className="mt-auto flex h-10 w-1/4 items-center justify-center">
-              {selectedYear}
-            </Card>
-          </div>
         </ShouldRender>
 
         <DialogFooter>

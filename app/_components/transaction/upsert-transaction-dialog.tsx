@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import ExpenseForm from "./forms/expense-form";
+import ExpenseForm from "./forms/ExpenseForm";
 import GainForm from "./forms/gain-form";
 import TransferForm from "./forms/transfer-form";
 import InvestmentForm from "./forms/investment-form";
