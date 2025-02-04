@@ -41,6 +41,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { createInvoice } from "@/app/_actions/credit-cards/create-invoice";
 import { Card } from "../../ui/card";
+import { getImportantDates } from "@/app/_utils/date";
 
 type FormSchema = z.infer<typeof formSchemas.expense>;
 
@@ -74,10 +75,11 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
   const loading = loadingAccounts || loadingCreditCards || loadingInvoices;
   const error = accountsError || creditCardsError || invoicesError;
 
-  const today = new Date();
-  const currentMonth = today.getMonth() + 1;
-  const currentYear = today.getFullYear();
-  const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+  const {
+    month: currentMonth,
+    year: currentYear,
+    nextMonth,
+  } = getImportantDates(new Date());
 
   const defaultInvoice = useMemo(() => {
     const invoice = invoices.find(
@@ -121,17 +123,16 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
   const invoiceOptions = useMemo(() => {
     if (!selectedDate) return [currentMonth, nextMonth];
 
-    const selectedDateMonth = selectedDate.getMonth() + 1;
-    const selectedDatenextMonth =
-      selectedDateMonth === 12 ? 1 : selectedDateMonth + 1;
+    const { month: selectedDateMonth, nextMonth: selectedDatenextMonth } =
+      getImportantDates(selectedDate);
 
     return [selectedDateMonth, selectedDatenextMonth];
   }, [currentMonth, nextMonth, selectedDate]);
 
   const handleMonthChange = (value: string) => {
     const selectedMonth = Number(value);
-    const selectedDateYear = selectedDate.getFullYear();
-    const selectedDateNextYear = selectedDateYear + 1;
+    const { year: selectedDateYear, nextYear: selectedDateNextYear } =
+      getImportantDates(selectedDate);
 
     setSelectedYear(() => {
       if (invoiceOptions.includes(12) && invoiceOptions.includes(1)) {

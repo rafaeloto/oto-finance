@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/app/_lib/prisma";
+import { getImportantDates } from "@/app/_utils/date";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
@@ -19,10 +20,11 @@ export const updateCardInvoices = async (creditCardId: string) => {
     throw new Error("Credit card not found");
   }
 
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1;
-  const currentDay = now.getDate();
+  const {
+    day: currentDay,
+    month: currentMonth,
+    year: currentYear,
+  } = getImportantDates(new Date());
 
   // Close all open invoices that should be closed
   await db.invoice.updateMany({

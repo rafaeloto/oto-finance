@@ -22,10 +22,11 @@ export const calculateClosingAndDueDates = (
   closingDay: number,
   dueDay: number,
 ): { closingDate: string; dueDate: string } => {
-  const today = new Date();
-  const currentDay = today.getDate();
-  const currentMonth = today.getMonth();
-  const currentYear = today.getFullYear();
+  const {
+    day: currentDay,
+    month: currentMonth,
+    year: currentYear,
+  } = getImportantDates(new Date());
 
   // Calculates the card cloding date
   const closingMonth =
@@ -42,5 +43,23 @@ export const calculateClosingAndDueDates = (
   return {
     closingDate: format(closingDate, "dd/MM"),
     dueDate: format(dueDate, "dd/MM"),
+  };
+};
+
+export const getImportantDates = (date: Date) => {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  const nextMonth = month === 12 ? 1 : month + 1;
+  const nextYear = year + 1;
+  const nextMonthYear = month === 12 ? nextYear : year;
+
+  return {
+    day,
+    month,
+    year,
+    nextMonth,
+    nextYear,
+    nextMonthYear,
   };
 };
