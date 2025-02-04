@@ -76,11 +76,13 @@ model Transaction {
   updatedAt     DateTime                 @updatedAt
   userId        String
 
-  accountId     String?
-  fromAccountId String?
-  toAccountId   String?
-  cardId        String?
-  invoiceId     String?
+  accountId         String?
+  fromAccountId     String?
+  toAccountId       String?
+  cardId            String?
+  invoiceId         String?
+  installmentId     String?
+  installmentNumber Int?
 
   gainCategory       GainTransactionCategory?
   expenseCategory    ExpenseTransactionCategory?
