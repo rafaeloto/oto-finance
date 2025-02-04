@@ -16,7 +16,9 @@ export const formSchemas = {
       paymentMethod: z.nativeEnum(TransactionPaymentMethod),
       accountId: z.string().optional(),
       cardId: z.string().optional(),
+      installmentType: z.enum(["once", "split"]).optional(),
       invoiceMonth: z.number().optional(),
+      installments: z.number().max(12, "O máximo de parcelas é 12").optional(),
       date: z.date({ required_error: "A data é obrigatória" }),
     })
     .superRefine((data, ctx) => {
@@ -33,6 +35,23 @@ export const formSchemas = {
           ctx.addIssue({
             path: ["invoiceMonth"],
             message: "A fatura é obrigatória.",
+            code: z.ZodIssueCode.custom,
+          });
+        }
+        if (!data.installmentType) {
+          ctx.addIssue({
+            path: ["installmentType"],
+            message: "Selecione um tipo de parcelamento.",
+            code: z.ZodIssueCode.custom,
+          });
+        }
+        if (
+          data.installmentType === "split" &&
+          (!data.installments || data.installments < 2)
+        ) {
+          ctx.addIssue({
+            path: ["installments"],
+            message: "Selecione pelo menos duas parcelas.",
             code: z.ZodIssueCode.custom,
           });
         }

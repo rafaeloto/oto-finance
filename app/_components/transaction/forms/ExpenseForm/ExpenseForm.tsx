@@ -41,6 +41,7 @@ import { useMemo, useState } from "react";
 import { createInvoice } from "@/app/_actions/credit-cards/create-invoice";
 import { getImportantDates } from "@/app/_utils/date";
 import CreditCardFields from "./CreditCardFields";
+import { InstallmentType } from "./CreditCardFields/CreditCardFields";
 
 type FormSchema = z.infer<typeof formSchemas.expense>;
 
@@ -96,7 +97,9 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
     paymentMethod: transaction?.paymentMethod || TransactionPaymentMethod.DEBIT,
     accountId: transaction?.accountId || "",
     cardId: transaction?.cardId || "",
+    installmentType: "once" as InstallmentType,
     invoiceMonth: defaultInvoice?.month || currentMonth,
+    installments: 2,
     date: transaction?.date ? new Date(transaction?.date) : new Date(),
   };
 

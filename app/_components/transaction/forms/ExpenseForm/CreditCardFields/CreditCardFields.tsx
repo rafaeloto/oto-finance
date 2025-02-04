@@ -1,3 +1,4 @@
+import ShouldRender from "@/app/_components/_atoms/should-render";
 import { Card } from "@/app/_components/ui/card";
 import {
   FormControl,
@@ -6,6 +7,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/app/_components/ui/form";
+import { Input } from "@/app/_components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -18,6 +21,8 @@ import { getImportantDates } from "@/app/_utils/date";
 import Image from "next/image";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
+
+export type InstallmentType = "once" | "split" | undefined;
 
 type Props = {
   selectedYear: number;
@@ -33,6 +38,7 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
 
   const selectedCardId = watch("cardId");
   const selectedDate = watch("date");
+  const selectedInstallmentType = watch("installmentType");
 
   // Function to generate the invoice options based on the selected date
   const invoiceOptions = useMemo(() => {
@@ -59,42 +65,74 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
 
   return (
     <>
-      <FormField
-        control={control}
-        name="cardId"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Cartão de crédito</FormLabel>
-            <Select
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-              disabled={loadingCreditCards}
-            >
+      <div className="flex w-full items-end space-x-6">
+        <FormField
+          control={control}
+          name="cardId"
+          render={({ field }) => (
+            <FormItem className="flex-grow">
+              <FormLabel>Cartão de crédito</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={loadingCreditCards}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o cartão..." />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {creditCards?.map((card) => (
+                    <SelectItem key={card.id} value={card.id}>
+                      <div className="flex items-center space-x-5">
+                        <Image
+                          src={`/credit-cards/${card.flag}.svg`}
+                          alt={card.flag || "Cartão"}
+                          width={20}
+                          height={20}
+                        />
+                        <span>{card.name}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="installmentType"
+          render={({ field }) => (
+            <FormItem className="mb-3 w-2/5">
               <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o cartão..." />
-                </SelectTrigger>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex space-x-3"
+                >
+                  <FormItem className="flex items-center space-x-1 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="once" />
+                    </FormControl>
+                    <FormLabel>À vista</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-1 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="split" />
+                    </FormControl>
+                    <FormLabel>Parcelado</FormLabel>
+                  </FormItem>
+                </RadioGroup>
               </FormControl>
-              <SelectContent>
-                {creditCards?.map((card) => (
-                  <SelectItem key={card.id} value={card.id}>
-                    <div className="flex items-center space-x-5">
-                      <Image
-                        src={`/credit-cards/${card.flag}.svg`}
-                        alt={card.flag || "Cartão"}
-                        width={20}
-                        height={20}
-                      />
-                      <span>{card.name}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
 
       <div className="flex w-full space-x-4">
         <FormField
@@ -132,6 +170,27 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
         <Card className="mt-auto flex h-10 w-1/4 items-center justify-center">
           {selectedYear}
         </Card>
+
+        <ShouldRender if={selectedInstallmentType === "split"}>
+          <FormField
+            control={control}
+            name="installments"
+            render={({ field }) => (
+              <FormItem className="w-1/4">
+                <FormLabel>Parcelas</FormLabel>
+                <FormControl>
+                  <Input
+                    min={1}
+                    max={12}
+                    {...field}
+                    disabled={!selectedCardId || !selectedDate}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </ShouldRender>
       </div>
     </>
   );
