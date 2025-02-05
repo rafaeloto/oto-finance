@@ -28,7 +28,7 @@ export const upsertGainTransaction = async (
     throw new Error("Unauthorized");
   }
 
-  const existingTransaction = await getTransaction(params.id);
+  const existingTransaction = await getTransaction({ id: params.id });
 
   // Group all operations in a single transaction, to apply transactional processing.
   await db.$transaction(async (transaction) => {

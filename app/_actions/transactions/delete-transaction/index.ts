@@ -14,7 +14,7 @@ export const deleteTransaction = async ({
   transactionId,
 }: DeleteTransactionSchema) => {
   // Retrieve the transaction
-  const transaction = await getTransaction(transactionId);
+  const transaction = await getTransaction({ id: transactionId });
 
   if (!transaction) {
     throw new Error("Transaction not found");

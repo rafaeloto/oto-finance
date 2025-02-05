@@ -32,7 +32,7 @@ export const upsertTransferTransaction = async (
     throw new Error("Unauthorized");
   }
 
-  const existingTransaction = await getTransaction(params.id);
+  const existingTransaction = await getTransaction({ id: params.id });
 
   // Identify if there were changes that impact the balances.
   const fieldsAffectingBalanceChanged = existingTransaction

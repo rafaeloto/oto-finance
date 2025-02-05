@@ -28,7 +28,7 @@ export const upsertInvestmentTransaction = async (
     throw new Error("Unauthorized");
   }
 
-  const existingTransaction = await getTransaction(params.id);
+  const existingTransaction = await getTransaction({ id: params.id });
 
   const fieldsAffectingBalanceChanged = existingTransaction
     ? Number(existingTransaction.amount) !== params.amount ||
