@@ -38,12 +38,12 @@ import { Button } from "../../../ui/button";
 import ShouldRender from "../../../_atoms/should-render";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { createInvoice } from "@/app/_actions/credit-cards/create-invoice";
+import handleCreditTransaction from "./handleCreditTransaction";
 import { getImportantDates } from "@/app/_utils/date";
 import CreditCardFields from "./CreditCardFields";
 import { InstallmentType } from "./CreditCardFields/CreditCardFields";
 
-type FormSchema = z.infer<typeof formSchemas.expense>;
+export type FormSchema = z.infer<typeof formSchemas.expense>;
 
 interface ExpenseFormProps {
   setIsOpen: (open: boolean) => void;
@@ -64,6 +64,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
     invoices,
     loading: loadingInvoices,
     error: invoicesError,
+    reloadInvoices,
   } = useInvoices();
 
   const loading = loadingAccounts || loadingInvoices;
@@ -112,54 +113,42 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
   const isCreditCard = paymentMethod === TransactionPaymentMethod.CREDIT;
 
   const onSubmit = async (data: FormSchema) => {
-    try {
-      let invoiceId: string | undefined;
-
-      if (isCreditCard && data?.invoiceMonth && data?.cardId) {
-        // If it's a credit card transaction, remove the accountId
-        delete data.accountId;
-
-        // Checks if the invoice for the selected month and year already exists
-        let invoice = invoices?.find(
-          (inv) =>
-            inv.creditCardId === data.cardId &&
-            inv.month === data.invoiceMonth &&
-            inv.year === selectedYear,
-        );
-
-        // If the invoice exists and is already paid, prevents the creation of the transaction
-        if (invoice && invoice.status === "PAID") {
-          toast.error(
-            "Não é possível adicionar transações a uma fatura já paga.",
-          );
-          return;
-        }
-
-        if (!invoice) {
-          // Creates the invoice if it doesn't exist
-          invoice = await createInvoice({
-            creditCardId: data.cardId,
-            month: data.invoiceMonth,
-            year: selectedYear,
-          });
-        }
-
-        // Updates the invoiceId with the newly created or found invoice
-        invoiceId = invoice.id;
-      } else {
-        // If it's not a credit card transaction, remove the cardId and invoiceId
-        delete data.cardId;
-        invoiceId = undefined;
-      }
-      // Removes the invoiceMonth from the data, because it was already parsed
-      delete data.invoiceMonth;
-
-      await upsertExpenseTransaction({ ...data, invoiceId, id: transactionId });
+    const onSuccess = () => {
       toast.success(
         `Transação ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
       );
       setIsOpen(false);
       form.reset();
+    };
+
+    // If it's a credit transaction, upsert credit transaction
+    if (isCreditCard) {
+      try {
+        await handleCreditTransaction({
+          data,
+          invoices,
+          selectedYear,
+          transactionId,
+        });
+
+        await reloadInvoices();
+        onSuccess();
+      } catch (error) {
+        console.error(error);
+        toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
+      }
+      return;
+    }
+
+    // If it's not a credit transaction, upsert debit transaction
+    try {
+      delete data.cardId;
+      delete data.installmentType;
+      delete data.installments;
+      delete data.invoiceMonth;
+
+      await upsertExpenseTransaction({ ...data, id: transactionId });
+      onSuccess();
     } catch (error) {
       console.error(error);
       toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);

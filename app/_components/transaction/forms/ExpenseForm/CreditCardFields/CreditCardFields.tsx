@@ -180,10 +180,12 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
                 <FormLabel>Parcelas</FormLabel>
                 <FormControl>
                   <Input
-                    min={1}
+                    min={2}
                     max={12}
+                    type="number"
                     {...field}
                     disabled={!selectedCardId || !selectedDate}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
                   />
                 </FormControl>
                 <FormMessage />
