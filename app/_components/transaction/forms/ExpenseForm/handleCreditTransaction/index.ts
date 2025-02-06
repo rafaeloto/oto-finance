@@ -1,9 +1,12 @@
+"use server";
+
 import { FormSchema } from "@/app/_components/transaction/forms/ExpenseForm/ExpenseForm";
 import { Invoice } from "@prisma/client";
 import { toast } from "sonner";
 import { v4 as uuid } from "uuid";
 import { createInvoice } from "../../../../../_actions/credit-cards/create-invoice";
 import { upsertExpenseTransaction } from "../../../../../_actions/transactions/upsert-expense-transaction";
+import { revalidatePath } from "next/cache";
 
 type FindOrOpenInvoiceProps = {
   invoices: Invoice[];
@@ -73,11 +76,14 @@ const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
     delete data.invoiceMonth;
 
     // Upserts a single transaction
-    await upsertExpenseTransaction({
-      ...data,
-      invoiceId: invoice.id,
-      id: transactionId,
-    });
+    await upsertExpenseTransaction(
+      {
+        ...data,
+        invoiceId: invoice.id,
+        id: transactionId,
+      },
+      { shouldRevalidate: false },
+    );
     return;
   }
 
@@ -108,15 +114,18 @@ const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
       });
 
       // Create transaction for each installment
-      await upsertExpenseTransaction({
-        ...data,
-        id: undefined, // Installments are new transactions
-        amount: installmentAmount,
-        date: new Date(transactionDate),
-        invoiceId: installmentInvoice.id,
-        installmentId,
-        installmentNumber,
-      });
+      await upsertExpenseTransaction(
+        {
+          ...data,
+          id: undefined, // Installments are new transactions
+          amount: installmentAmount,
+          date: new Date(transactionDate),
+          invoiceId: installmentInvoice.id,
+          installmentId,
+          installmentNumber,
+        },
+        { shouldRevalidate: false },
+      );
 
       availableInvoices.push(installmentInvoice);
 
@@ -133,5 +142,9 @@ const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
       transactionDate.setMonth(transactionDate.getMonth() + 1);
     }
   }
+
+  revalidatePath("/");
+  revalidatePath("/transactions");
+  revalidatePath("/credit-cards/details");
 };
 export default handleCreditTransaction;

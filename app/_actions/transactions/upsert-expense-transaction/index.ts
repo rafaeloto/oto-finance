@@ -27,11 +27,18 @@ interface UpsertExpenseTransactionParams {
   date: Date;
 }
 
+type AdditionalParams = {
+  shouldRevalidate?: boolean;
+  client?: Omit<Prisma.TransactionClient, "$transaction">;
+};
+
 export const upsertExpenseTransaction = async (
   params: UpsertExpenseTransactionParams,
-  client?: Omit<Prisma.TransactionClient, "$transaction">,
+  additionalParams?: AdditionalParams,
 ) => {
   upsertExpenseTransactionSchema.parse(params);
+
+  const { shouldRevalidate = true, client } = additionalParams ?? {};
 
   // Uses the transactional client, if provided, or the default client.
   const prismaClient = client ?? db;
@@ -205,8 +212,10 @@ export const upsertExpenseTransaction = async (
     data: { ...updatedParams, userId, type: "EXPENSE" },
   });
 
-  revalidatePath("/");
-  revalidatePath("/transactions");
-  revalidatePath("/accounts");
-  revalidatePath("/credit-cards/details");
+  if (shouldRevalidate) {
+    revalidatePath("/");
+    revalidatePath("/transactions");
+    revalidatePath("/accounts");
+    revalidatePath("/credit-cards/details");
+  }
 };
