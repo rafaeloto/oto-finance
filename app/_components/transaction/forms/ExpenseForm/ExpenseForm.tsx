@@ -42,6 +42,7 @@ import handleCreditTransaction from "./handleCreditTransaction";
 import { getImportantDates } from "@/app/_utils/date";
 import CreditCardFields from "./CreditCardFields";
 import { InstallmentType } from "./CreditCardFields/CreditCardFields";
+import { Loader2Icon } from "lucide-react";
 
 export type FormSchema = z.infer<typeof formSchemas.expense>;
 
@@ -89,6 +90,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
   const [selectedYear, setSelectedYear] = useState<number>(
     defaultInvoice?.year || currentYear,
   );
+  const [upserting, setUpserting] = useState(false);
 
   const defaultValues = {
     name: transaction?.name || "",
@@ -114,6 +116,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
 
   const onSubmit = async (data: FormSchema) => {
     const onSuccess = () => {
+      setUpserting(false);
       toast.success(
         `Transação ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
       );
@@ -121,12 +124,19 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
       form.reset();
     };
 
+    const onError = (error: Error) => {
+      setUpserting(false);
+      toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
+      console.error(error);
+    };
+
+    setUpserting(true);
+
     // If it's a credit transaction, upsert credit transaction
     if (isCreditCard) {
       try {
         await handleCreditTransaction({
           data,
-          invoices,
           selectedYear,
           transactionId,
         });
@@ -134,8 +144,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
         await reloadInvoices();
         onSuccess();
       } catch (error) {
-        console.error(error);
-        toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
+        onError(error as Error);
       }
       return;
     }
@@ -150,8 +159,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
       await upsertExpenseTransaction({ ...data, id: transactionId });
       onSuccess();
     } catch (error) {
-      console.error(error);
-      toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
+      onError(error as Error);
     }
   };
 
@@ -308,8 +316,14 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
               Cancelar
             </Button>
           </DialogClose>
-          <Button type="submit" disabled={loading || !!error}>
-            {isUpdate ? "Atualizar" : "Adicionar"}
+          <Button type="submit" disabled={loading || upserting || !!error}>
+            {upserting ? (
+              <Loader2Icon className="animate-spin" />
+            ) : isUpdate ? (
+              "Atualizar"
+            ) : (
+              "Adicionar"
+            )}
           </Button>
         </DialogFooter>
       </form>

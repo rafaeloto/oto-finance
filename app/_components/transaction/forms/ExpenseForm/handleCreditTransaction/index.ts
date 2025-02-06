@@ -1,62 +1,25 @@
 "use server";
 
 import { FormSchema } from "@/app/_components/transaction/forms/ExpenseForm/ExpenseForm";
-import { Invoice } from "@prisma/client";
-import { toast } from "sonner";
 import { v4 as uuid } from "uuid";
-import { createInvoice } from "../../../../../_actions/credit-cards/create-invoice";
 import { upsertExpenseTransaction } from "../../../../../_actions/transactions/upsert-expense-transaction";
-import { revalidatePath } from "next/cache";
-
-type FindOrOpenInvoiceProps = {
-  invoices: Invoice[];
-  cardId: string;
-  invoiceMonth: number;
-  invoiceYear: number;
-};
-
-const findOrOpenInvoice = async (
-  props: FindOrOpenInvoiceProps,
-): Promise<Invoice> => {
-  const { invoices, cardId, invoiceMonth, invoiceYear } = props;
-
-  // Checks if the invoice for the selected month and year already exists
-  const existingInvoice = invoices.find(
-    (inv) =>
-      inv.creditCardId === cardId &&
-      inv.month === invoiceMonth &&
-      inv.year === invoiceYear,
-  );
-
-  if (existingInvoice) {
-    // If the invoice exists and is already paid, prevents the creation of the transaction
-    if (existingInvoice.status === "PAID") {
-      toast.error("Não é possível adicionar transações a uma fatura já paga.");
-      throw new Error("Invoice is already paid");
-    }
-    // Returns the existing invoice
-    return existingInvoice;
-  }
-
-  // Creates and returns a new invoice if it doesn't exist
-  return await createInvoice({
-    creditCardId: cardId,
-    month: invoiceMonth,
-    year: invoiceYear,
-  });
-};
+import { db } from "@/app/_lib/prisma";
+import { findOrOpenInvoice, revalidatePaths } from "./utils";
+import { auth } from "@clerk/nextjs/server";
 
 type HandleCreditTransactionProps = {
   transactionId?: string;
   data: FormSchema;
-  invoices: Invoice[];
   selectedYear: number;
 };
 
 const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
-  const { data, invoices, transactionId, selectedYear } = props;
+  const { userId } = await auth();
+
+  if (!userId) throw new Error("Unauthorized");
+
+  const { data, transactionId, selectedYear } = props;
   const { installmentType, installments } = data;
-  const availableInvoices = [...invoices];
 
   // For the credit card transactions, removes the accountId and other data not used on the action
   delete data.installmentType;
@@ -65,86 +28,99 @@ const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
 
   // If the transaction doesn't have installments
   if (installmentType === "once") {
-    const invoice = await findOrOpenInvoice({
-      cardId: data.cardId!,
-      invoiceMonth: data.invoiceMonth!,
-      invoiceYear: selectedYear,
-      invoices,
+    await db.$transaction(async (prismaClient) => {
+      const invoice = await findOrOpenInvoice({
+        userId,
+        cardId: data.cardId!,
+        invoiceMonth: data.invoiceMonth!,
+        invoiceYear: selectedYear,
+        client: prismaClient,
+      });
+
+      // Removes the invoiceMonth from the data, because it was already parsed
+      delete data.invoiceMonth;
+
+      // Upserts a single transaction
+      await upsertExpenseTransaction(
+        {
+          ...data,
+          invoiceId: invoice.id,
+          id: transactionId,
+        },
+        { revalidate: false, client: prismaClient },
+      );
     });
 
-    // Removes the invoiceMonth from the data, because it was already parsed
-    delete data.invoiceMonth;
+    revalidatePaths();
 
-    // Upserts a single transaction
-    await upsertExpenseTransaction(
-      {
-        ...data,
-        invoiceId: invoice.id,
-        id: transactionId,
-      },
-      { shouldRevalidate: false },
-    );
     return;
   }
 
   // If the transaction has installments
   if (installmentType === "split") {
-    // Checks if the transaction has at least 2 installments
-    if (installments! < 2)
-      throw new Error("At least 2 installments are required");
+    await db.$transaction(
+      async (prismaClient) => {
+        // Checks if the transaction has at least 2 installments
+        if (installments! < 2)
+          throw new Error("At least 2 installments are required");
 
-    // Sets initial invoice and installment values
-    const transactionDate = new Date(data.date);
-    const installmentId = uuid();
-    const installmentAmount = data.amount / installments!;
-    let installmentMonth = data.invoiceMonth!;
-    let installmentYear = selectedYear;
-    let installmentNumber = 1;
+        // Sets initial invoice and installment values
+        const transactionDate = new Date(data.date);
+        const installmentId = uuid();
+        const installmentAmount = data.amount / installments!;
+        const installmentMonth = data.invoiceMonth!;
+        const installmentYear = selectedYear;
 
-    // Removes the invoiceMonth from the data, because it was already parsed
-    delete data.invoiceMonth;
+        // Removes the invoiceMonth from the data, because it was already parsed
+        delete data.invoiceMonth;
 
-    for (let i = 0; i < installments!; i++) {
-      // Finds or creates the corresponding invoice
-      const installmentInvoice = await findOrOpenInvoice({
-        cardId: data.cardId!,
-        invoiceMonth: installmentMonth,
-        invoiceYear: installmentYear,
-        invoices: availableInvoices,
-      });
+        // Generates an array with the details for each installment
+        const installmentDetails = Array.from({ length: installments! }).map(
+          (_, index) => {
+            const date = new Date(transactionDate);
+            date.setMonth(date.getMonth() + index);
 
-      // Create transaction for each installment
-      await upsertExpenseTransaction(
-        {
-          ...data,
-          id: undefined, // Installments are new transactions
-          amount: installmentAmount,
-          date: new Date(transactionDate),
-          invoiceId: installmentInvoice.id,
-          installmentId,
-          installmentNumber,
-        },
-        { shouldRevalidate: false },
-      );
+            const month = ((installmentMonth + index - 1) % 12) + 1;
+            const year =
+              installmentYear + Math.floor((installmentMonth + index - 1) / 12);
 
-      availableInvoices.push(installmentInvoice);
+            return { date, month, year, number: index + 1 };
+          },
+        );
 
-      // Adjusts the next installment month and year
-      if (installmentMonth === 12) {
-        installmentMonth = 1;
-        installmentYear++;
-      } else {
-        installmentMonth++;
-      }
+        // Generates a promise for each installment and runs them in parallel
+        await Promise.all(
+          installmentDetails.map(async (installment) => {
+            // Finds or creates the corresponding invoice
+            const installmentInvoice = await findOrOpenInvoice({
+              userId,
+              cardId: data.cardId!,
+              invoiceMonth: installment.month,
+              invoiceYear: installment.year,
+              client: prismaClient,
+            });
 
-      // Adjusts the next installment number and date
-      installmentNumber++;
-      transactionDate.setMonth(transactionDate.getMonth() + 1);
-    }
+            // Creates the transaction linked to the correct invoice
+            await upsertExpenseTransaction(
+              {
+                ...data,
+                id: undefined,
+                amount: installmentAmount,
+                date: installment.date,
+                invoiceId: installmentInvoice.id,
+                installmentId,
+                installmentNumber: installment.number,
+              },
+              { revalidate: false, client: prismaClient },
+            );
+          }),
+        );
+      },
+      { timeout: 60000 },
+    ); // This timeout is necessary to prevent the action from timing out
   }
 
-  revalidatePath("/");
-  revalidatePath("/transactions");
-  revalidatePath("/credit-cards/details");
+  revalidatePaths();
 };
+
 export default handleCreditTransaction;
