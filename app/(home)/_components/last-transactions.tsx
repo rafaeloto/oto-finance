@@ -33,7 +33,7 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
   const hasNoData = lastTransactions.length === 0;
 
   return (
-    <ScrollArea className="rounded-md border">
+    <div className="flex min-h-0 flex-1 flex-col rounded-md border">
       <CardHeader className="flex-row items-center justify-between">
         <CardTitle className="font-bold">Últimas Transações</CardTitle>
         <Button variant="outline" className="rounded-full font-bold" asChild>
@@ -41,44 +41,48 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
         </Button>
       </CardHeader>
 
-      {hasNoData ? (
-        <EmptyListFeedback message="Nenhuma transação registrada" />
-      ) : (
-        <CardContent className="space-y-6">
-          {lastTransactions.map((transaction) => (
-            <div
-              key={transaction.id}
-              className="flex items-center justify-between"
-            >
-              <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-white bg-opacity-[3%] p-3 text-white">
-                  <Image
-                    src={`/${TRANSACTION_PAYMENT_METHOD_ICONS[transaction.paymentMethod]}`}
-                    height={20}
-                    width={20}
-                    alt={transaction.paymentMethod}
-                  />
+      <ScrollArea className="min-h-0 flex-1 overflow-auto">
+        {hasNoData ? (
+          <EmptyListFeedback message="Nenhuma transação registrada" />
+        ) : (
+          <CardContent className="space-y-6">
+            {lastTransactions.map((transaction) => (
+              <div
+                key={transaction.id}
+                className="flex items-center justify-between"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="rounded-lg bg-white bg-opacity-[3%] p-3 text-white">
+                    <Image
+                      src={`/${TRANSACTION_PAYMENT_METHOD_ICONS[transaction.paymentMethod]}`}
+                      height={20}
+                      width={20}
+                      alt={transaction.paymentMethod}
+                    />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold">{transaction.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(transaction.date).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-bold">{transaction.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {new Date(transaction.date).toLocaleDateString("pt-BR", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </p>
-                </div>
+                <p
+                  className={`text-sm font-bold ${getAmountColor(transaction)}`}
+                >
+                  {getAmountPrefix(transaction)}
+                  {formatCurrency(Number(transaction.amount))}
+                </p>
               </div>
-              <p className={`text-sm font-bold ${getAmountColor(transaction)}`}>
-                {getAmountPrefix(transaction)}
-                {formatCurrency(Number(transaction.amount))}
-              </p>
-            </div>
-          ))}
-        </CardContent>
-      )}
-    </ScrollArea>
+            ))}
+          </CardContent>
+        )}
+      </ScrollArea>
+    </div>
   );
 };
 
