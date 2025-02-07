@@ -49,6 +49,16 @@ export const upsertExpenseTransaction = async (
     throw new Error("Unauthorized");
   }
 
+  const revalidatePaths = () => {
+    if (revalidate) {
+      console.log("revalidating");
+      revalidatePath("/");
+      revalidatePath("/transactions");
+      revalidatePath("/accounts");
+      revalidatePath("/credit-cards/details", "page");
+    }
+  };
+
   const existingTransaction = await getTransaction({
     id: params.id,
     client: prismaClient,
@@ -86,6 +96,8 @@ export const upsertExpenseTransaction = async (
     await prismaClient.transaction.create({
       data: { ...updatedParams, userId, type: "EXPENSE" },
     });
+
+    revalidatePaths();
     return;
   }
 
@@ -212,10 +224,5 @@ export const upsertExpenseTransaction = async (
     data: { ...updatedParams, userId, type: "EXPENSE" },
   });
 
-  if (revalidate) {
-    revalidatePath("/");
-    revalidatePath("/transactions");
-    revalidatePath("/accounts");
-    revalidatePath("/credit-cards/details", "page");
-  }
+  revalidatePaths();
 };
