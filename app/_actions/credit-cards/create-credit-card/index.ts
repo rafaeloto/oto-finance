@@ -33,5 +33,5 @@ export const createCreditCard = async (params: CreateCreditCardParams) => {
   });
 
   revalidatePath("/credit-cards");
-  revalidatePath("/credit-cards/details");
+  revalidatePath("/credit-cards/details", "page");
 };

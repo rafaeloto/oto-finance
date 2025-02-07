@@ -1,4 +1,3 @@
-// app/components/Providers.tsx
 import { ClerkProvider } from "@clerk/nextjs";
 import { AccountsProvider } from "../AccountsContext";
 import { CreditCardsProvider } from "../CreditCardsContext";

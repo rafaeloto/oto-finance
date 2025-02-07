@@ -3,6 +3,7 @@
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { updateCardInvoices } from "../update-card-invoices";
+import { revalidatePath } from "next/cache";
 
 export const updateAllUserInvoices = async () => {
   const { userId } = await auth();
@@ -11,14 +12,25 @@ export const updateAllUserInvoices = async () => {
     throw new Error("Unauthorized");
   }
 
-  // Busca todos os cartões de crédito do usuário
+  // Find all user credit cards
   const userCreditCards = await db.creditCard.findMany({
     where: { userId },
     select: { id: true },
   });
 
-  // Percorre todos os cartões do usuário e garante que as faturas estejam em dia
-  for (const card of userCreditCards) {
-    await updateCardInvoices(card.id);
-  }
+  // Group all operations in a single transaction to ensure atomicity
+  await db.$transaction(
+    async (prismaClient) => {
+      // Iterate through all user credit cards and ensure their invoices are up to date
+      for (const card of userCreditCards) {
+        await updateCardInvoices({
+          creditCardId: card.id,
+          client: prismaClient,
+        });
+      }
+    },
+    { timeout: 60000 },
+  );
+
+  revalidatePath("/credit-cards/details", "page");
 };

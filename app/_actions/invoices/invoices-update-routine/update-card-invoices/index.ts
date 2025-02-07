@@ -3,22 +3,23 @@
 import { db } from "@/app/_lib/prisma";
 import { getImportantDates } from "@/app/_utils/date";
 import { auth } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 
-export const updateCardInvoices = async (creditCardId: string) => {
+type UpdateCardInvoicesProps = {
+  creditCardId: string;
+  client?: Omit<Prisma.TransactionClient, "$transaction">;
+};
+
+export const updateCardInvoices = async (props: UpdateCardInvoicesProps) => {
+  const { creditCardId, client } = props;
+
   const { userId } = await auth();
 
   if (!userId) {
     throw new Error("Unauthorized");
   }
 
-  const creditCard = await db.creditCard.findUnique({
-    where: { id: creditCardId },
-  });
-
-  if (!creditCard) {
-    throw new Error("Credit card not found");
-  }
+  const prismaClient = client ?? db;
 
   const {
     day: currentDay,
@@ -27,7 +28,7 @@ export const updateCardInvoices = async (creditCardId: string) => {
   } = getImportantDates(new Date());
 
   // Close all open invoices that should be closed
-  await db.invoice.updateMany({
+  await prismaClient.invoice.updateMany({
     where: {
       creditCardId,
       status: "OPEN",
@@ -43,7 +44,4 @@ export const updateCardInvoices = async (creditCardId: string) => {
     },
     data: { status: "CLOSED" },
   });
-
-  revalidatePath("/credit-cards");
-  revalidatePath("/credit-cards/details");
 };

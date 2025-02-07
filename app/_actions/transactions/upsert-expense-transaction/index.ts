@@ -206,7 +206,7 @@ export const upsertExpenseTransaction = async (
     }
   }
 
-  // Atualizar a transação
+  // Update the transaction
   await prismaClient.transaction.update({
     where: { id: updatedParams.id },
     data: { ...updatedParams, userId, type: "EXPENSE" },
@@ -216,6 +216,6 @@ export const upsertExpenseTransaction = async (
     revalidatePath("/");
     revalidatePath("/transactions");
     revalidatePath("/accounts");
-    revalidatePath("/credit-cards/details");
+    revalidatePath("/credit-cards/details", "page");
   }
 };

@@ -68,5 +68,5 @@ export const payInvoice = async (params: PayInvoiceParams) => {
   revalidatePath("/");
   revalidatePath("/accounts");
   revalidatePath("/invoices");
-  revalidatePath("/credit-cards/details");
+  revalidatePath("/credit-cards/details", "page");
 };

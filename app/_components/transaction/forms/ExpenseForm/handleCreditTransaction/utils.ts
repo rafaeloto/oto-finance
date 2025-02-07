@@ -51,5 +51,5 @@ export const findOrOpenInvoice = async (
 export const revalidatePaths = () => {
   revalidatePath("/");
   revalidatePath("/transactions");
-  revalidatePath("/credit-cards/details");
+  revalidatePath("/credit-cards/details", "page");
 };

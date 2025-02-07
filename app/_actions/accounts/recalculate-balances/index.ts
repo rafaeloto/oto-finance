@@ -35,85 +35,48 @@ export const recalculateBalances = async () => {
   const accounts = await getAccounts();
 
   // Group all operations in a single transaction to ensure atomicity
-  await db.$transaction(async (prismaClient) => {
-    // Resets all user accounts to zero
-    for (const account of accounts) {
-      await updateSingleAccountBalance({
-        operation: "decrement",
-        amount: Number(account.balance),
-        accountId: account.id,
-        transaction: prismaClient,
-      });
-    }
-
-    // Remove the amountPaid of paid invoices from the accounts balances
-    for (const invoice of paidInvoices) {
-      if (invoice.paidByAccountId && invoice.paymentAmount) {
+  await db.$transaction(
+    async (prismaClient) => {
+      // Resets all user accounts to zero
+      for (const account of accounts) {
         await updateSingleAccountBalance({
           operation: "decrement",
-          amount: Number(invoice.paymentAmount),
-          accountId: invoice.paidByAccountId,
+          amount: Number(account.balance),
+          accountId: account.id,
           transaction: prismaClient,
         });
       }
-    }
 
-    // Groups transactions by account and recalculates the balance
-    for (const transaction of transactions) {
-      switch (transaction.type) {
-        // Subtracts the value from the account
-        case "EXPENSE":
-          if (transaction.accountId) {
-            await updateSingleAccountBalance({
-              operation: "decrement",
-              amount: Number(transaction.amount),
-              accountId: transaction.accountId,
-              transaction: prismaClient,
-            });
-          }
-          break;
+      // Remove the amountPaid of paid invoices from the accounts balances
+      for (const invoice of paidInvoices) {
+        if (invoice.paidByAccountId && invoice.paymentAmount) {
+          await updateSingleAccountBalance({
+            operation: "decrement",
+            amount: Number(invoice.paymentAmount),
+            accountId: invoice.paidByAccountId,
+            transaction: prismaClient,
+          });
+        }
+      }
 
-        // Adds the value to the account
-        case "GAIN":
-          if (transaction.accountId) {
-            await updateSingleAccountBalance({
-              operation: "increment",
-              amount: Number(transaction.amount),
-              accountId: transaction.accountId,
-              transaction: prismaClient,
-            });
-          }
-          break;
-
-        // Transfers the value between accounts
-        case "TRANSFER":
-          if (transaction.fromAccountId && transaction.toAccountId) {
-            await updateAccountsBalances({
-              amount: Number(transaction.amount),
-              fromAccountId: transaction.fromAccountId,
-              toAccountId: transaction.toAccountId,
-              transaction: prismaClient,
-            });
-          }
-          break;
-
-        // Subtracts or adds the value to the accounts
-        case "INVESTMENT":
-          if (transaction.accountId) {
-            if (
-              transaction.investmentCategory ===
-              InvestmentTransactionCategory.INVESTMENT_NEGATIVE_RETURN
-            ) {
+      // Groups transactions by account and recalculates the balance
+      for (const transaction of transactions) {
+        switch (transaction.type) {
+          // Subtracts the value from the account
+          case "EXPENSE":
+            if (transaction.accountId) {
               await updateSingleAccountBalance({
                 operation: "decrement",
                 amount: Number(transaction.amount),
                 accountId: transaction.accountId,
                 transaction: prismaClient,
               });
-            } else if (
-              transaction.investmentCategory ===
-              InvestmentTransactionCategory.INVESTMENT_POSITIVE_RETURN
-            ) {
+            }
+            break;
+
+          // Adds the value to the account
+          case "GAIN":
+            if (transaction.accountId) {
               await updateSingleAccountBalance({
                 operation: "increment",
                 amount: Number(transaction.amount),
@@ -121,14 +84,54 @@ export const recalculateBalances = async () => {
                 transaction: prismaClient,
               });
             }
-          }
-          break;
+            break;
 
-        default:
-          break;
+          // Transfers the value between accounts
+          case "TRANSFER":
+            if (transaction.fromAccountId && transaction.toAccountId) {
+              await updateAccountsBalances({
+                amount: Number(transaction.amount),
+                fromAccountId: transaction.fromAccountId,
+                toAccountId: transaction.toAccountId,
+                transaction: prismaClient,
+              });
+            }
+            break;
+
+          // Subtracts or adds the value to the accounts
+          case "INVESTMENT":
+            if (transaction.accountId) {
+              if (
+                transaction.investmentCategory ===
+                InvestmentTransactionCategory.INVESTMENT_NEGATIVE_RETURN
+              ) {
+                await updateSingleAccountBalance({
+                  operation: "decrement",
+                  amount: Number(transaction.amount),
+                  accountId: transaction.accountId,
+                  transaction: prismaClient,
+                });
+              } else if (
+                transaction.investmentCategory ===
+                InvestmentTransactionCategory.INVESTMENT_POSITIVE_RETURN
+              ) {
+                await updateSingleAccountBalance({
+                  operation: "increment",
+                  amount: Number(transaction.amount),
+                  accountId: transaction.accountId,
+                  transaction: prismaClient,
+                });
+              }
+            }
+            break;
+
+          default:
+            break;
+        }
       }
-    }
-  });
+    },
+    { timeout: 60000 },
+  );
 
   revalidatePath("/accounts");
 };
