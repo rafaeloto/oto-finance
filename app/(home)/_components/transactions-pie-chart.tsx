@@ -64,14 +64,14 @@ const TransactionsPieChart = ({
   const hasNoData = chartData.every((item) => item.amount === 0);
 
   return (
-    <Card className="flex flex-col p-6">
+    <Card className="flex flex-col px-6">
       {hasNoData ? (
         <EmptyListFeedback message="Nenhuma transação registrada" />
       ) : (
         <CardContent className="flex-1 pb-0">
           <ChartContainer
             config={chartConfig}
-            className="mx-auto aspect-square max-h-[250px]"
+            className="mx-auto aspect-square max-h-[230px]"
           >
             <PieChart>
               <ChartTooltip
