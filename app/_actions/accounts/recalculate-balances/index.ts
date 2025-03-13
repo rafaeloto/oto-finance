@@ -47,6 +47,16 @@ export const recalculateBalances = async () => {
         });
       }
 
+      // Adds the initial balances to each account
+      for (const account of accounts) {
+        await updateSingleAccountBalance({
+          operation: "increment",
+          amount: Number(account.initialBalance),
+          accountId: account.id,
+          transaction: prismaClient,
+        });
+      }
+
       // Remove the amountPaid of paid invoices from the accounts balances
       for (const invoice of paidInvoices) {
         if (invoice.paidByAccountId && invoice.paymentAmount) {

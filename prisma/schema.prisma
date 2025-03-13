@@ -8,13 +8,14 @@ datasource db {
 }
 
 model Account {
-  id        String   @id @default(uuid())
-  name      String
-  bank      Bank
-  balance   Decimal  @db.Decimal(10, 2)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String
+  id             String   @id @default(uuid())
+  name           String
+  bank           Bank
+  initialBalance Decimal  @default(0) @db.Decimal(10, 2)
+  balance        Decimal  @db.Decimal(10, 2)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  userId         String
 
   transactions     Transaction[] @relation("AccountTransaction")
   fromTransactions Transaction[] @relation("AccountFromTransaction")

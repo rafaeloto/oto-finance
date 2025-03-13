@@ -46,7 +46,7 @@ const formSchema = z.object({
   bank: z.nativeEnum(Bank, {
     required_error: "O banco é obrigatório",
   }),
-  balance: z.number().optional(),
+  initialBalance: z.number().min(0, "O saldo inicial é obrigatório"),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -62,7 +62,7 @@ const CreateAccountDialog = ({
     defaultValues: {
       name: "",
       bank: Bank.NUBANK,
-      balance: 0,
+      initialBalance: 0,
     },
   });
 
@@ -113,7 +113,7 @@ const CreateAccountDialog = ({
 
             <FormField
               control={form.control}
-              name="balance"
+              name="initialBalance"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Saldo inicial</FormLabel>

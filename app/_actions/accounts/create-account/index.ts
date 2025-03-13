@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 interface CreateAccountParams {
   name: string;
   bank: Bank;
-  balance?: number;
+  initialBalance: number;
 }
 
 export const createAccount = async (params: CreateAccountParams) => {
@@ -21,13 +21,14 @@ export const createAccount = async (params: CreateAccountParams) => {
     throw new Error("Unauthorized");
   }
 
-  const balance = params.balance ?? 0;
+  const { name, bank, initialBalance } = params;
 
   await db.account.create({
     data: {
-      name: params.name,
-      bank: params.bank,
-      balance,
+      name,
+      bank,
+      initialBalance,
+      balance: initialBalance,
       userId,
     },
   });
