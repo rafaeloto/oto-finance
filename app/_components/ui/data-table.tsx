@@ -19,11 +19,13 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  minRowHeight?: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  minRowHeight,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -58,6 +60,7 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                {...(minRowHeight && { className: `h-[${minRowHeight}px]` })}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

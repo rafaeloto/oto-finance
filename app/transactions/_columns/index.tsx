@@ -186,8 +186,8 @@ export function getTransactionColumns({
 
         return (
           <div
-            className="space-x-1"
-            style={{ display: isEditableTransaction ? "block" : "none" }}
+            className="flex justify-end space-x-1"
+            {...(!isEditableTransaction && { style: { display: "none" } })}
           >
             <EditTransactionButton transaction={transaction} />
             <DeleteTransactionButton transactionId={transaction.id} />

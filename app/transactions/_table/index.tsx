@@ -27,6 +27,7 @@ export const TransactionsTable = ({
     <DataTable
       columns={columns}
       data={JSON.parse(JSON.stringify(transactions))}
+      minRowHeight={73}
     />
   );
 };
