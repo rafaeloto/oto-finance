@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/_components/ui/select";
+import { getValidDateFromParams } from "@/app/_utils/date";
 import { getMonthsOptions, getYearsOptions } from "@/app/_utils/select";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,11 +15,16 @@ import { useEffect, useState } from "react";
 const TimeSelect = () => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
-  const currentMonth = searchParams.get("month")?.padStart(2, "0") ?? "01";
-  const currentYear = searchParams.get("year") ?? "01";
+  const paramsMonth = searchParams.get("month")?.padStart(2, "0");
+  const paramsYear = searchParams.get("year");
 
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const { validMonth, validYear } = getValidDateFromParams(
+    paramsMonth!,
+    paramsYear!,
+  );
+
+  const [selectedMonth, setSelectedMonth] = useState(validMonth);
+  const [selectedYear, setSelectedYear] = useState(validYear);
 
   const monthOptions = getMonthsOptions();
   const yearOptions = getYearsOptions();
@@ -34,12 +40,12 @@ const TimeSelect = () => {
   };
 
   useEffect(() => {
-    setSelectedMonth(currentMonth);
-  }, [currentMonth]);
+    setSelectedMonth(validMonth);
+  }, [validMonth]);
 
   useEffect(() => {
-    setSelectedYear(currentYear);
-  }, [currentYear]);
+    setSelectedYear(validYear);
+  }, [validYear]);
 
   return (
     <>

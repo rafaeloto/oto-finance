@@ -5,11 +5,18 @@ import { isMatch } from "date-fns";
 import { generateAiReportSchema, GenerateAiReportSchema } from "./schema";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export const generateAiReport = async ({ month }: GenerateAiReportSchema) => {
+export const generateAiReport = async ({
+  month,
+  year,
+}: GenerateAiReportSchema) => {
   generateAiReportSchema.parse({ month });
 
   if (!isMatch(month, "MM")) {
     throw new Error("Invalid month");
+  }
+
+  if (!isMatch(year, "yyyy")) {
+    throw new Error("Invalid year");
   }
 
   const { userId } = await auth();
@@ -26,8 +33,8 @@ export const generateAiReport = async ({ month }: GenerateAiReportSchema) => {
   const transactions = await db.transaction.findMany({
     where: {
       date: {
-        gte: new Date(`2024-${month}-01`),
-        lt: new Date(`2024-${month}-31`),
+        gte: new Date(`${year}-${month}-01`),
+        lt: new Date(`${year}-${month}-31`),
       },
     },
   });

@@ -3,13 +3,13 @@ import { redirect } from "next/navigation";
 import Navbar from "../_components/_molecules/navbar";
 import SummaryCards from "./_components/summary-cards";
 import TimeSelect from "./_components/time-select";
-import { isMatch } from "date-fns";
 import TransactionsPieChart from "./_components/transactions-pie-chart";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import AiReportButton from "./_components/ai-report-button";
+import { getValidDateFromParams } from "../_utils/date";
 
 interface HomeProps {
   searchParams: {
@@ -18,11 +18,6 @@ interface HomeProps {
   };
 }
 
-const updateQueryParams = (params: HomeProps["searchParams"]): string => {
-  const urlParams = new URLSearchParams(params);
-  return `?${urlParams.toString()}`;
-};
-
 const Home = async ({ searchParams: { month, year } }: HomeProps) => {
   const { userId } = await auth();
 
@@ -30,22 +25,9 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
     redirect("/login");
   }
 
-  const monthIsInvalid = !month || !isMatch(month, "MM");
-  const yearIsInvalid = !year || !/^\d{4}$/.test(year);
+  const { validMonth, validYear } = getValidDateFromParams(month, year);
 
-  if (monthIsInvalid || yearIsInvalid) {
-    const currentMonth = String(new Date().getMonth() + 1).padStart(2, "0");
-    const currentYear = String(new Date().getFullYear());
-
-    redirect(
-      updateQueryParams({
-        month: monthIsInvalid ? currentMonth : month,
-        year: yearIsInvalid ? currentYear : currentYear,
-      }),
-    );
-  }
-
-  const dashboard = await getDashboard(month, year);
+  const dashboard = await getDashboard(validMonth, validYear);
   const userCanAddTransaction = await canUserAddTransaction();
   const user = await clerkClient().users.getUser(userId);
 
@@ -57,7 +39,8 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <div className="flex gap-3">
             <AiReportButton
-              month={month}
+              month={validMonth}
+              year={validYear}
               hasPremiumPlan={
                 user?.publicMetadata.subscriptionPlan === "premium"
               }
@@ -68,7 +51,6 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
         <div className="grid flex-1 grid-cols-[2fr,1fr] gap-6 overflow-hidden">
           <div className="flex flex-col gap-6 overflow-hidden">
             <SummaryCards
-              month={month}
               {...dashboard}
               userCanAddTransaction={userCanAddTransaction}
             />

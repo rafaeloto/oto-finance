@@ -7,7 +7,6 @@ import {
 import SummaryCard from "./summary-card";
 
 interface SummaryCardsProps {
-  month: string;
   balance: number;
   investmentsTotal: number;
   gainsTotal: number;

@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, isMatch } from "date-fns";
 
 /**
  * Calculates the card closing and due dates based on the current date and the
@@ -46,10 +46,12 @@ export const calculateClosingAndDueDates = (
   };
 };
 
-export const getImportantDates = (date: Date) => {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
+export const getImportantDates = (date?: Date) => {
+  const validDate = date ?? new Date();
+
+  const day = validDate.getDate();
+  const month = validDate.getMonth() + 1;
+  const year = validDate.getFullYear();
   const nextMonth = month === 12 ? 1 : month + 1;
   const nextYear = year + 1;
   const nextMonthYear = month === 12 ? nextYear : year;
@@ -62,4 +64,20 @@ export const getImportantDates = (date: Date) => {
     nextYear,
     nextMonthYear,
   };
+};
+
+export const getValidDateFromParams = (month: string, year: string) => {
+  // Gets the current month and year as strings
+  const currentMonth = String(getImportantDates().month).padStart(2, "0");
+  const currentYear = String(getImportantDates().year);
+
+  // Verifies if month and year are valid
+  const monthIsInvalid = !month || !isMatch(month, "MM");
+  const yearIsInvalid = !year || !/^\d{4}$/.test(year);
+
+  // If the parameters are invalid, use the current date values
+  const validMonth = monthIsInvalid ? currentMonth : month;
+  const validYear = yearIsInvalid ? currentYear : year;
+
+  return { validMonth, validYear };
 };
