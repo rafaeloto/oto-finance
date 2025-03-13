@@ -7,49 +7,76 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/_components/ui/select";
+import { getMonthsOptions, getYearsOptions } from "@/app/_utils/select";
 import { useRouter, useSearchParams } from "next/navigation";
-
-const MONTH_OPTIONS = [
-  { value: "01", label: "Janeiro" },
-  { value: "02", label: "Fevereiro" },
-  { value: "03", label: "Março" },
-  { value: "04", label: "Abril" },
-  { value: "05", label: "Maio" },
-  { value: "06", label: "Junho" },
-  { value: "07", label: "Julho" },
-  { value: "08", label: "Agosto" },
-  { value: "09", label: "Setembro" },
-  { value: "10", label: "Outubro" },
-  { value: "11", label: "Novembro" },
-  { value: "12", label: "Dezembro" },
-];
+import { useEffect, useState } from "react";
 
 const TimeSelect = () => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
-  const month = searchParams.get("month") ?? "01";
+  const currentMonth = searchParams.get("month")?.padStart(2, "0") ?? "01";
+  const currentYear = searchParams.get("year") ?? "01";
+
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+
+  const monthOptions = getMonthsOptions();
+  const yearOptions = getYearsOptions();
 
   const handleMonthChange = (month: string) => {
-    push(`/?month=${month}`);
+    setSelectedMonth(month);
+    push(`/?month=${month}&year=${selectedYear}`);
   };
 
-  return (
-    <Select
-      onValueChange={(value) => handleMonthChange(value)}
-      defaultValue={month}
-    >
-      <SelectTrigger className="w-[150px] rounded-full">
-        <SelectValue placeholder="Mês" />
-      </SelectTrigger>
+  const handleYearChange = (year: string) => {
+    setSelectedYear(year);
+    push(`/?month=${selectedMonth}&year=${year}`);
+  };
 
-      <SelectContent>
-        {MONTH_OPTIONS.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+  useEffect(() => {
+    setSelectedMonth(currentMonth);
+  }, [currentMonth]);
+
+  useEffect(() => {
+    setSelectedYear(currentYear);
+  }, [currentYear]);
+
+  return (
+    <>
+      <Select
+        onValueChange={(value) => handleMonthChange(value)}
+        value={selectedMonth}
+      >
+        <SelectTrigger className="w-[150px] rounded-full">
+          <SelectValue placeholder="Mês" />
+        </SelectTrigger>
+
+        <SelectContent>
+          {monthOptions.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      <Select
+        onValueChange={(value) => handleYearChange(value)}
+        value={selectedYear}
+      >
+        <SelectTrigger className="w-[150px] rounded-full">
+          <SelectValue placeholder="Ano" />
+        </SelectTrigger>
+
+        <SelectContent>
+          {yearOptions.map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </>
   );
 };
 

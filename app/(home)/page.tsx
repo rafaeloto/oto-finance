@@ -14,10 +14,16 @@ import AiReportButton from "./_components/ai-report-button";
 interface HomeProps {
   searchParams: {
     month: string;
+    year: string;
   };
 }
 
-const Home = async ({ searchParams: { month } }: HomeProps) => {
+const updateQueryParams = (params: HomeProps["searchParams"]): string => {
+  const urlParams = new URLSearchParams(params);
+  return `?${urlParams.toString()}`;
+};
+
+const Home = async ({ searchParams: { month, year } }: HomeProps) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -25,15 +31,22 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
   }
 
   const monthIsInvalid = !month || !isMatch(month, "MM");
+  const yearIsInvalid = !year || !/^\d{4}$/.test(year);
 
-  if (monthIsInvalid) {
-    redirect(`?month=${new Date().getMonth() + 1}`);
+  if (monthIsInvalid || yearIsInvalid) {
+    const currentMonth = String(new Date().getMonth() + 1).padStart(2, "0");
+    const currentYear = String(new Date().getFullYear());
+
+    redirect(
+      updateQueryParams({
+        month: monthIsInvalid ? currentMonth : month,
+        year: yearIsInvalid ? currentYear : currentYear,
+      }),
+    );
   }
 
-  const dashboard = await getDashboard(month);
-
+  const dashboard = await getDashboard(month, year);
   const userCanAddTransaction = await canUserAddTransaction();
-
   const user = await clerkClient().users.getUser(userId);
 
   return (
