@@ -37,7 +37,7 @@ export const recalculateBalances = async () => {
   // Group all operations in a single transaction to ensure atomicity
   await db.$transaction(
     async (prismaClient) => {
-      // Resets all user accounts to zero
+      // Resets all user accounts to zero and add initial balance
       for (const account of accounts) {
         await updateSingleAccountBalance({
           operation: "decrement",
@@ -45,10 +45,7 @@ export const recalculateBalances = async () => {
           accountId: account.id,
           transaction: prismaClient,
         });
-      }
 
-      // Adds the initial balances to each account
-      for (const account of accounts) {
         await updateSingleAccountBalance({
           operation: "increment",
           amount: Number(account.initialBalance),
