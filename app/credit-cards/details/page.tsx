@@ -2,7 +2,7 @@ import EmptyListFeedback from "@/app/_components/_atoms/empty-list-feedback";
 import Navbar from "@/app/_components/_molecules/navbar";
 import { getCreditCardById } from "@/app/_data/get-credit-card-by-id";
 import { getInvoices } from "@/app/_data/get-invoices";
-import { getTransactionsByInvoice } from "@/app/_data/get-transactions-by-invoice";
+import { getTransactions } from "@/app/_data/get-transactions";
 import InvoiceDetails from "./_components/invoice-details";
 import { getUser } from "@/app/_data/get-user";
 
@@ -29,7 +29,7 @@ const CreditCardDetails = async ({
   const transactionsByInvoice = await Promise.all(
     invoiceIds.map(async (invoiceId) => ({
       id: invoiceId,
-      transactions: await getTransactionsByInvoice({ invoiceId }),
+      transactions: await getTransactions({ invoiceId }),
     })),
   );
 
