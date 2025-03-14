@@ -10,9 +10,9 @@ import {
 } from "../ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import ExpenseForm from "./forms/ExpenseForm";
-import GainForm from "./forms/gain-form";
-import TransferForm from "./forms/transfer-form";
-import InvestmentForm from "./forms/investment-form";
+import GainForm from "./forms/GainForm";
+import TransferForm from "./forms/TransferForm";
+import InvestmentForm from "./forms/InvestmentForm";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;

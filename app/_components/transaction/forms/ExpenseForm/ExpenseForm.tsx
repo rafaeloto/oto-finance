@@ -36,13 +36,13 @@ import { DatePicker } from "../../../ui/date-picker";
 import { DialogClose, DialogFooter } from "../../../ui/dialog";
 import { Button } from "../../../ui/button";
 import ShouldRender from "../../../_atoms/should-render";
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import handleCreditTransaction from "./handleCreditTransaction";
 import { getImportantDates } from "@/app/_utils/date";
 import CreditCardFields from "./CreditCardFields";
 import { InstallmentType } from "./CreditCardFields/CreditCardFields";
 import { Loader2Icon } from "lucide-react";
+import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
 
 export type FormSchema = z.infer<typeof formSchemas.expense>;
 
@@ -284,15 +284,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
                   <SelectContent>
                     {accounts?.map((option) => (
                       <SelectItem key={option.id} value={option.id}>
-                        <div className="flex items-center space-x-5">
-                          <Image
-                            src={`/banks/${option.bank}.svg`}
-                            alt={option.bank || "Banco"}
-                            width={20}
-                            height={20}
-                          />
-                          <span>{option.name}</span>
-                        </div>
+                        <AccountOption name={option.name} bank={option.bank} />
                       </SelectItem>
                     ))}
                   </SelectContent>

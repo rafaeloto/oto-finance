@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { formSchemas } from "./formSchema";
+import { formSchemas } from "../formSchema";
 import { useAccounts } from "@/app/_contexts/AccountsContext";
+import { GainTransactionCategory, Transaction } from "@prisma/client";
 import { z } from "zod";
-import { upsertInvestmentTransaction } from "@/app/_actions/transactions/upsert-investment-transaction";
+import { upsertGainTransaction } from "@/app/_actions/transactions/upsert-gain-transaction";
 import { toast } from "sonner";
 import {
   Form,
@@ -12,31 +13,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/form";
-import { Input } from "../../ui/input";
-import { MoneyInput } from "../../_atoms/money-input";
+} from "../../../ui/form";
+import { Input } from "../../../ui/input";
+import { MoneyInput } from "../../../_atoms/money-input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../ui/select";
-import { DatePicker } from "../../ui/date-picker";
-import { DialogClose, DialogFooter } from "../../ui/dialog";
-import { Button } from "../../ui/button";
-import { INVESTMENT_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction";
-import { InvestmentTransactionCategory, Transaction } from "@prisma/client";
-import Image from "next/image";
+} from "../../../ui/select";
+import { GAIN_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction";
+import { DatePicker } from "../../../ui/date-picker";
+import { DialogClose, DialogFooter } from "../../../ui/dialog";
+import { Button } from "../../../ui/button";
+import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
 
-type FormSchema = z.infer<typeof formSchemas.investment>;
+type FormSchema = z.infer<typeof formSchemas.gain>;
 
-interface InvestmentFormProps {
+interface GainFormProps {
   setIsOpen: (open: boolean) => void;
   transaction?: Transaction;
 }
 
-const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
+const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
   const transactionId = transaction?.id;
 
   const isUpdate = !!transactionId;
@@ -46,21 +46,19 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
   const defaultValues = {
     name: transaction?.name || "",
     amount: Number(transaction?.amount) || 0,
-    investmentCategory:
-      transaction?.investmentCategory ||
-      InvestmentTransactionCategory.INVESTMENT_POSITIVE_RETURN,
+    gainCategory: transaction?.gainCategory || GainTransactionCategory.SALARY,
     accountId: transaction?.accountId || "",
     date: transaction?.date ? new Date(transaction?.date) : new Date(),
   };
 
   const form = useForm({
-    resolver: zodResolver(formSchemas.investment),
+    resolver: zodResolver(formSchemas.gain),
     defaultValues,
   });
 
   const onSubmit = async (data: FormSchema) => {
     try {
-      await upsertInvestmentTransaction({ ...data, id: transactionId });
+      await upsertGainTransaction({ ...data, id: transactionId });
       toast.success(
         `Transação ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
       );
@@ -114,7 +112,7 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
 
         <FormField
           control={form.control}
-          name="investmentCategory"
+          name="gainCategory"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Categoria</FormLabel>
@@ -125,7 +123,7 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {INVESTMENT_TRANSACTION_CATEGORY_OPTIONS.map((option) => (
+                  {GAIN_TRANSACTION_CATEGORY_OPTIONS.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
@@ -152,15 +150,7 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
                 <SelectContent>
                   {accounts?.map((option) => (
                     <SelectItem key={option.id} value={option.id}>
-                      <div className="flex items-center space-x-5">
-                        <Image
-                          src={`/banks/${option.bank}.svg`}
-                          alt={option.bank || "Banco"}
-                          width={20}
-                          height={20}
-                        />
-                        <span>{option.name}</span>
-                      </div>
+                      <AccountOption name={option.name} bank={option.bank} />
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -195,4 +185,4 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
   );
 };
 
-export default InvestmentForm;
+export default GainForm;
