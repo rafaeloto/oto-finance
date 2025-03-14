@@ -66,7 +66,7 @@ export const getImportantDates = (date?: Date) => {
   };
 };
 
-export const getValidDateFromParams = (month: string, year: string) => {
+export const getValidDateFromParams = (month?: string, year?: string) => {
   // Gets the current month and year as strings
   const currentMonth = String(getImportantDates().month).padStart(2, "0");
   const currentYear = String(getImportantDates().year);

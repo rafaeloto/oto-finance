@@ -1,4 +1,3 @@
-import { db } from "../_lib/prisma";
 import AddTransactionButton from "../_components/transaction/add-transaction-button";
 import Navbar from "../_components/_molecules/navbar";
 import { auth } from "@clerk/nextjs/server";
@@ -10,27 +9,29 @@ import { getCreditCards } from "../_data/get-credit-cards";
 import { TransactionsTable } from "./_table";
 import { getAccounts } from "../_data/get-accounts";
 import { getInvoices } from "../_data/get-invoices";
+import TransactionFilters from "./_filters";
+import {
+  getTransactions,
+  type getTransactionsParams,
+} from "../_data/get-transactions";
+import { validateSearchParams } from "./_filters/validateFilters";
 
-const TransactionsPage = async () => {
+type PageProps = {
+  searchParams: getTransactionsParams;
+};
+
+const TransactionsPage = async ({ searchParams }: PageProps) => {
   const { userId } = await auth();
 
   if (!userId) {
     redirect("/login");
   }
 
-  const transactions = await db.transaction.findMany({
-    where: {
-      userId,
-    },
-    orderBy: {
-      date: "desc",
-    },
-  });
-
-  const userCanAddTransaction = await canUserAddTransaction();
-
+  const filters = validateSearchParams(searchParams);
+  const transactions = await getTransactions(filters);
   const hasNoData = transactions.length === 0;
 
+  const userCanAddTransaction = await canUserAddTransaction();
   const creditCards = await getCreditCards();
   const accounts = await getAccounts();
   const paidInvoices = await getInvoices({ status: "PAID" });
@@ -40,9 +41,9 @@ const TransactionsPage = async () => {
       <Navbar />
 
       <div className="flex h-screen flex-col space-y-10 overflow-hidden px-20 py-10">
-        {/* TÍTULO E BOTAO */}
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl font-bold">Transações</h1>
+          <TransactionFilters />
           <AddTransactionButton userCanAddTransaction={userCanAddTransaction} />
         </div>
 
