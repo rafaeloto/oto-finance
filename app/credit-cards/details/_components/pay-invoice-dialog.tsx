@@ -30,6 +30,7 @@ import {
 } from "@/app/_components/ui/select";
 import { toast } from "sonner";
 import { useAccounts } from "@/app/_contexts/AccountsContext";
+import { useInvoices } from "@/app/_contexts/InvoicesContext";
 import { DatePicker } from "@/app/_components/ui/date-picker";
 import { Loader2Icon } from "lucide-react";
 import { formatCurrency } from "@/app/_utils/currency";
@@ -73,8 +74,10 @@ const PayInvoiceDialog = ({
   invoice,
 }: PayInvoiceDialogProps) => {
   const { accounts, loading: loadingAccounts } = useAccounts();
+  const { reloadInvoices } = useInvoices();
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [formData, setFormData] = useState<FormSchema | null>(null);
+  const [paying, setPaying] = useState(false);
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -93,12 +96,14 @@ const PayInvoiceDialog = ({
   const handleConfirmPayment = async () => {
     if (!formData) return;
 
+    setPaying(true);
+
     try {
-      payInvoice({
+      await payInvoice({
         invoiceId: invoice.id,
         ...formData,
       });
-
+      await reloadInvoices();
       toast.success("Pagamento realizado com sucesso!");
       setIsOpen(false);
       form.reset();
@@ -106,6 +111,7 @@ const PayInvoiceDialog = ({
       console.error(error);
       toast.error("Erro ao registrar o pagamento!");
     } finally {
+      setPaying(false);
       setIsConfirmDialogOpen(false);
     }
   };
@@ -241,8 +247,16 @@ const PayInvoiceDialog = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmPayment}>
-              Confirmar Pagamento
+            <AlertDialogAction
+              onClick={handleConfirmPayment}
+              disabled={paying}
+              className="min-w-24"
+            >
+              {paying ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                "Confirmar Pagamento"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

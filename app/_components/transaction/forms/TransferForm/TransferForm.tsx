@@ -28,6 +28,8 @@ import { Button } from "../../../ui/button";
 import { TRANSFER_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction";
 import { Transaction, TransferTransactionCategory } from "@prisma/client";
 import { AccountOption } from "../../../_molecules/SelectOptions";
+import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
 
 type FormSchema = z.infer<typeof formSchemas.transfer>;
 
@@ -42,6 +44,8 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
   const isUpdate = !!transactionId;
 
   const { accounts, loading, error } = useAccounts();
+
+  const [upserting, setUpserting] = useState(false);
 
   const defaultValues = {
     name: transaction?.name || "",
@@ -59,6 +63,8 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
   });
 
   const onSubmit = async (data: FormSchema) => {
+    setUpserting(true);
+
     try {
       await upsertTransferTransaction({ ...data, id: transactionId });
       toast.success(
@@ -69,6 +75,8 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
     } catch (error) {
       console.error(error);
       toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
+    } finally {
+      setUpserting(false);
     }
   };
 
@@ -205,7 +213,19 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
               Cancelar
             </Button>
           </DialogClose>
-          <Button type="submit">{isUpdate ? "Atualizar" : "Adicionar"}</Button>
+          <Button
+            type="submit"
+            disabled={loading || upserting || !!error}
+            className="min-w-24"
+          >
+            {upserting ? (
+              <Loader2Icon className="animate-spin" />
+            ) : isUpdate ? (
+              "Atualizar"
+            ) : (
+              "Adicionar"
+            )}
+          </Button>
         </DialogFooter>
       </form>
     </Form>

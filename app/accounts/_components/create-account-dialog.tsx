@@ -34,6 +34,8 @@ import { BANK_OPTIONS } from "@/app/_constants/account";
 import { createAccount } from "@/app/_actions/accounts/create-account";
 import { toast } from "sonner";
 import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
+import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
 
 interface CreateAccountDialogProps {
   isOpen: boolean;
@@ -58,6 +60,8 @@ const CreateAccountDialog = ({
 }: CreateAccountDialogProps) => {
   const { reloadAccounts } = useAccounts();
 
+  const [creating, setCreating] = useState(false);
+
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -68,6 +72,8 @@ const CreateAccountDialog = ({
   });
 
   const onSubmit = async (data: FormSchema) => {
+    setCreating(true);
+
     try {
       await createAccount({ ...data });
       await reloadAccounts();
@@ -77,6 +83,8 @@ const CreateAccountDialog = ({
     } catch (error) {
       console.error(error);
       toast.error("Erro ao criar conta!");
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -171,7 +179,13 @@ const CreateAccountDialog = ({
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button type="submit">Adicionar</Button>
+              <Button type="submit" disabled={creating} className="min-w-24">
+                {creating ? (
+                  <Loader2Icon className="animate-spin" />
+                ) : (
+                  "Adicionar"
+                )}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

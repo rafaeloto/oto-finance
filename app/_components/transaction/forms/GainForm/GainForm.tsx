@@ -28,6 +28,8 @@ import { DatePicker } from "../../../ui/date-picker";
 import { DialogClose, DialogFooter } from "../../../ui/dialog";
 import { Button } from "../../../ui/button";
 import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
+import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
 
 type FormSchema = z.infer<typeof formSchemas.gain>;
 
@@ -43,6 +45,8 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
 
   const { accounts, loading, error } = useAccounts();
 
+  const [upserting, setUpserting] = useState(false);
+
   const defaultValues = {
     name: transaction?.name || "",
     amount: Number(transaction?.amount) || 0,
@@ -57,6 +61,8 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
   });
 
   const onSubmit = async (data: FormSchema) => {
+    setUpserting(true);
+
     try {
       await upsertGainTransaction({ ...data, id: transactionId });
       toast.success(
@@ -67,6 +73,8 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
     } catch (error) {
       console.error(error);
       toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
+    } finally {
+      setUpserting(false);
     }
   };
 
@@ -178,7 +186,19 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
               Cancelar
             </Button>
           </DialogClose>
-          <Button type="submit">{isUpdate ? "Atualizar" : "Adicionar"}</Button>
+          <Button
+            type="submit"
+            disabled={loading || upserting || !!error}
+            className="min-w-24"
+          >
+            {upserting ? (
+              <Loader2Icon className="animate-spin" />
+            ) : isUpdate ? (
+              "Atualizar"
+            ) : (
+              "Adicionar"
+            )}
+          </Button>
         </DialogFooter>
       </form>
     </Form>

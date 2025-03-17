@@ -308,7 +308,11 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
               Cancelar
             </Button>
           </DialogClose>
-          <Button type="submit" disabled={loading || upserting || !!error}>
+          <Button
+            type="submit"
+            disabled={loading || upserting || !!error}
+            className="min-w-24"
+          >
             {upserting ? (
               <Loader2Icon className="animate-spin" />
             ) : isUpdate ? (

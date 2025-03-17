@@ -38,6 +38,8 @@ import { createCreditCard } from "@/app/_actions/credit-cards/create-credit-card
 import { toast } from "sonner";
 import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
 import { useInvoices } from "@/app/_contexts/InvoicesContext";
+import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
 
 interface CreateCreditCardDialogProps {
   isOpen: boolean;
@@ -89,6 +91,8 @@ const CreateCreditCardDialog = ({
   const { reloadCreditCards } = useCreditCards();
   const { reloadInvoices } = useInvoices();
 
+  const [creating, setCreating] = useState(false);
+
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -101,6 +105,8 @@ const CreateCreditCardDialog = ({
   });
 
   const onSubmit = async (data: FormSchema) => {
+    setCreating(true);
+
     try {
       await createCreditCard({ ...data });
       await reloadCreditCards();
@@ -111,6 +117,8 @@ const CreateCreditCardDialog = ({
     } catch (error) {
       console.error(error);
       toast.error("Erro ao criar cartão!");
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -281,7 +289,13 @@ const CreateCreditCardDialog = ({
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button type="submit">Adicionar</Button>
+              <Button type="submit" disabled={creating} className="min-w-24">
+                {creating ? (
+                  <Loader2Icon className="animate-spin" />
+                ) : (
+                  "Adicionar"
+                )}
+              </Button>
             </DialogFooter>
           </form>
         </Form>
