@@ -33,6 +33,7 @@ import {
 import { BANK_OPTIONS } from "@/app/_constants/account";
 import { createAccount } from "@/app/_actions/accounts/create-account";
 import { toast } from "sonner";
+import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
 
 interface CreateAccountDialogProps {
   isOpen: boolean;
@@ -151,7 +152,10 @@ const CreateAccountDialog = ({
                     <SelectContent>
                       {BANK_OPTIONS.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
-                          {option.label}
+                          <AccountOption
+                            name={option.label}
+                            bank={option.value as Bank}
+                          />
                         </SelectItem>
                       ))}
                     </SelectContent>

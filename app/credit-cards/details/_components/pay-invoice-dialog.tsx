@@ -2,7 +2,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/app/_components/ui/button";
-import Image from "next/image";
 import {
   Dialog,
   DialogClose,
@@ -46,6 +45,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/app/_components/ui/alert-dialog";
+import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
 
 interface PayInvoiceDialogProps {
   isOpen: boolean;
@@ -198,15 +198,10 @@ const PayInvoiceDialog = ({
                         {!loadingAccounts &&
                           accounts?.map((option) => (
                             <SelectItem key={option.id} value={option.id}>
-                              <div className="flex items-center space-x-5">
-                                <Image
-                                  src={`/banks/${option.bank}.svg`}
-                                  alt={option.bank || "Banco"}
-                                  width={20}
-                                  height={20}
-                                />
-                                <span>{option.name}</span>
-                              </div>
+                              <AccountOption
+                                name={option.name}
+                                bank={option.bank}
+                              />
                             </SelectItem>
                           ))}
                       </SelectContent>

@@ -1,6 +1,12 @@
 "use client";
 
-import { Account, CreditCard, Invoice, Transaction } from "@prisma/client";
+import {
+  Account,
+  Bank,
+  CreditCard,
+  Invoice,
+  Transaction,
+} from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import TransactionTypeBadge from "../_components/type-badge";
 import {
@@ -14,6 +20,7 @@ import EditTransactionButton from "../_components/edit-transaction-button";
 import DeleteTransactionButton from "../_components/delete-transaction-button";
 import Image from "next/image";
 import { Redo2 } from "lucide-react";
+import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
 
 interface Props {
   creditCards: CreditCard[];
@@ -96,25 +103,14 @@ export function getTransactionColumns({
           return (
             <div className="flex items-center space-x-5">
               <div className="space-y-3">
-                <div className="flex items-center space-x-5">
-                  <Image
-                    src={`/banks/${fromAccount?.bank}.svg`}
-                    alt={fromAccount?.bank || "Cartão de crédito"}
-                    width={20}
-                    height={20}
-                  />
-                  <p>{fromAccount?.name}</p>
-                </div>
-
-                <div className="flex items-center space-x-5">
-                  <Image
-                    src={`/banks/${toAcount?.bank}.svg`}
-                    alt={toAcount?.bank || "Cartão de crédito"}
-                    width={20}
-                    height={20}
-                  />
-                  <p>{toAcount?.name}</p>
-                </div>
+                <AccountOption
+                  name={fromAccount?.name || "Conta"}
+                  bank={fromAccount?.bank as Bank}
+                />
+                <AccountOption
+                  name={toAcount?.name || "Conta"}
+                  bank={toAcount?.bank as Bank}
+                />
               </div>
 
               <Redo2 size={20} className="rotate-180" />
@@ -144,15 +140,10 @@ export function getTransactionColumns({
             (account) => account.id === transaction.accountId,
           );
           return (
-            <div className="flex items-center space-x-5">
-              <Image
-                src={`/banks/${account?.bank}.svg`}
-                alt={account?.bank || "Cartão de crédito"}
-                width={20}
-                height={20}
-              />
-              <p>{account?.name}</p>
-            </div>
+            <AccountOption
+              name={account?.name || "Conta"}
+              bank={account?.bank as Bank}
+            />
           );
         }
       },
