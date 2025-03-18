@@ -27,7 +27,7 @@ import { GAIN_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction"
 import { DatePicker } from "../../../ui/date-picker";
 import { DialogClose, DialogFooter } from "../../../ui/dialog";
 import { Button } from "../../../ui/button";
-import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
+import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
 
@@ -158,7 +158,10 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
                 <SelectContent>
                   {accounts?.map((option) => (
                     <SelectItem key={option.id} value={option.id}>
-                      <AccountOption name={option.name} bank={option.bank} />
+                      <ImageAndLabelOption
+                        src={`/banks/${option.bank}.svg`}
+                        label={option.name}
+                      />
                     </SelectItem>
                   ))}
                 </SelectContent>

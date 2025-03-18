@@ -1,22 +1,24 @@
 import Image from "next/image";
-import { Bank } from "@prisma/client";
 
-type AccountOptionParams = {
-  name: string;
-  bank: Bank;
+type ImageAndLabelOptionParams = {
+  src: string;
+  label: string;
 };
 
-export const AccountOption = ({ name, bank }: AccountOptionParams) => {
+export const ImageAndLabelOption = ({
+  src,
+  label,
+}: ImageAndLabelOptionParams) => {
   return (
     <div className="flex items-center space-x-5">
       <Image
-        src={`/banks/${bank}.svg`}
-        alt={bank || "Banco"}
+        src={src}
+        alt={label || "Bank Logo"}
         width={20}
         height={20}
-        {...(bank === "C6" && { className: "bg-white" })}
+        {...(label === "C6" && { className: "bg-white" })}
       />
-      <span>{name}</span>
+      <span>{label}</span>
     </div>
   );
 };

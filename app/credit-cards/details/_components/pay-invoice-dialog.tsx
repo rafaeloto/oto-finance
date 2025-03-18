@@ -46,7 +46,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/app/_components/ui/alert-dialog";
-import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
+import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 
 interface PayInvoiceDialogProps {
   isOpen: boolean;
@@ -204,9 +204,9 @@ const PayInvoiceDialog = ({
                         {!loadingAccounts &&
                           accounts?.map((option) => (
                             <SelectItem key={option.id} value={option.id}>
-                              <AccountOption
-                                name={option.name}
-                                bank={option.bank}
+                              <ImageAndLabelOption
+                                src={`/banks/${option.bank}.svg`}
+                                label={option.name}
                               />
                             </SelectItem>
                           ))}

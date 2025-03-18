@@ -1,4 +1,5 @@
 import ShouldRender from "@/app/_components/_atoms/should-render";
+import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 import { Card } from "@/app/_components/ui/card";
 import {
   FormControl,
@@ -18,7 +19,6 @@ import {
 } from "@/app/_components/ui/select";
 import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
 import { getImportantDates } from "@/app/_utils/date";
-import Image from "next/image";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -85,15 +85,10 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
                 <SelectContent>
                   {creditCards?.map((card) => (
                     <SelectItem key={card.id} value={card.id}>
-                      <div className="flex items-center space-x-5">
-                        <Image
-                          src={`/credit-cards/${card.flag}.svg`}
-                          alt={card.flag || "Cartão"}
-                          width={20}
-                          height={20}
-                        />
-                        <span>{card.name}</span>
-                      </div>
+                      <ImageAndLabelOption
+                        src={`/credit-cards/${card.flag}.svg`}
+                        label={card.name}
+                      />
                     </SelectItem>
                   ))}
                 </SelectContent>

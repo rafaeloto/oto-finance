@@ -8,12 +8,14 @@ import TransactionTypeBadge from "../_components/type-badge";
 import { TransactionType } from "@prisma/client";
 import SelectFilter from "@/app/_components/_molecules/SelectFilter";
 import { useAccounts } from "@/app/_contexts/AccountsContext";
-import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
+import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
+import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 import InputFilter from "@/app/_components/_molecules/InputFilter";
 import TimeSelect from "@/app/_components/_molecules/TimeSelect";
 
 const TransactionFilters = () => {
   const { accounts } = useAccounts();
+  const { creditCards } = useCreditCards();
 
   return (
     <div className="flex space-x-4">
@@ -43,9 +45,28 @@ const TransactionFilters = () => {
         paramKey="accountId"
         options={accounts.map((account) => ({
           value: account.id,
-          label: <AccountOption name={account.name} bank={account.bank} />,
+          label: (
+            <ImageAndLabelOption
+              src={`/banks/${account.bank}.svg`}
+              label={account.name}
+            />
+          ),
         }))}
         placeholder="Conta"
+      />
+
+      <SelectFilter
+        paramKey="cardId"
+        options={creditCards.map((card) => ({
+          value: card.id,
+          label: (
+            <ImageAndLabelOption
+              src={`/credit-cards/${card.flag}.svg`}
+              label={card.name}
+            />
+          ),
+        }))}
+        placeholder="Cartão"
       />
 
       <TimeSelect />

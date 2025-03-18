@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Account,
-  Bank,
-  CreditCard,
-  Invoice,
-  Transaction,
-} from "@prisma/client";
+import { Account, CreditCard, Invoice, Transaction } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import TransactionTypeBadge from "../_components/type-badge";
 import {
@@ -18,9 +12,8 @@ import {
 } from "@/app/_constants/transaction";
 import EditTransactionButton from "../_components/edit-transaction-button";
 import DeleteTransactionButton from "../_components/delete-transaction-button";
-import Image from "next/image";
 import { Redo2 } from "lucide-react";
-import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
+import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 
 interface Props {
   creditCards: CreditCard[];
@@ -103,13 +96,13 @@ export function getTransactionColumns({
           return (
             <div className="flex items-center space-x-5">
               <div className="space-y-3">
-                <AccountOption
-                  name={fromAccount?.name || "Conta"}
-                  bank={fromAccount?.bank as Bank}
+                <ImageAndLabelOption
+                  src={`/banks/${fromAccount?.bank || "OTHER"}.svg`}
+                  label={fromAccount?.name || "Conta"}
                 />
-                <AccountOption
-                  name={toAcount?.name || "Conta"}
-                  bank={toAcount?.bank as Bank}
+                <ImageAndLabelOption
+                  src={`/banks/${toAcount?.bank || "OTHER"}.svg`}
+                  label={toAcount?.name || "Conta"}
                 />
               </div>
 
@@ -123,15 +116,10 @@ export function getTransactionColumns({
             (card) => card.id === transaction.cardId,
           );
           return (
-            <div className="flex items-center space-x-5">
-              <Image
-                src={`/credit-cards/${creditCard?.flag}.svg`}
-                alt={creditCard?.flag || "Cartão de crédito"}
-                width={20}
-                height={20}
-              />
-              <p>{creditCard?.name}</p>
-            </div>
+            <ImageAndLabelOption
+              src={`/credit-cards/${creditCard?.flag || "OTHER"}.svg`}
+              label={creditCard?.name || "Cartão"}
+            />
           );
         }
 
@@ -140,9 +128,9 @@ export function getTransactionColumns({
             (account) => account.id === transaction.accountId,
           );
           return (
-            <AccountOption
-              name={account?.name || "Conta"}
-              bank={account?.bank as Bank}
+            <ImageAndLabelOption
+              src={`/banks/${account?.bank || "OTHER"}.svg`}
+              label={account?.name || "Conta"}
             />
           );
         }

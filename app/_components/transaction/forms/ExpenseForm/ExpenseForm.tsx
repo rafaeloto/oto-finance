@@ -42,7 +42,7 @@ import { getImportantDates } from "@/app/_utils/date";
 import CreditCardFields from "./CreditCardFields";
 import { InstallmentType } from "./CreditCardFields/CreditCardFields";
 import { Loader2Icon } from "lucide-react";
-import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
+import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 
 export type FormSchema = z.infer<typeof formSchemas.expense>;
 
@@ -284,7 +284,10 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
                   <SelectContent>
                     {accounts?.map((option) => (
                       <SelectItem key={option.id} value={option.id}>
-                        <AccountOption name={option.name} bank={option.bank} />
+                        <ImageAndLabelOption
+                          src={`/banks/${option.bank}.svg`}
+                          label={option.name}
+                        />
                       </SelectItem>
                     ))}
                   </SelectContent>

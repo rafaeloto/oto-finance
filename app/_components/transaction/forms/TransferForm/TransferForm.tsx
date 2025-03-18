@@ -27,7 +27,7 @@ import { DialogClose, DialogFooter } from "../../../ui/dialog";
 import { Button } from "../../../ui/button";
 import { TRANSFER_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction";
 import { Transaction, TransferTransactionCategory } from "@prisma/client";
-import { AccountOption } from "../../../_molecules/SelectOptions";
+import { ImageAndLabelOption } from "../../../_molecules/SelectOptions";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
 
@@ -160,7 +160,10 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
                 <SelectContent>
                   {accounts?.map((option) => (
                     <SelectItem key={option.id} value={option.id}>
-                      <AccountOption name={option.name} bank={option.bank} />
+                      <ImageAndLabelOption
+                        src={`/banks/${option.bank}.svg`}
+                        label={option.name}
+                      />
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -185,7 +188,10 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
                 <SelectContent>
                   {accounts?.map((option) => (
                     <SelectItem key={option.id} value={option.id}>
-                      <AccountOption name={option.name} bank={option.bank} />
+                      <ImageAndLabelOption
+                        src={`/banks/${option.bank}.svg`}
+                        label={option.name}
+                      />
                     </SelectItem>
                   ))}
                 </SelectContent>

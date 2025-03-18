@@ -2,7 +2,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/app/_components/ui/button";
-import Image from "next/image";
 import {
   Dialog,
   DialogClose,
@@ -40,6 +39,7 @@ import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
 import { useInvoices } from "@/app/_contexts/InvoicesContext";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
+import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 
 interface CreateCreditCardDialogProps {
   isOpen: boolean;
@@ -232,15 +232,10 @@ const CreateCreditCardDialog = ({
                     <SelectContent>
                       {CREDIT_CARD_OPTIONS.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
-                          <div className="flex items-center space-x-5">
-                            <Image
-                              src={`/credit-cards/${option.value}.svg`}
-                              alt={option.label || "Cartão"}
-                              width={20}
-                              height={20}
-                            />
-                            <span>{option.label}</span>
-                          </div>
+                          <ImageAndLabelOption
+                            src={`/credit-cards/${option.value}.svg`}
+                            label={option.label}
+                          />
                         </SelectItem>
                       ))}
                     </SelectContent>

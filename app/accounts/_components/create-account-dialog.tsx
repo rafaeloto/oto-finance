@@ -33,7 +33,7 @@ import {
 import { BANK_OPTIONS } from "@/app/_constants/account";
 import { createAccount } from "@/app/_actions/accounts/create-account";
 import { toast } from "sonner";
-import { AccountOption } from "@/app/_components/_molecules/SelectOptions";
+import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
 
@@ -160,9 +160,9 @@ const CreateAccountDialog = ({
                     <SelectContent>
                       {BANK_OPTIONS.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
-                          <AccountOption
-                            name={option.label}
-                            bank={option.value as Bank}
+                          <ImageAndLabelOption
+                            src={`/banks/${option.value}.svg`}
+                            label={option.label}
                           />
                         </SelectItem>
                       ))}
