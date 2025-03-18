@@ -14,6 +14,7 @@ import EditTransactionButton from "../_components/edit-transaction-button";
 import DeleteTransactionButton from "../_components/delete-transaction-button";
 import { Redo2 } from "lucide-react";
 import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
+import AmountText from "@/app/_components/_molecules/AmountText";
 
 interface Props {
   creditCards: CreditCard[];
@@ -149,11 +150,9 @@ export function getTransactionColumns({
     {
       accessorKey: "amount",
       header: "Valor",
-      cell: ({ row: { original: transaction } }) =>
-        new Intl.NumberFormat("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }).format(Number(transaction.amount)),
+      cell: ({ row: { original: transaction } }) => (
+        <AmountText transaction={transaction} />
+      ),
     },
     {
       accessorKey: "actions",

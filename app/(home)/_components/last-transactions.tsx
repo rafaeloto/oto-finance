@@ -1,10 +1,10 @@
 import EmptyListFeedback from "@/app/_components/_atoms/empty-list-feedback";
+import AmountText from "@/app/_components/_molecules/AmountText";
 import { Button } from "@/app/_components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/app/_components/ui/card";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@/app/_constants/transaction";
-import { formatCurrency } from "@/app/_utils/currency";
-import { Transaction, TransactionType } from "@prisma/client";
+import { Transaction } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,23 +13,6 @@ interface LastTransactionsProps {
 }
 
 const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
-  const getAmountColor = (transaction: Transaction) => {
-    if (transaction.type === TransactionType.EXPENSE) {
-      return "text-red-500";
-    }
-    if (transaction.type === TransactionType.GAIN) {
-      return "text-primary";
-    }
-    return "text-white";
-  };
-
-  const getAmountPrefix = (transaction: Transaction) => {
-    if (transaction.type === TransactionType.GAIN) {
-      return "+";
-    }
-    return "-";
-  };
-
   const hasNoData = lastTransactions.length === 0;
 
   return (
@@ -71,12 +54,7 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
                     </p>
                   </div>
                 </div>
-                <p
-                  className={`text-sm font-bold ${getAmountColor(transaction)}`}
-                >
-                  {getAmountPrefix(transaction)}
-                  {formatCurrency(Number(transaction.amount))}
-                </p>
+                <AmountText transaction={transaction} />
               </div>
             ))}
           </CardContent>
