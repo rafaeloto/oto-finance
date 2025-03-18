@@ -14,6 +14,7 @@ export const AccountOption = ({ name, bank }: AccountOptionParams) => {
         alt={bank || "Banco"}
         width={20}
         height={20}
+        {...(bank === "C6" && { className: "bg-white" })}
       />
       <span>{name}</span>
     </div>

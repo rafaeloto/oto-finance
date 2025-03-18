@@ -12,6 +12,8 @@ export const BANK_LABELS = {
   [Bank.NUBANK]: "Nubank",
   [Bank.PICPAY]: "Picpay",
   [Bank.SANTANDER]: "Santander",
+  [Bank.C6]: "C6",
+  [Bank.OTHER]: "Outro",
 };
 
 export const BANK_OPTIONS = Object.entries(BANK_LABELS).map(

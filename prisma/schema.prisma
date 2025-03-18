@@ -103,6 +103,8 @@ enum Bank {
   NUBANK
   PICPAY
   SANTANDER
+  OTHER
+  C6
 }
 
 enum CreditCardFlag {
