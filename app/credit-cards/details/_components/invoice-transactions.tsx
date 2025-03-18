@@ -28,7 +28,7 @@ const InvoiceTransactions = ({
   const hasNoData = !transactions?.length;
 
   return (
-    <Card className="space-y-4">
+    <Card className="flex h-full flex-col space-y-4">
       <CardHeader className="flex-row items-center justify-between">
         <CardTitle className="font-bold">Transações da Fatura</CardTitle>
       </CardHeader>
@@ -36,7 +36,7 @@ const InvoiceTransactions = ({
       {hasNoData ? (
         <EmptyListFeedback message="Nenhuma transação na fatura" />
       ) : (
-        <ScrollArea>
+        <ScrollArea className="flex-1">
           <CardContent className="space-y-6">
             {transactions.map((transaction) => (
               <div

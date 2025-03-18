@@ -29,12 +29,12 @@ const InvoiceList = ({
   };
 
   return (
-    <div className="h-full space-y-4 pt-4">
+    <div className="flex flex-col space-y-4 p-4">
       {invoices.map((invoice) => (
         <div
           key={invoice.id}
           className={clsx(
-            "rounded-md border px-6 py-4 shadow-sm",
+            "rounded-md border p-4 px-6 shadow-sm",
             invoice.id === selectedInvoiceId &&
               "border-muted-foreground bg-muted",
           )}

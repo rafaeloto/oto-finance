@@ -18,6 +18,7 @@ import {
   Transaction,
 } from "@prisma/client";
 import { useCallback, useMemo, useState } from "react";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
 
 type InvoiceDetailsProps = {
   creditCard: CreditCard;
@@ -75,9 +76,9 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
   }, []);
 
   return (
-    <div className="grid h-full grid-cols-2 gap-10">
+    <div className="flex h-full gap-10">
       {/* Left section */}
-      <div className="flex flex-col space-y-6">
+      <div className="flex h-full w-1/2 flex-col space-y-6">
         {/* Card */}
         <CreditCardUnity
           creditCard={creditCard}
@@ -86,9 +87,12 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
         />
 
         {/* Tabs */}
-        <Card className="h-full">
-          <Tabs defaultValue="OPEN" className="h-full w-full">
-            <TabsList className="h-[10%] w-full justify-between px-10">
+        <Card className="flex h-full flex-1 flex-col overflow-hidden">
+          <Tabs
+            defaultValue="OPEN"
+            className="flex h-full w-full flex-1 flex-col"
+          >
+            <TabsList className="flex h-14 justify-between px-10">
               <TabsTrigger value="PAID">
                 {INVOICE_STATUS_LABELS.PAID}
               </TabsTrigger>
@@ -101,36 +105,44 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
             </TabsList>
 
             {/* Tabs Content */}
-            <TabsContent value="PAID" className="m-0 h-[90%]">
-              <InvoiceList
-                invoices={getFilteredInvoices("PAID")}
-                onSelectInvoice={onSelectInvoice}
-                selectedInvoiceId={selectedInvoiceId}
-              />
+            <TabsContent value="PAID" className="h-0 flex-1">
+              <ScrollArea className="h-full">
+                <InvoiceList
+                  invoices={getFilteredInvoices("PAID")}
+                  onSelectInvoice={onSelectInvoice}
+                  selectedInvoiceId={selectedInvoiceId}
+                />
+              </ScrollArea>
             </TabsContent>
-            <TabsContent value="CLOSED" className="m-0 h-[90%]">
-              <InvoiceList
-                invoices={getFilteredInvoices("CLOSED")}
-                onSelectInvoice={onSelectInvoice}
-                selectedInvoiceId={selectedInvoiceId}
-              />
+            <TabsContent value="CLOSED" className="h-0 flex-1">
+              <ScrollArea className="h-full">
+                <InvoiceList
+                  invoices={getFilteredInvoices("CLOSED")}
+                  onSelectInvoice={onSelectInvoice}
+                  selectedInvoiceId={selectedInvoiceId}
+                />
+              </ScrollArea>
             </TabsContent>
-            <TabsContent value="OPEN" className="m-0 h-[90%]">
-              <InvoiceList
-                invoices={getFilteredInvoices("OPEN")}
-                onSelectInvoice={onSelectInvoice}
-                selectedInvoiceId={selectedInvoiceId}
-              />
+            <TabsContent value="OPEN" className="h-0 flex-1">
+              <ScrollArea className="h-full">
+                <InvoiceList
+                  invoices={getFilteredInvoices("OPEN")}
+                  onSelectInvoice={onSelectInvoice}
+                  selectedInvoiceId={selectedInvoiceId}
+                />
+              </ScrollArea>
             </TabsContent>
           </Tabs>
         </Card>
       </div>
 
       {/* Right side */}
-      <InvoiceTransactions
-        transactions={selectedInvoiceTransactions}
-        canChangeTransactions={selectedInvoiceStatus !== "PAID"}
-      />
+      <div className="flex h-full w-1/2 flex-col overflow-hidden">
+        <InvoiceTransactions
+          transactions={selectedInvoiceTransactions}
+          canChangeTransactions={selectedInvoiceStatus !== "PAID"}
+        />
+      </div>
     </div>
   );
 };

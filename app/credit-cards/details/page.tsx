@@ -39,7 +39,7 @@ const CreditCardDetails = async ({
     <>
       <Navbar />
 
-      <div className="flex h-screen flex-col space-y-6 overflow-hidden px-20 py-10">
+      <div className="flex h-full flex-col overflow-hidden px-20 py-10">
         {!foundCreditCard ? (
           <EmptyListFeedback message="Cartão de crédito não encontrado" />
         ) : (
