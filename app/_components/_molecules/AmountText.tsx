@@ -1,21 +1,34 @@
 import { formatCurrency } from "@/app/_utils/currency";
 import { Transaction, TransactionType } from "@prisma/client";
 
-const getAmountColor = (type: TransactionType) => {
-  if (type === TransactionType.EXPENSE) {
-    return "text-red-500";
-  }
-  if (type === TransactionType.GAIN) {
-    return "text-primary";
-  }
-  return "text-white";
-};
+const getColorAndPrefix = (transaction: Transaction) => {
+  const { type, investmentCategory } = transaction;
 
-const getAmountPrefix = (type: TransactionType) => {
-  if (type === TransactionType.GAIN) {
-    return "+";
+  const isPositive =
+    type === TransactionType.GAIN ||
+    investmentCategory === "INVESTMENT_POSITIVE_RETURN";
+  const isNegative =
+    type === TransactionType.EXPENSE ||
+    investmentCategory === "INVESTMENT_NEGATIVE_RETURN";
+
+  if (isPositive) {
+    return {
+      color: "text-primary",
+      prefix: "+",
+    };
   }
-  return "-";
+
+  if (isNegative) {
+    return {
+      color: "text-red-500",
+      prefix: "-",
+    };
+  }
+
+  return {
+    color: "text-white",
+    prefix: "",
+  };
 };
 
 type AmountTextProps = {
@@ -25,9 +38,11 @@ type AmountTextProps = {
 const AmountText = ({ transaction }: AmountTextProps) => {
   if (!transaction) return "";
 
+  const { color, prefix } = getColorAndPrefix(transaction);
+
   return (
-    <p className={`text-sm font-bold ${getAmountColor(transaction.type)}`}>
-      {getAmountPrefix(transaction.type)}
+    <p className={`text-sm font-bold ${color}`}>
+      {prefix}
       {formatCurrency(Number(transaction.amount))}
     </p>
   );
