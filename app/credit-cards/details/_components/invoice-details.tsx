@@ -32,10 +32,17 @@ type InvoiceDetailsProps = {
 const InvoiceDetails = (props: InvoiceDetailsProps) => {
   const { creditCard, invoices, transactionsByInvoice, userName } = props;
 
-  // Function to filter invoices by status
+  // Function to filter invoices by status and sort them
   const getFilteredInvoices = useCallback(
     (status: InvoiceStatus) =>
-      invoices.filter((invoice) => invoice.status === status),
+      invoices
+        .filter((invoice) => invoice.status === status)
+        .sort((a, b) => {
+          if (a.year === b.year) {
+            return a.month - b.month;
+          }
+          return a.year - b.year;
+        }),
     [invoices],
   );
 
@@ -69,9 +76,9 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
 
   return (
     <div className="grid h-full grid-cols-2 gap-10">
-      {/* Parte esquerda */}
+      {/* Left section */}
       <div className="flex flex-col space-y-6">
-        {/* Cartão */}
+        {/* Card */}
         <CreditCardUnity
           creditCard={creditCard}
           complete={false}
@@ -93,7 +100,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
               </TabsTrigger>
             </TabsList>
 
-            {/* Conteúdo das tabs */}
+            {/* Tabs Content */}
             <TabsContent value="PAID" className="m-0 h-[90%]">
               <InvoiceList
                 invoices={getFilteredInvoices("PAID")}
@@ -119,7 +126,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
         </Card>
       </div>
 
-      {/* Parte direita */}
+      {/* Right side */}
       <InvoiceTransactions
         transactions={selectedInvoiceTransactions}
         canChangeTransactions={selectedInvoiceStatus !== "PAID"}
