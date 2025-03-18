@@ -141,7 +141,7 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
                   handleMonthChange(value);
                   field.onChange(Number(value));
                 }}
-                defaultValue={field.value.toString()}
+                defaultValue={invoiceOptions[1].toString()}
                 disabled={!selectedCardId || !selectedDate}
               >
                 <FormControl>
