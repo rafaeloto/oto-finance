@@ -11,13 +11,7 @@ export const ImageAndLabelOption = ({
 }: ImageAndLabelOptionParams) => {
   return (
     <div className="flex items-center space-x-5">
-      <Image
-        src={src}
-        alt={label || "Bank Logo"}
-        width={20}
-        height={20}
-        {...(label === "C6" && { className: "bg-white" })}
-      />
+      <Image src={src} alt={label || "Bank Logo"} width={30} height={30} />
       <span>{label}</span>
     </div>
   );
