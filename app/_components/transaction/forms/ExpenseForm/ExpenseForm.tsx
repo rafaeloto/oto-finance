@@ -167,127 +167,66 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nome</FormLabel>
-              <FormControl>
-                <Input placeholder="Digite o nome..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="amount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Valor</FormLabel>
-              <FormControl>
-                <MoneyInput
-                  placeholder="Digite o valor..."
-                  value={field.value}
-                  onValueChange={({ floatValue }) => field.onChange(floatValue)}
-                  onBlur={field.onBlur}
-                  disabled={field.disabled}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="expenseCategory"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Categoria</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione uma categoria..." />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {EXPENSE_TRANSACTION_CATEGORY_OPTIONS.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="paymentMethod"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Método de pagamento</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o metodo de pagamento..." />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {TRANSACTION_PAYMENT_METHOD_OPTIONS.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Data</FormLabel>
-              <DatePicker value={field.value} onChange={field.onChange} />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <ShouldRender if={!isCreditCard}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex h-full flex-col"
+      >
+        <div className="mb-8 flex-1 space-y-8">
           <FormField
             control={form.control}
-            name="accountId"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Conta</FormLabel>
+                <FormLabel>Nome</FormLabel>
+                <FormControl>
+                  <Input placeholder="Digite o nome..." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="amount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Valor</FormLabel>
+                <FormControl>
+                  <MoneyInput
+                    placeholder="Digite o valor..."
+                    value={field.value}
+                    onValueChange={({ floatValue }) =>
+                      field.onChange(floatValue)
+                    }
+                    onBlur={field.onBlur}
+                    disabled={field.disabled}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="expenseCategory"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Categoria</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  disabled={loadingAccounts}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecione o conta..." />
+                      <SelectValue placeholder="Selecione uma categoria..." />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {accounts?.map((option) => (
-                      <SelectItem key={option.id} value={option.id}>
-                        <ImageAndLabelOption
-                          src={`/banks/${option.bank}.svg`}
-                          label={option.name}
-                        />
+                    {EXPENSE_TRANSACTION_CATEGORY_OPTIONS.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -296,14 +235,88 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
               </FormItem>
             )}
           />
-        </ShouldRender>
 
-        <ShouldRender if={isCreditCard}>
-          <CreditCardFields
-            selectedYear={selectedYear}
-            setSelectedYear={setSelectedYear}
+          <FormField
+            control={form.control}
+            name="paymentMethod"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Método de pagamento</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o metodo de pagamento..." />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {TRANSACTION_PAYMENT_METHOD_OPTIONS.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </ShouldRender>
+
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Data</FormLabel>
+                <DatePicker value={field.value} onChange={field.onChange} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <ShouldRender if={!isCreditCard}>
+            <FormField
+              control={form.control}
+              name="accountId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Conta</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={loadingAccounts}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o conta..." />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {accounts?.map((option) => (
+                        <SelectItem key={option.id} value={option.id}>
+                          <ImageAndLabelOption
+                            src={`/banks/${option.bank}.svg`}
+                            label={option.name}
+                          />
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </ShouldRender>
+
+          <ShouldRender if={isCreditCard}>
+            <CreditCardFields
+              selectedYear={selectedYear}
+              setSelectedYear={setSelectedYear}
+            />
+          </ShouldRender>
+        </div>
 
         <DialogFooter>
           <DialogClose asChild>

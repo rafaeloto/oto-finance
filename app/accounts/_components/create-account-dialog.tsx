@@ -36,6 +36,7 @@ import { toast } from "sonner";
 import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
 
 interface CreateAccountDialogProps {
   isOpen: boolean;
@@ -98,97 +99,104 @@ const CreateAccountDialog = ({
         }
       }}
     >
-      <DialogContent>
+      <DialogContent className="flex h-[65vh] flex-col py-8 pr-1">
         <DialogHeader>
           <DialogTitle>Adicionar Conta</DialogTitle>
           <DialogDescription>Insira as informações abaixo</DialogDescription>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Digite o nome..." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <ScrollArea className="h-full pr-5">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex h-full flex-col"
+            >
+              <div className="mb-8 flex-1 space-y-8">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Digite o nome..." {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <FormField
-              control={form.control}
-              name="initialBalance"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Saldo inicial</FormLabel>
-                  <FormControl>
-                    <MoneyInput
-                      placeholder="Digite o valor..."
-                      value={field.value}
-                      onValueChange={({ floatValue }) =>
-                        field.onChange(floatValue)
-                      }
-                      onBlur={field.onBlur}
-                      disabled={field.disabled}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                <FormField
+                  control={form.control}
+                  name="initialBalance"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Saldo inicial</FormLabel>
+                      <FormControl>
+                        <MoneyInput
+                          placeholder="Digite o valor..."
+                          value={field.value}
+                          onValueChange={({ floatValue }) =>
+                            field.onChange(floatValue)
+                          }
+                          onBlur={field.onBlur}
+                          disabled={field.disabled}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <FormField
-              control={form.control}
-              name="bank"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Banco</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o banco da conta..." />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {BANK_OPTIONS.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          <ImageAndLabelOption
-                            src={`/banks/${option.value}.svg`}
-                            label={option.label}
-                          />
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                <FormField
+                  control={form.control}
+                  name="bank"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Banco</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o banco da conta..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {BANK_OPTIONS.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              <ImageAndLabelOption
+                                src={`/banks/${option.value}.svg`}
+                                label={option.label}
+                              />
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="outline">
-                  Cancelar
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="button" variant="outline">
+                    Cancelar
+                  </Button>
+                </DialogClose>
+                <Button type="submit" disabled={creating} className="min-w-24">
+                  {creating ? (
+                    <Loader2Icon className="animate-spin" />
+                  ) : (
+                    "Adicionar"
+                  )}
                 </Button>
-              </DialogClose>
-              <Button type="submit" disabled={creating} className="min-w-24">
-                {creating ? (
-                  <Loader2Icon className="animate-spin" />
-                ) : (
-                  "Adicionar"
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+              </DialogFooter>
+            </form>
+          </Form>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

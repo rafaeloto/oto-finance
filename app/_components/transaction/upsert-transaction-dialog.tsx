@@ -13,6 +13,7 @@ import ExpenseForm from "./forms/ExpenseForm";
 import GainForm from "./forms/GainForm";
 import TransferForm from "./forms/TransferForm";
 import InvestmentForm from "./forms/InvestmentForm";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
@@ -42,7 +43,7 @@ const UpsertTransactionDialog = ({
         setIsOpen(open);
       }}
     >
-      <DialogContent>
+      <DialogContent className="flex h-[85vh] flex-col py-8 pr-1">
         <DialogHeader>
           <DialogTitle>
             {isUpdate ? "Atualizar" : "Adicionar"} Transação
@@ -50,8 +51,11 @@ const UpsertTransactionDialog = ({
           <DialogDescription>Insira as informações abaixo</DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue={tabValueMap[transactionType || "EXPENSE"]}>
-          <TabsList>
+        <Tabs
+          defaultValue={tabValueMap[transactionType || "EXPENSE"]}
+          className="flex h-0 flex-1 flex-col"
+        >
+          <TabsList className="mr-5 flex h-12 justify-between px-5">
             <TabsTrigger
               value="expense"
               disabled={isUpdate && transactionType !== "EXPENSE"}
@@ -81,20 +85,28 @@ const UpsertTransactionDialog = ({
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="expense">
-            <ExpenseForm setIsOpen={setIsOpen} transaction={transaction} />
+          <TabsContent value="expense" className="mt-5 h-0 flex-1">
+            <ScrollArea className="h-full pr-5">
+              <ExpenseForm setIsOpen={setIsOpen} transaction={transaction} />
+            </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="gain">
-            <GainForm setIsOpen={setIsOpen} transaction={transaction} />
+          <TabsContent value="gain" className="mt-5 h-0 flex-1">
+            <ScrollArea className="h-full pr-5">
+              <GainForm setIsOpen={setIsOpen} transaction={transaction} />
+            </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="transfer">
-            <TransferForm setIsOpen={setIsOpen} transaction={transaction} />
+          <TabsContent value="transfer" className="mt-5 h-0 flex-1">
+            <ScrollArea className="h-full pr-5">
+              <TransferForm setIsOpen={setIsOpen} transaction={transaction} />
+            </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="investment">
-            <InvestmentForm setIsOpen={setIsOpen} transaction={transaction} />
+          <TabsContent value="investment" className="mt-5 h-0 flex-1">
+            <ScrollArea className="h-full pr-5">
+              <InvestmentForm setIsOpen={setIsOpen} transaction={transaction} />
+            </ScrollArea>
           </TabsContent>
         </Tabs>
       </DialogContent>

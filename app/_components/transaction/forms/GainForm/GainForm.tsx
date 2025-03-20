@@ -83,105 +83,118 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nome</FormLabel>
-              <FormControl>
-                <Input placeholder="Digite o nome..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="amount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Valor</FormLabel>
-              <FormControl>
-                <MoneyInput
-                  placeholder="Digite o valor..."
-                  value={field.value}
-                  onValueChange={({ floatValue }) => field.onChange(floatValue)}
-                  onBlur={field.onBlur}
-                  disabled={field.disabled}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="gainCategory"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Categoria</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex h-full flex-col"
+      >
+        <div className="mb-8 flex-1 space-y-8">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nome</FormLabel>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione uma categoria..." />
-                  </SelectTrigger>
+                  <Input placeholder="Digite o nome..." {...field} />
                 </FormControl>
-                <SelectContent>
-                  {GAIN_TRANSACTION_CATEGORY_OPTIONS.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="accountId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Conta</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <FormField
+            control={form.control}
+            name="amount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Valor</FormLabel>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o conta..." />
-                  </SelectTrigger>
+                  <MoneyInput
+                    placeholder="Digite o valor..."
+                    value={field.value}
+                    onValueChange={({ floatValue }) =>
+                      field.onChange(floatValue)
+                    }
+                    onBlur={field.onBlur}
+                    disabled={field.disabled}
+                  />
                 </FormControl>
-                <SelectContent>
-                  {accounts?.map((option) => (
-                    <SelectItem key={option.id} value={option.id}>
-                      <ImageAndLabelOption
-                        src={`/banks/${option.bank}.svg`}
-                        label={option.name}
-                      />
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Data</FormLabel>
-              <DatePicker value={field.value} onChange={field.onChange} />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="gainCategory"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Categoria</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione uma categoria..." />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {GAIN_TRANSACTION_CATEGORY_OPTIONS.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="accountId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Conta</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o conta..." />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {accounts?.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        <ImageAndLabelOption
+                          src={`/banks/${option.bank}.svg`}
+                          label={option.name}
+                        />
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Data</FormLabel>
+                <DatePicker value={field.value} onChange={field.onChange} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <DialogFooter>
           <DialogClose asChild>

@@ -47,6 +47,7 @@ import {
   AlertDialogTitle,
 } from "@/app/_components/ui/alert-dialog";
 import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
 
 interface PayInvoiceDialogProps {
   isOpen: boolean;
@@ -127,7 +128,7 @@ const PayInvoiceDialog = ({
           }
         }}
       >
-        <DialogContent>
+        <DialogContent className="flex h-[75vh] flex-col py-8 pr-1">
           <DialogHeader>
             <DialogTitle>
               <div className="flex flex-col gap-4 pb-4">
@@ -142,93 +143,100 @@ const PayInvoiceDialog = ({
             </DialogDescription>
           </DialogHeader>
 
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleFormSubmit)}
-              className="space-y-8"
-            >
-              <FormField
-                control={form.control}
-                name="paymentAmount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Valor do pagamento</FormLabel>
-                    <FormControl>
-                      <MoneyInput
-                        placeholder="Digite o valor..."
-                        value={field.value}
-                        onValueChange={({ floatValue }) =>
-                          field.onChange(floatValue)
-                        }
-                        onBlur={field.onBlur}
-                        disabled={field.disabled}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <ScrollArea className="h-full pr-5">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleFormSubmit)}
+                className="flex h-full flex-col"
+              >
+                <div className="mb-8 flex-1 space-y-8">
+                  <FormField
+                    control={form.control}
+                    name="paymentAmount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Valor do pagamento</FormLabel>
+                        <FormControl>
+                          <MoneyInput
+                            placeholder="Digite o valor..."
+                            value={field.value}
+                            onValueChange={({ floatValue }) =>
+                              field.onChange(floatValue)
+                            }
+                            onBlur={field.onBlur}
+                            disabled={field.disabled}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              <FormField
-                control={form.control}
-                name="paymentDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Data do pagamento</FormLabel>
-                    <DatePicker value={field.value} onChange={field.onChange} />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  <FormField
+                    control={form.control}
+                    name="paymentDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Data do pagamento</FormLabel>
+                        <DatePicker
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              <FormField
-                control={form.control}
-                name="paidByAccountId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Conta</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      disabled={loadingAccounts}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione a conta..." />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {loadingAccounts && (
-                          <Loader2Icon className="animate-spin" />
-                        )}
-                        {!loadingAccounts &&
-                          accounts?.map((option) => (
-                            <SelectItem key={option.id} value={option.id}>
-                              <ImageAndLabelOption
-                                src={`/banks/${option.bank}.svg`}
-                                label={option.name}
-                              />
-                            </SelectItem>
-                          ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  <FormField
+                    control={form.control}
+                    name="paidByAccountId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Conta</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          disabled={loadingAccounts}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione a conta..." />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {loadingAccounts && (
+                              <Loader2Icon className="animate-spin" />
+                            )}
+                            {!loadingAccounts &&
+                              accounts?.map((option) => (
+                                <SelectItem key={option.id} value={option.id}>
+                                  <ImageAndLabelOption
+                                    src={`/banks/${option.bank}.svg`}
+                                    label={option.name}
+                                  />
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">
-                    Cancelar
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button type="button" variant="outline">
+                      Cancelar
+                    </Button>
+                  </DialogClose>
+                  <Button disabled={loadingAccounts} type="submit">
+                    Registrar Pagamento
                   </Button>
-                </DialogClose>
-                <Button disabled={loadingAccounts} type="submit">
-                  Registrar Pagamento
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
+                </DialogFooter>
+              </form>
+            </Form>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
 
