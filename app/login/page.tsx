@@ -14,10 +14,13 @@ const LoginPage = async () => {
   }
 
   return (
-    <div className="grid h-full grid-cols-2">
-      {/* ESQUERDA */}
-      <div className="mx-auto flex h-full max-w-[550px] flex-col justify-center p-8">
-        <div className="mb-6 flex items-center gap-3">
+    <div className="relative flex h-full flex-col md:grid md:grid-cols-2">
+      {/* BACKGROUND IMAGE FOR MOBILE */}
+      <div className="absolute inset-0 bg-[url('/login.png')] bg-cover bg-center opacity-10 md:hidden" />
+
+      {/* INFO AND BUTTON */}
+      <div className="relative z-10 mx-auto flex h-full max-w-[550px] flex-col justify-center p-8">
+        <div className="mb-8 flex items-center gap-3 md:mb-6">
           <Image src="/favicon.ico" alt="Oto Finance" width={60} height={60} />
           <h1
             className={`${leagueSpartan.className} font-spartan text-4xl font-bold`}
@@ -25,7 +28,7 @@ const LoginPage = async () => {
             Oto Finance
           </h1>
         </div>
-        <h1 className="mb-3 text-4xl font-bold">Bem-vindo</h1>
+        <h1 className="mb-8 text-4xl font-bold md:mb-3">Bem-vindo</h1>
         <p className="mb-8 text-muted-foreground">
           A Oto Finance é uma plataforma de gestão financeira que permite que
           você tenha um controle completo sobre suas financas, utilizando IA
@@ -40,8 +43,8 @@ const LoginPage = async () => {
         </SignInButton>
       </div>
 
-      {/* DIREITA */}
-      <div className="relative h-full w-full">
+      {/* IMAGE TO THE RIGHT FOR DESKTOP */}
+      <div className="relative hidden h-full w-full md:block">
         <Image
           src="/login.png"
           alt="Faça login"
