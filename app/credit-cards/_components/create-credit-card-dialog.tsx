@@ -133,7 +133,7 @@ const CreateCreditCardDialog = ({
         }
       }}
     >
-      <DialogContent className="flex h-[85vh] flex-col py-8 pr-1">
+      <DialogContent className="flex h-[85vh] w-[85dvw] max-w-lg flex-col py-8 pr-1">
         <DialogHeader>
           <DialogTitle>Adicionar Cartão</DialogTitle>
           <DialogDescription>Insira as informações abaixo</DialogDescription>
@@ -289,7 +289,7 @@ const CreateCreditCardDialog = ({
                 />
               </div>
 
-              <DialogFooter>
+              <DialogFooter className="flex gap-3 md:gap-0">
                 <DialogClose asChild>
                   <Button type="button" variant="outline">
                     Cancelar

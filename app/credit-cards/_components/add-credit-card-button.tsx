@@ -4,9 +4,11 @@ import { useState } from "react";
 import { Button } from "@/app/_components/ui/button";
 import { CreditCardIcon } from "lucide-react";
 import CreateCreditCardDialog from "./create-credit-card-dialog";
+import useIsDesktop from "@/app/_utils/useIsDesktop";
 
 const AddCreditCardButton = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const isDesktop = useIsDesktop();
 
   return (
     <>
@@ -14,7 +16,7 @@ const AddCreditCardButton = () => {
         className="rounded-full font-bold"
         onClick={() => setIsDialogOpen(true)}
       >
-        Adicionar cartão de crédito
+        {`Adicionar${isDesktop ? " cartão de crédito" : ""}`}
         <CreditCardIcon />
       </Button>
 

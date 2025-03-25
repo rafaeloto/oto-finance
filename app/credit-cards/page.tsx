@@ -25,7 +25,7 @@ const CreditCards = async () => {
     <>
       <Navbar />
 
-      <div className="flex h-screen flex-col space-y-6 overflow-hidden px-20 py-10">
+      <div className="flex h-dvh flex-col gap-6 overflow-hidden px-6 py-6 md:px-20 md:py-10">
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl font-bold">Cartões de crédito</h1>
           <AddCreditCardButton />
@@ -35,18 +35,14 @@ const CreditCards = async () => {
           <EmptyListFeedback message="Nenhum cartão registrado" />
         ) : (
           <ScrollArea className="h-full">
-            <div className="flex justify-center">
-              <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {creditCards.map(async (card) => {
-                  return (
-                    <CreditCardUnity
-                      key={card.id}
-                      creditCard={card}
-                      userName={userName || undefined}
-                    />
-                  );
-                })}
-              </div>
+            <div className="flex flex-wrap justify-center gap-3 md:gap-10">
+              {creditCards.map(async (card) => (
+                <CreditCardUnity
+                  key={card.id}
+                  creditCard={card}
+                  userName={userName || undefined}
+                />
+              ))}
             </div>
           </ScrollArea>
         )}
