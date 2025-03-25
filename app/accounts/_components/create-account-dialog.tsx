@@ -99,7 +99,7 @@ const CreateAccountDialog = ({
         }
       }}
     >
-      <DialogContent className="flex h-[65vh] flex-col py-8 pr-1">
+      <DialogContent className="flex h-[65svh] w-[85svw] max-w-lg flex-col py-8 pr-1">
         <DialogHeader>
           <DialogTitle>Adicionar Conta</DialogTitle>
           <DialogDescription>Insira as informações abaixo</DialogDescription>
@@ -180,7 +180,7 @@ const CreateAccountDialog = ({
                 />
               </div>
 
-              <DialogFooter>
+              <DialogFooter className="flex gap-3 md:gap-0">
                 <DialogClose asChild>
                   <Button type="button" variant="outline">
                     Cancelar
