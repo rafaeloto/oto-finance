@@ -5,84 +5,90 @@ import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Menu } from "lucide-react";
+import useIsDesktop from "@/app/_utils/useIsDesktop";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const isDesktop = useIsDesktop();
+
+  const navItems = [
+    { href: "/", label: "Dashboard" },
+    { href: "/transactions", label: "Transações" },
+    { href: "/accounts", label: "Contas" },
+    { href: "/credit-cards", label: "Cartões" },
+    { href: "/subscription", label: "Assinatura" },
+  ];
+
+  const optionColor = (href: string) => {
+    if (pathname === href) {
+      return "font-bold text-primary";
+    }
+    return "text-muted-foreground";
+  };
 
   return (
-    <nav className="flex justify-between border-b border-solid px-8 py-4">
+    <nav className="flex justify-between border-b border-solid px-6 py-4 md:px-8">
       <div className="flex items-center gap-10">
+        {/* Logo */}
         <Link href="/">
           <div className="flex items-center gap-2">
             <Image
               src="/favicon.ico"
               alt="Oto Finance"
-              width={40}
+              width={isDesktop ? 40 : 30}
               height={40}
             />
-            <h1 className={`${leagueSpartan.className} text-2xl font-bold`}>
+            <h1
+              className={`${leagueSpartan.className} text-xl font-bold md:text-2xl`}
+            >
               Oto Finance
             </h1>
           </div>
         </Link>
 
-        <Link
-          href="/"
-          className={
-            pathname === "/"
-              ? "font-bold text-primary"
-              : "text-muted-foreground"
-          }
-        >
-          Dashboard
-        </Link>
-
-        <Link
-          href="/transactions"
-          className={
-            pathname === "/transactions"
-              ? "font-bold text-primary"
-              : "text-muted-foreground"
-          }
-        >
-          Transações
-        </Link>
-
-        <Link
-          href="/accounts"
-          className={
-            pathname === "/accounts"
-              ? "font-bold text-primary"
-              : "text-muted-foreground"
-          }
-        >
-          Contas
-        </Link>
-
-        <Link
-          href="/credit-cards"
-          className={
-            pathname === "/credit-cards"
-              ? "font-bold text-primary"
-              : "text-muted-foreground"
-          }
-        >
-          Cartões
-        </Link>
-
-        <Link
-          href="/subscription"
-          className={
-            pathname === "/subscription"
-              ? "font-bold text-primary"
-              : "text-muted-foreground"
-          }
-        >
-          Assinatura
-        </Link>
+        {/* Desktop Menu */}
+        <div className="hidden items-center gap-10 md:flex">
+          {navItems.map(({ href, label }) => (
+            <Link key={href} href={href} className={optionColor(href)}>
+              {label}
+            </Link>
+          ))}
+        </div>
       </div>
 
-      <UserButton showName />
+      {/* Mobile Menu */}
+      <div className="flex items-center gap-5">
+        <UserButton showName />
+
+        <div className="flex items-center md:hidden">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button aria-label="Abrir menu">
+                <Menu className="h-6 w-6" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="w-48 p-3 shadow-sm shadow-primary"
+            >
+              {navItems.map(({ href, label }) => (
+                <DropdownMenuItem key={href} asChild>
+                  <Link href={href} className={`w-full ${optionColor(href)}`}>
+                    {label}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
     </nav>
   );
 };
