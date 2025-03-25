@@ -8,7 +8,7 @@ interface AccountCardProps {
 
 const AccountCard = ({ account }: AccountCardProps) => {
   return (
-    <Card className="flex max-w-[400px] items-center justify-around bg-white bg-opacity-5 p-10">
+    <Card className="flex w-full max-w-[350px] items-center justify-around bg-white bg-opacity-5 p-10">
       {/* Imagem à esquerda */}
       <Image
         src={`/banks/${account.bank}.svg`}
