@@ -44,19 +44,19 @@ const RecalculateBalancesButton = () => {
         >
           {loading ? (
             <>
-              <span>Recalculando...</span>
+              <span className="hidden md:block">Recalculando...</span>
               <LoaderCircleIcon className="animate-spin" />
             </>
           ) : (
             <>
-              <span>Recalcular saldos</span>
+              <span className="hidden md:block">Recalcular saldos</span>
               <CalculatorIcon />
             </>
           )}
         </Button>
       </AlertDialogTrigger>
 
-      <AlertDialogContent>
+      <AlertDialogContent className="w-[85%] max-w-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>
             Você deseja realmente recalcular os saldos?

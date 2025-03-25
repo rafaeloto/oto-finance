@@ -26,7 +26,7 @@ const Accounts = async () => {
       <div className="flex h-dvh flex-col gap-6 overflow-hidden px-6 py-6 md:px-20 md:py-10">
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl font-bold">Contas</h1>
-          <div className="flex flex-col gap-3 md:flex-row">
+          <div className="flex flex-row gap-3">
             <AddAccountButton />
             <RecalculateBalancesButton />
           </div>
