@@ -24,7 +24,7 @@ const PlanCard = (props: PlanCardProps) => {
   } = props;
 
   return (
-    <Card className="w-full max-w-[450px]">
+    <Card className="w-full max-w-96">
       <CardHeader className="relative border-b border-solid py-8">
         {isActive && (
           <Badge className="absolute left-4 top-8 bg-primary/10 text-base text-primary">

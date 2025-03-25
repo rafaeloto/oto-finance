@@ -19,11 +19,11 @@ const SubscriptionPage = async () => {
   return (
     <>
       <Navbar />
-      <div className="flex h-screen flex-col gap-6 px-6 py-6 md:px-20 md:py-10">
+      <div className="flex h-dvh flex-col gap-6 overflow-y-hidden px-6 py-6 md:px-20 md:py-10">
         <h1 className="text-2xl font-bold">Assinatura</h1>
 
         <ScrollArea className="h-0 flex-1">
-          <div className="mb-14 flex flex-col gap-6 md:flex-row md:gap-10">
+          <div className="flex flex-col flex-wrap gap-6 md:flex-row md:gap-10">
             <PlanCard
               isActive={!hasPremiumPlan}
               title="Plano Básico"
