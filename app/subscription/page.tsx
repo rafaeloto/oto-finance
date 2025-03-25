@@ -2,6 +2,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import Navbar from "../_components/_molecules/navbar";
 import { redirect } from "next/navigation";
 import PlanCard from "./_components/PlanCard";
+import { ScrollArea } from "../_components/ui/scroll-area";
 import { getCurrentMonthTransactions } from "../_data/get-current-month-transactions";
 
 const SubscriptionPage = async () => {
@@ -18,28 +19,30 @@ const SubscriptionPage = async () => {
   return (
     <>
       <Navbar />
-      <div className="h-screen space-y-6 px-20 py-10">
+      <div className="flex h-screen flex-col gap-6 px-6 py-6 md:px-20 md:py-10">
         <h1 className="text-2xl font-bold">Assinatura</h1>
 
-        <div className="flex gap-10">
-          <PlanCard
-            isActive={!hasPremiumPlan}
-            title="Plano Básico"
-            value={0}
-            includedFeatures={[
-              `Apenas 10 transações por mês (${currentMonthTransactions}/10)`,
-            ]}
-            notIncludedFeatures={["Relatórios de IA"]}
-          />
+        <ScrollArea className="flex-1">
+          <div className="flex flex-col gap-6 md:flex-row md:gap-10">
+            <PlanCard
+              isActive={!hasPremiumPlan}
+              title="Plano Básico"
+              value={0}
+              includedFeatures={[
+                `Apenas 10 transações por mês (${currentMonthTransactions}/10)`,
+              ]}
+              notIncludedFeatures={["Relatórios de IA"]}
+            />
 
-          <PlanCard
-            isActive={hasPremiumPlan}
-            title="Plano Premium"
-            value={19}
-            includedFeatures={["Transações ilimitadas", "Relatórios de IA"]}
-            showAquirePlanButton
-          />
-        </div>
+            <PlanCard
+              isActive={hasPremiumPlan}
+              title="Plano Premium"
+              value={19}
+              includedFeatures={["Transações ilimitadas", "Relatórios de IA"]}
+              showAquirePlanButton
+            />
+          </div>
+        </ScrollArea>
       </div>
     </>
   );
