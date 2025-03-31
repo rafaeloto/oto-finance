@@ -6,6 +6,7 @@ import { formatCurrency } from "@/app/_utils/currency";
 import { Invoice } from "@prisma/client";
 import clsx from "clsx";
 import InvoiceButtons from "./invoice-buttons";
+import useIsDesktop from "@/app/_utils/useIsDesktop";
 
 type params = {
   invoices: Invoice[];
@@ -18,6 +19,8 @@ const InvoiceList = ({
   onSelectInvoice,
   selectedInvoiceId,
 }: params) => {
+  const isDesktop = useIsDesktop();
+
   if (invoices.length === 0) {
     return <EmptyListFeedback message="Nenhuma fatura encontrada" />;
   }
@@ -29,30 +32,33 @@ const InvoiceList = ({
   };
 
   return (
-    <div className="flex flex-col space-y-4 p-4">
+    <div className="flex flex-col space-y-4 pt-4 md:px-4 md:py-4">
       {invoices.map((invoice) => (
         <div
           key={invoice.id}
           className={clsx(
-            "rounded-md border p-4 px-6 shadow-sm",
+            "rounded-md border p-4 shadow-sm md:px-6",
             invoice.id === selectedInvoiceId &&
               "border-muted-foreground bg-muted",
           )}
         >
           <div className="flex w-full items-center justify-between">
-            <p className="w-1/4 text-lg font-medium">
+            <p className="w-1/8 text-sm font-medium md:w-1/4 md:text-lg">
               {invoice.month}/{invoice.year}
             </p>
-            <p className={`w-1/4 ${statusColorMap[invoice.status]} font-bold`}>
+            <p
+              className={`w-1/8 text-sm md:w-1/4 md:text-base ${statusColorMap[invoice.status]} font-bold`}
+            >
               {INVOICE_STATUS_LABELS[invoice.status]}
             </p>
-            <p className="w-1/4 text-lg font-semibold">
+            <p className="w-1/4 text-sm font-semibold md:text-lg">
               {formatCurrency(Number(invoice.totalAmount))}
             </p>
             <InvoiceButtons
               onClickSee={() => onSelectInvoice(invoice.id)}
               canBePaid={invoice.status === "CLOSED"}
               invoice={invoice}
+              noPadding={!isDesktop}
             />
           </div>
         </div>

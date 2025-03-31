@@ -19,6 +19,9 @@ import {
 } from "@prisma/client";
 import { useCallback, useMemo, useState } from "react";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import { Label } from "@/app/_components/ui/label";
+import { Switch } from "@/app/_components/ui/switch";
+import useIsDesktop from "@/app/_utils/useIsDesktop";
 
 type InvoiceDetailsProps = {
   creditCard: CreditCard;
@@ -32,6 +35,7 @@ type InvoiceDetailsProps = {
 
 const InvoiceDetails = (props: InvoiceDetailsProps) => {
   const { creditCard, invoices, transactionsByInvoice, userName } = props;
+  const isDesktop = useIsDesktop();
 
   // Function to filter invoices by status and sort them
   const getFilteredInvoices = useCallback(
@@ -50,6 +54,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<
     string | undefined
   >(getFilteredInvoices("OPEN")[0]?.id);
+  const [showTransactions, setShowTransactions] = useState(false);
 
   // Gets the transactions in the selected invoice
   const selectedInvoiceTransactions = useMemo(() => {
@@ -73,76 +78,79 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
   // Function to handle invoice selection, updating the state
   const onSelectInvoice = useCallback((invoiceId: string) => {
     setSelectedInvoiceId(invoiceId);
+    setShowTransactions(true);
   }, []);
 
   return (
-    <div className="flex h-full gap-10">
+    <div className="flex h-full flex-col gap-6 md:flex-row md:gap-10">
       {/* Left section */}
-      <div className="flex h-full w-1/2 flex-col space-y-6">
+      <div
+        className={`flex ${(isDesktop || !showTransactions) && "h-full"} w-full flex-col space-y-6 md:w-1/2`}
+      >
         {/* Card */}
-        <CreditCardUnity
-          creditCard={creditCard}
-          complete={false}
-          userName={userName}
-        />
+        <div className="flex items-center justify-center">
+          <CreditCardUnity
+            creditCard={creditCard}
+            complete={false}
+            userName={userName}
+          />
+        </div>
+
+        {/* Switch para mobile */}
+        <div className="flex items-center justify-center gap-3 md:hidden">
+          <Label>Faturas</Label>
+          <Switch
+            checked={showTransactions}
+            onCheckedChange={setShowTransactions}
+          />
+          <Label>Transações</Label>
+        </div>
 
         {/* Tabs */}
-        <Card className="flex h-full flex-1 flex-col overflow-hidden">
-          <Tabs
-            defaultValue="OPEN"
-            className="flex h-full w-full flex-1 flex-col"
-          >
-            <TabsList className="flex h-14 justify-between px-10">
-              <TabsTrigger value="PAID">
-                {INVOICE_STATUS_LABELS.PAID}
-              </TabsTrigger>
-              <TabsTrigger value="CLOSED">
-                {INVOICE_STATUS_LABELS.CLOSED}
-              </TabsTrigger>
-              <TabsTrigger value="OPEN">
-                {INVOICE_STATUS_LABELS.OPEN}
-              </TabsTrigger>
-            </TabsList>
+        {(isDesktop || !showTransactions) && (
+          <Card className="flex flex-1 flex-col overflow-hidden">
+            <Tabs
+              defaultValue="OPEN"
+              className="flex h-full w-full flex-1 flex-col"
+            >
+              <TabsList className="flex h-14 justify-between px-10">
+                <TabsTrigger value="PAID">
+                  {INVOICE_STATUS_LABELS.PAID}
+                </TabsTrigger>
+                <TabsTrigger value="CLOSED">
+                  {INVOICE_STATUS_LABELS.CLOSED}
+                </TabsTrigger>
+                <TabsTrigger value="OPEN">
+                  {INVOICE_STATUS_LABELS.OPEN}
+                </TabsTrigger>
+              </TabsList>
 
-            {/* Tabs Content */}
-            <TabsContent value="PAID" className="h-0 flex-1">
-              <ScrollArea className="h-full">
-                <InvoiceList
-                  invoices={getFilteredInvoices("PAID")}
-                  onSelectInvoice={onSelectInvoice}
-                  selectedInvoiceId={selectedInvoiceId}
-                />
-              </ScrollArea>
-            </TabsContent>
-            <TabsContent value="CLOSED" className="h-0 flex-1">
-              <ScrollArea className="h-full">
-                <InvoiceList
-                  invoices={getFilteredInvoices("CLOSED")}
-                  onSelectInvoice={onSelectInvoice}
-                  selectedInvoiceId={selectedInvoiceId}
-                />
-              </ScrollArea>
-            </TabsContent>
-            <TabsContent value="OPEN" className="h-0 flex-1">
-              <ScrollArea className="h-full">
-                <InvoiceList
-                  invoices={getFilteredInvoices("OPEN")}
-                  onSelectInvoice={onSelectInvoice}
-                  selectedInvoiceId={selectedInvoiceId}
-                />
-              </ScrollArea>
-            </TabsContent>
-          </Tabs>
-        </Card>
+              {/* Tabs Content */}
+              {(["PAID", "CLOSED", "OPEN"] as InvoiceStatus[]).map((status) => (
+                <TabsContent key={status} value={status} className="h-0 flex-1">
+                  <ScrollArea className="h-full">
+                    <InvoiceList
+                      invoices={getFilteredInvoices(status)}
+                      onSelectInvoice={onSelectInvoice}
+                      selectedInvoiceId={selectedInvoiceId}
+                    />
+                  </ScrollArea>
+                </TabsContent>
+              ))}
+            </Tabs>
+          </Card>
+        )}
       </div>
 
       {/* Right side */}
-      <div className="flex h-full w-1/2 flex-col overflow-hidden">
-        <InvoiceTransactions
-          transactions={selectedInvoiceTransactions}
-          canChangeTransactions={selectedInvoiceStatus !== "PAID"}
-        />
-      </div>
+      {(isDesktop || showTransactions) && (
+        <div className="flex h-full w-full flex-col overflow-hidden md:w-1/2">
+          <InvoiceTransactions
+            transactions={selectedInvoiceTransactions}
+            canChangeTransactions={selectedInvoiceStatus !== "PAID"}
+          />
+        </div>
+      )}
     </div>
   );
 };

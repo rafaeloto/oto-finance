@@ -13,13 +13,16 @@ import { Button } from "@/app/_components/ui/button";
 import { TrashIcon } from "lucide-react";
 import { deleteTransaction } from "@/app/_actions/transactions/delete-transaction";
 import { toast } from "sonner";
+import { cn } from "@/app/_lib/utils";
 
 interface DeleteTransactionButtonProps {
   transactionId: string;
+  noPadding?: boolean;
 }
 
 const DeleteTransactionButton = ({
   transactionId,
+  noPadding = false,
 }: DeleteTransactionButtonProps) => {
   const handleConfirmDeleteClick = async () => {
     try {
@@ -34,7 +37,11 @@ const DeleteTransactionButton = ({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="text-muted-foreground">
+        <Button
+          variant="ghost"
+          size={noPadding ? "sm" : "icon"}
+          className={cn("text-muted-foreground", noPadding && "p-0")}
+        >
           <TrashIcon />
         </Button>
       </AlertDialogTrigger>
