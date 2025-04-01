@@ -3,9 +3,16 @@
 import SelectFilter from "@/app/_components/_molecules/SelectFilter";
 import { getValidDateFromParams } from "@/app/_utils/date";
 import { getMonthsOptions, getYearsOptions } from "@/app/_utils/select";
+import type { TransactionFilters } from "@/app/transactions/_filters/TransactionFilterDialog";
 import { useSearchParams } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 
-const TimeSelect = () => {
+type TimeSelectProps = {
+  filters?: { month?: string; year?: string };
+  setFilters?: Dispatch<SetStateAction<TransactionFilters>>;
+};
+
+const TimeSelect = ({ filters, setFilters }: TimeSelectProps) => {
   const searchParams = useSearchParams();
 
   const paramsMonth = searchParams.get("month")?.padStart(2, "0");
@@ -21,20 +28,30 @@ const TimeSelect = () => {
     value: year,
   }));
 
+  const hasFilters = !!filters && !!setFilters;
+
   return (
     <>
       <SelectFilter
         paramKey="month"
         options={monthOptions}
         placeholder="Mês"
-        defaultValue={validMonth}
+        value={filters?.month || validMonth}
+        {...(hasFilters && {
+          onChange: (value) =>
+            setFilters((prev) => ({ ...prev, month: value ?? "" })),
+        })}
       />
 
       <SelectFilter
         paramKey="year"
         options={yearOptions}
         placeholder="Ano"
-        defaultValue={validYear}
+        value={filters?.year || validYear}
+        {...(hasFilters && {
+          onChange: (value) =>
+            setFilters((prev) => ({ ...prev, year: value ?? "" })),
+        })}
       />
     </>
   );

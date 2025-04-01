@@ -10,6 +10,7 @@ import {
 } from "../ui/tooltip";
 import UpsertTransactionDialog from "./upsert-transaction-dialog";
 import { ArrowDownUpIcon } from "lucide-react";
+import useIsDesktop from "@/app/_utils/useIsDesktop";
 
 interface AddTransactionButtonProps {
   userCanAddTransaction?: boolean;
@@ -19,6 +20,8 @@ const AddTransactionButton = ({
   userCanAddTransaction,
 }: AddTransactionButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const isDesktop = useIsDesktop();
 
   return (
     <>
@@ -30,7 +33,7 @@ const AddTransactionButton = ({
               onClick={() => setIsDialogOpen(true)}
               disabled={!userCanAddTransaction}
             >
-              Adicionar transação
+              {isDesktop ? "Adicionar transação" : "Adicionar"}
               <ArrowDownUpIcon />
             </Button>
           </TooltipTrigger>

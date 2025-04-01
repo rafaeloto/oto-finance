@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/app/_components/ui/select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Option = {
   label: React.ReactNode;
@@ -19,24 +19,32 @@ type SelectFilterProps = {
   paramKey: string;
   options: Option[];
   placeholder: string;
-  defaultValue?: string;
+  value?: string;
+  onChange?: (value: string | undefined) => void;
 };
 
 const SelectFilter = ({
   paramKey,
   options,
   placeholder,
-  defaultValue,
+  value,
+  onChange,
 }: SelectFilterProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
   const [selectedValue, setSelectedValue] = useState(
-    defaultValue || searchParams.get(paramKey) || undefined,
+    value || searchParams.get(paramKey) || undefined,
   );
 
+  useEffect(() => {
+    setSelectedValue(value || searchParams.get(paramKey) || undefined);
+  }, [value, searchParams, paramKey]);
+
   const handleFilterChange = (value: string | undefined) => {
+    if (onChange) return onChange(value);
+
     const params = new URLSearchParams(searchParams.toString());
 
     if (value) {
@@ -53,10 +61,10 @@ const SelectFilter = ({
   return (
     <Select
       onValueChange={handleFilterChange}
-      value={selectedValue}
+      value={selectedValue ?? ""}
       disabled={!options.length}
     >
-      <SelectTrigger className="min-w-fit space-x-2 rounded-full">
+      <SelectTrigger className="min-w-fit space-x-2 md:rounded-full">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 

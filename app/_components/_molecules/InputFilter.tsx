@@ -4,14 +4,23 @@ import { Input } from "../ui/input";
 type InputFilterProps = {
   paramKey: string;
   placeholder: string;
+  value?: string;
+  onChange?: (value: string | undefined) => void;
 };
 
-const InputFilter = ({ paramKey, placeholder }: InputFilterProps) => {
+const InputFilter = ({
+  paramKey,
+  placeholder,
+  value,
+  onChange,
+}: InputFilterProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
   const handleFilterChange = (value: string | undefined) => {
+    if (onChange) return onChange(value);
+
     const params = new URLSearchParams(searchParams.toString());
 
     if (value) {
@@ -27,7 +36,8 @@ const InputFilter = ({ paramKey, placeholder }: InputFilterProps) => {
     <Input
       placeholder={placeholder}
       onChange={(e) => handleFilterChange(e.target.value)}
-      className="w-[10rem] rounded-full"
+      className="w-full md:w-[10rem] md:rounded-full"
+      value={value ?? ""}
     />
   );
 };
