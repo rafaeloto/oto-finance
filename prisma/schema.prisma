@@ -105,6 +105,7 @@ enum Bank {
   SANTANDER
   OTHER
   C6
+  XP
 }
 
 enum CreditCardFlag {

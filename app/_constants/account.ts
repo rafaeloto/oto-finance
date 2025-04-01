@@ -13,6 +13,7 @@ export const BANK_LABELS = {
   [Bank.PICPAY]: "Picpay",
   [Bank.SANTANDER]: "Santander",
   [Bank.C6]: "C6",
+  [Bank.XP]: "XP",
   [Bank.OTHER]: "Outro",
 };
 
