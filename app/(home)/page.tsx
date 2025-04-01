@@ -1,4 +1,5 @@
-import { auth, clerkClient } from "@clerk/nextjs/server";
+// import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Navbar from "../_components/_molecules/navbar";
 import SummaryCards from "./_components/summary-cards";
@@ -8,7 +9,7 @@ import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
-import AiReportButton from "./_components/ai-report-button";
+// import AiReportButton from "./_components/ai-report-button";
 import { getValidDateFromParams } from "../_utils/date";
 
 interface HomeProps {
@@ -29,7 +30,7 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
 
   const dashboard = await getDashboard(validMonth, validYear);
   const userCanAddTransaction = await canUserAddTransaction();
-  const user = await clerkClient().users.getUser(userId);
+  // const user = await clerkClient().users.getUser(userId);
 
   return (
     <>
@@ -38,13 +39,14 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <div className="flex gap-3">
-            <AiReportButton
+            {/* TODO: Add this back once the AI report feature is fixed */}
+            {/* <AiReportButton
               month={validMonth}
               year={validYear}
               hasPremiumPlan={
                 user?.publicMetadata.subscriptionPlan === "premium"
               }
-            />
+            /> */}
             <TimeSelect />
           </div>
         </div>
