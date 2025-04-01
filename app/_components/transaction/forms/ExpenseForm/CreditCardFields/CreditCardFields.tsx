@@ -102,12 +102,12 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
           control={control}
           name="installmentType"
           render={({ field }) => (
-            <FormItem className="mb-3 w-2/5">
+            <FormItem className="mb-3 w-min md:w-2/5">
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex space-x-3"
+                  className="flex flex-col space-y-2 md:flex-row md:space-x-3"
                 >
                   <FormItem className="flex items-center space-x-1 space-y-0">
                     <FormControl>

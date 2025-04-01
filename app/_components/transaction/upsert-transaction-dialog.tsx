@@ -43,7 +43,7 @@ const UpsertTransactionDialog = ({
         setIsOpen(open);
       }}
     >
-      <DialogContent className="flex h-[85vh] flex-col py-8 pr-1">
+      <DialogContent className="flex h-[85vh] w-[85svw] max-w-lg flex-col py-8 pr-1">
         <DialogHeader>
           <DialogTitle>
             {isUpdate ? "Atualizar" : "Adicionar"} Transação
@@ -55,7 +55,7 @@ const UpsertTransactionDialog = ({
           defaultValue={tabValueMap[transactionType || "EXPENSE"]}
           className="flex h-0 flex-1 flex-col"
         >
-          <TabsList className="mr-5 flex h-12 justify-between px-5">
+          <TabsList className="mr-5 flex h-12 justify-between overflow-x-auto whitespace-nowrap px-2 md:px-5">
             <TabsTrigger
               value="expense"
               disabled={isUpdate && transactionType !== "EXPENSE"}

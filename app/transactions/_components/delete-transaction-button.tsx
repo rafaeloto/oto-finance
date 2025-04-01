@@ -46,7 +46,7 @@ const DeleteTransactionButton = ({
         </Button>
       </AlertDialogTrigger>
 
-      <AlertDialogContent>
+      <AlertDialogContent className="w-[85%] max-w-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>
             Você deseja realmente deletar essa transação?

@@ -128,7 +128,7 @@ const PayInvoiceDialog = ({
           }
         }}
       >
-        <DialogContent className="flex h-[75vh] flex-col py-8 pr-1">
+        <DialogContent className="flex h-[75vh] w-[85svw] max-w-lg flex-col py-8 pr-1">
           <DialogHeader>
             <DialogTitle>
               <div className="flex flex-col gap-4 pb-4">
