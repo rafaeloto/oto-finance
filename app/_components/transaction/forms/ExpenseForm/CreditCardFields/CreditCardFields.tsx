@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/app/_components/ui/select";
 import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
-import { getImportantDates } from "@/app/_utils/date";
+import { getInvoiceOptions } from "@/app/_utils/date";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -34,33 +34,33 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
 
   const { creditCards, loading: loadingCreditCards } = useCreditCards();
 
-  const { month: currentMonth, nextMonth } = getImportantDates(new Date());
-
   const selectedCardId = watch("cardId");
   const selectedDate = watch("date");
   const selectedInstallmentType = watch("installmentType");
 
-  // Function to generate the invoice options based on the selected date
+  const selectedCard = useMemo(() => {
+    if (!selectedCardId) return;
+
+    return creditCards.find((card) => card.id === selectedCardId);
+  }, [selectedCardId, creditCards]);
+
   const invoiceOptions = useMemo(() => {
-    if (!selectedDate) return [currentMonth, nextMonth];
+    if (!selectedDate || !selectedCard) return [];
 
-    const { month: selectedDateMonth, nextMonth: selectedDatenextMonth } =
-      getImportantDates(selectedDate);
-
-    return [selectedDateMonth, selectedDatenextMonth];
-  }, [currentMonth, nextMonth, selectedDate]);
+    return getInvoiceOptions(
+      selectedDate,
+      selectedCard.closingDate,
+      selectedCard.dueDate,
+    );
+  }, [selectedCard, selectedDate]);
 
   const handleMonthChange = (value: string) => {
     const selectedMonth = Number(value);
-    const { year: selectedDateYear, nextYear: selectedDateNextYear } =
-      getImportantDates(selectedDate);
 
-    setSelectedYear(() => {
-      if (invoiceOptions.includes(12) && invoiceOptions.includes(1)) {
-        return selectedMonth === 12 ? selectedDateYear : selectedDateNextYear;
-      }
-      return selectedDateYear;
-    });
+    const year = invoiceOptions.find(
+      (option) => option.value === selectedMonth,
+    )?.year;
+    if (!!year) setSelectedYear(year);
   };
 
   return (
@@ -150,9 +150,12 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {invoiceOptions?.map((value) => (
-                    <SelectItem key={value} value={value.toString()}>
-                      {value}
+                  {invoiceOptions?.map((option) => (
+                    <SelectItem
+                      key={option.value}
+                      value={option.value.toString()}
+                    >
+                      {option.label}
                     </SelectItem>
                   ))}
                 </SelectContent>

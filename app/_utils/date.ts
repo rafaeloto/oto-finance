@@ -1,4 +1,5 @@
 import { format, isMatch } from "date-fns";
+import { MONTH_NAMES } from "../_constants/month";
 
 /**
  * Calculates the card closing and due dates based on the current date and the
@@ -93,4 +94,70 @@ export const getValidDateFromParams = (month?: string, year?: string) => {
   const validYear = yearIsInvalid ? currentYear : year;
 
   return { validMonth, validYear };
+};
+
+/**
+ * Gets the options for a Select component with the values of the
+ * invoice months based on the selected date, closing and due day.
+ *
+ * @param selectedDate - The date that the user has selected.
+ * @param closingDay - The day of the month that the invoice is closed.
+ * @param dueDay - The day of the month that the invoice is due.
+ * @returns An array of objects with the value, label and year of the
+ * invoice options.
+ */
+export const getInvoiceOptions = (
+  selectedDate: Date,
+  closingDay: number,
+  dueDay: number,
+): { value: number; label: string; year: number }[] => {
+  const {
+    day: selectedDay,
+    month: selectedMonth,
+    year: selectedYear,
+  } = getImportantDates(selectedDate);
+
+  let firstInvoiceMonth = selectedMonth;
+  let firstInvoiceYear = selectedYear;
+
+  // If the selected day is greater than the closing day,
+  // the first invoice should be one month later, because the
+  // invoice month refers to the month the invoice is paid
+  if (selectedDay > closingDay) {
+    firstInvoiceMonth += 1;
+    if (firstInvoiceMonth > 12) {
+      firstInvoiceMonth = 1;
+      firstInvoiceYear += 1;
+    }
+  }
+
+  // If the closingDay day is greater than the dueDay,
+  // the first invoice should be one month later
+  if (closingDay > dueDay) {
+    firstInvoiceMonth += 1;
+    if (firstInvoiceMonth > 12) {
+      firstInvoiceMonth = 1;
+      firstInvoiceYear += 1;
+    }
+  }
+
+  let secondInvoiceMonth = firstInvoiceMonth + 1;
+  let secondInvoiceYear = firstInvoiceYear;
+  if (secondInvoiceMonth > 12) {
+    secondInvoiceMonth = 1;
+    secondInvoiceYear += 1;
+  }
+
+  return [
+    {
+      value: firstInvoiceMonth,
+      label: MONTH_NAMES[firstInvoiceMonth],
+      year: firstInvoiceYear,
+    },
+    {
+      value: secondInvoiceMonth,
+      label: MONTH_NAMES[secondInvoiceMonth],
+      year: secondInvoiceYear,
+    },
+  ];
 };
