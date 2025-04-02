@@ -28,17 +28,30 @@ export const calculateClosingAndDueDates = (
     year: currentYear,
   } = getImportantDates(new Date());
 
-  // Calculates the card cloding date
-  const closingMonth =
-    closingDay >= currentDay ? currentMonth : currentMonth + 1;
-  const closingDate = new Date(currentYear, closingMonth, closingDay);
+  // Calculates the card's closing date
+  let closingMonth = closingDay >= currentDay ? currentMonth : currentMonth + 1;
+  let closingYear = currentYear;
 
-  // Calculates the card due date
-  const dueMonth =
-    dueDay > closingDay || closingDate.getMonth() !== currentMonth
-      ? closingMonth
-      : closingMonth + 1;
-  const dueDate = new Date(currentYear, dueMonth, dueDay);
+  if (closingMonth > 12) {
+    closingMonth = 1;
+    closingYear += 1;
+  }
+
+  const closingDate = new Date(closingYear, closingMonth - 1, closingDay);
+
+  // Calculates the card's due date
+  let dueMonth = closingMonth;
+  let dueYear = closingYear;
+
+  if (closingDay > dueDay) {
+    dueMonth += 1;
+    if (dueMonth > 12) {
+      dueMonth = 1;
+      dueYear += 1;
+    }
+  }
+
+  const dueDate = new Date(dueYear, dueMonth - 1, dueDay);
 
   return {
     closingDate: format(closingDate, "dd/MM"),
