@@ -128,7 +128,7 @@ const PayInvoiceDialog = ({
           }
         }}
       >
-        <DialogContent className="flex h-[75vh] w-[85svw] max-w-lg flex-col py-8 pr-1">
+        <DialogContent className="flex h-[75svh] w-[95svw] max-w-lg flex-col py-8 pr-1">
           <DialogHeader>
             <DialogTitle>
               <div className="flex flex-col gap-4 pb-4">
@@ -149,7 +149,7 @@ const PayInvoiceDialog = ({
                 onSubmit={form.handleSubmit(handleFormSubmit)}
                 className="flex h-full flex-col"
               >
-                <div className="mb-8 flex-1 space-y-8">
+                <div className="mb-8 flex-1 space-y-8 px-1">
                   <FormField
                     control={form.control}
                     name="paymentAmount"
@@ -196,7 +196,7 @@ const PayInvoiceDialog = ({
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
-                          disabled={loadingAccounts}
+                          disabled={loadingAccounts || !accounts?.length}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -224,7 +224,7 @@ const PayInvoiceDialog = ({
                   />
                 </div>
 
-                <DialogFooter>
+                <DialogFooter className="flex gap-3 md:gap-0">
                   <DialogClose asChild>
                     <Button type="button" variant="outline">
                       Cancelar

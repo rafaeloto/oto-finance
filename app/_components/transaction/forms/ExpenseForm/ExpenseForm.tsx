@@ -313,7 +313,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
           </ShouldRender>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="flex gap-3 md:gap-0">
           <DialogClose asChild>
             <Button type="button" variant="outline">
               Cancelar

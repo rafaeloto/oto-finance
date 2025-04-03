@@ -81,7 +81,7 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="w-[85svw] max-w-lg">
+      <DialogContent className="w-[95svw] max-w-lg">
         <DialogHeader>
           <DialogTitle>Filtros</DialogTitle>
         </DialogHeader>
@@ -165,7 +165,7 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
           />
         </div>
 
-        <DialogFooter className="gap-2">
+        <DialogFooter className="flex gap-3 md:gap-0">
           <DialogClose asChild>
             <Button type="button" variant="outline">
               Cancelar

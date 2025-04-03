@@ -43,7 +43,7 @@ const UpsertTransactionDialog = ({
         setIsOpen(open);
       }}
     >
-      <DialogContent className="flex h-[85vh] w-[85svw] max-w-lg flex-col py-8 pr-1">
+      <DialogContent className="flex h-[85svh] w-[95svw] max-w-lg flex-col py-8 pr-1">
         <DialogHeader>
           <DialogTitle>
             {isUpdate ? "Atualizar" : "Adicionar"} Transação

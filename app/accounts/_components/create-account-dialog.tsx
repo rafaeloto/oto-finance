@@ -99,7 +99,7 @@ const CreateAccountDialog = ({
         }
       }}
     >
-      <DialogContent className="flex h-[65svh] w-[85svw] max-w-lg flex-col py-8 pr-1">
+      <DialogContent className="flex h-[65svh] w-[95svw] max-w-lg flex-col py-8 pr-1">
         <DialogHeader>
           <DialogTitle>Adicionar Conta</DialogTitle>
           <DialogDescription>Insira as informações abaixo</DialogDescription>
@@ -111,7 +111,7 @@ const CreateAccountDialog = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className="flex h-full flex-col"
             >
-              <div className="mb-8 flex-1 space-y-8">
+              <div className="mb-8 flex-1 space-y-8 px-1">
                 <FormField
                   control={form.control}
                   name="name"

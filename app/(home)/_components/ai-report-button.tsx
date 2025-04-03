@@ -53,7 +53,7 @@ const AiReportButton = ({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-[600px]">
+      <DialogContent className="w-[95svw] max-w-lg">
         {hasPremiumPlan ? (
           <>
             <DialogHeader>
@@ -68,9 +68,11 @@ const AiReportButton = ({
               <Markdown>{report}</Markdown>
             </ScrollArea>
 
-            <DialogFooter>
+            <DialogFooter className="flex gap-3 md:gap-0">
               <DialogClose asChild>
-                <Button variant="ghost">Cancelar</Button>
+                <Button type="button" variant="outline">
+                  Cancelar
+                </Button>
               </DialogClose>
 
               <Button
@@ -94,9 +96,11 @@ const AiReportButton = ({
               </DialogDescription>
             </DialogHeader>
 
-            <DialogFooter>
+            <DialogFooter className="flex gap-3 md:gap-0">
               <DialogClose asChild>
-                <Button variant="ghost">Cancelar</Button>
+                <Button type="button" variant="outline">
+                  Cancelar
+                </Button>
               </DialogClose>
 
               <Button asChild>
