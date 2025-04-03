@@ -10,7 +10,6 @@ import { auth } from "@clerk/nextjs/server";
 type HandleCreditTransactionProps = {
   transactionId?: string;
   data: FormSchema;
-  selectedYear: number;
 };
 
 const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
@@ -18,7 +17,7 @@ const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
 
   if (!userId) throw new Error("Unauthorized");
 
-  const { data, transactionId, selectedYear } = props;
+  const { data, transactionId } = props;
   const { installmentType, installments } = data;
 
   // For the credit card transactions, removes the accountId and other data not used on the action
@@ -33,12 +32,13 @@ const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
         userId,
         cardId: data.cardId!,
         invoiceMonth: data.invoiceMonth!,
-        invoiceYear: selectedYear,
+        invoiceYear: data.invoiceYear!,
         client: prismaClient,
       });
 
-      // Removes the invoiceMonth from the data, because it was already parsed
+      // Removes the invoiceMonth and invoiceYear from the data, because they were already parsed
       delete data.invoiceMonth;
+      delete data.invoiceYear;
 
       // Upserts a single transaction
       await upsertExpenseTransaction(
@@ -69,10 +69,11 @@ const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
         const installmentId = uuid();
         const installmentAmount = data.amount / installments!;
         const installmentMonth = data.invoiceMonth!;
-        const installmentYear = selectedYear;
+        const installmentYear = data.invoiceYear!;
 
-        // Removes the invoiceMonth from the data, because it was already parsed
+        // Removes the invoiceMonth and invoiceYear from the data, because they were already parsed
         delete data.invoiceMonth;
+        delete data.invoiceYear;
 
         // Generates an array with the details for each installment
         const installmentDetails = Array.from({ length: installments! }).map(

@@ -1,6 +1,5 @@
 import ShouldRender from "@/app/_components/_atoms/should-render";
 import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
-import { Card } from "@/app/_components/ui/card";
 import {
   FormControl,
   FormField,
@@ -19,30 +18,24 @@ import {
 } from "@/app/_components/ui/select";
 import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
 import { getInvoiceOptions } from "@/app/_utils/date";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 
 export type InstallmentType = "once" | "split" | undefined;
 
-type Props = {
-  selectedYear: number;
-  setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
-};
-
-const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
-  const { control, watch } = useFormContext();
-
+const CreditCardFields = () => {
+  const { control, watch, setValue, clearErrors } = useFormContext();
   const { creditCards, loading: loadingCreditCards } = useCreditCards();
 
   const selectedCardId = watch("cardId");
   const selectedDate = watch("date");
   const selectedInstallmentType = watch("installmentType");
+  const invoiceMonth = watch("invoiceMonth");
 
-  const selectedCard = useMemo(() => {
-    if (!selectedCardId) return;
-
-    return creditCards.find((card) => card.id === selectedCardId);
-  }, [selectedCardId, creditCards]);
+  const selectedCard = useMemo(
+    () => creditCards.find((card) => card.id === selectedCardId),
+    [selectedCardId, creditCards],
+  );
 
   const invoiceOptions = useMemo(() => {
     if (!selectedDate || !selectedCard) return [];
@@ -54,14 +47,34 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
     );
   }, [selectedCard, selectedDate]);
 
-  const handleMonthChange = (value: string) => {
-    const selectedMonth = Number(value);
+  const selectedYear = useMemo(
+    () => invoiceOptions.find((option) => option.value === invoiceMonth)?.year,
+    [invoiceMonth, invoiceOptions],
+  );
 
-    const year = invoiceOptions.find(
-      (option) => option.value === selectedMonth,
-    )?.year;
-    if (!!year) setSelectedYear(year);
-  };
+  // Ensures the selected invoice is valid
+  useEffect(() => {
+    if (!invoiceOptions.some((option) => option.value === invoiceMonth)) {
+      setValue("invoiceMonth", undefined);
+      setValue("invoiceYear", undefined);
+    }
+  }, [invoiceOptions, invoiceMonth, setValue]);
+
+  // Clears the invoiceMonth and invoiceYear when
+  // the card or date are undefined, and selects the first
+  // available invoice when those values change
+  useEffect(() => {
+    if (!selectedDate || !selectedCard) {
+      setValue("invoiceMonth", undefined);
+      setValue("invoiceYear", undefined);
+      return;
+    }
+
+    const fisrtInvoice = invoiceOptions[0];
+    setValue("invoiceMonth", fisrtInvoice?.value);
+    setValue("invoiceYear", fisrtInvoice?.year);
+    clearErrors(["invoiceMonth", "invoiceYear"]);
+  }, [selectedDate, selectedCard, invoiceOptions, setValue, clearErrors]);
 
   return (
     <>
@@ -74,7 +87,7 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
               <FormLabel>Cartão de crédito</FormLabel>
               <Select
                 onValueChange={field.onChange}
-                defaultValue={field.value}
+                value={field.value}
                 disabled={loadingCreditCards}
               >
                 <FormControl>
@@ -106,7 +119,7 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value || "once"}
                   className="flex flex-col space-y-2 md:flex-row md:space-x-3"
                 >
                   <FormItem className="flex items-center space-x-1 space-y-0">
@@ -137,11 +150,8 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
             <FormItem className="flex-grow">
               <FormLabel>Fatura</FormLabel>
               <Select
-                onValueChange={(value) => {
-                  handleMonthChange(value);
-                  field.onChange(Number(value));
-                }}
-                defaultValue={field.value.toString()}
+                onValueChange={(value) => field.onChange(Number(value))}
+                value={field.value ? field.value.toString() : undefined}
                 disabled={!selectedCardId || !selectedDate}
               >
                 <FormControl>
@@ -165,9 +175,25 @@ const CreditCardFields = ({ selectedYear, setSelectedYear }: Props) => {
           )}
         />
 
-        <Card className="mt-auto flex h-10 w-1/4 items-center justify-center">
-          {selectedYear}
-        </Card>
+        <FormField
+          control={control}
+          name="invoiceYear"
+          render={({ field }) => (
+            <FormItem className="mt-auto w-1/4">
+              <FormLabel>Ano</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  disabled
+                  value={selectedYear}
+                  placeholder="Ano"
+                  style={{ opacity: 1 }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <ShouldRender if={selectedInstallmentType === "split"}>
           <FormField

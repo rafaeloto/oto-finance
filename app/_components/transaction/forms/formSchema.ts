@@ -18,30 +18,44 @@ export const formSchemas = {
       cardId: z.string().optional(),
       installmentType: z.enum(["once", "split"]).optional(),
       invoiceMonth: z.number().optional(),
+      invoiceYear: z.number().optional(),
       installments: z.number().max(12, "O máximo de parcelas é 12").optional(),
       date: z.date({ required_error: "A data é obrigatória" }),
     })
     .superRefine((data, ctx) => {
-      // If paymentMethod is 'CREDIT', cardId and invoiceMonth must be required
+      // If paymentMethod is 'CREDIT', cardId, invoiceMonth and invoiceYear are required
       if (data.paymentMethod === TransactionPaymentMethod.CREDIT) {
         if (!data.cardId) {
           ctx.addIssue({
             path: ["cardId"],
-            message: "O cartão de crédito é obrigatório.",
+            message: "O cartão de crédito é obrigatório",
             code: z.ZodIssueCode.custom,
           });
         }
         if (!data.invoiceMonth) {
           ctx.addIssue({
             path: ["invoiceMonth"],
-            message: "A fatura é obrigatória.",
+            message: !data.cardId
+              ? "Selecione um cartão"
+              : "A fatura é obrigatória",
+            code: z.ZodIssueCode.custom,
+          });
+        }
+        if (!data.invoiceYear) {
+          ctx.addIssue({
+            path: ["invoiceYear"],
+            message: !data.cardId
+              ? "Selecione um cartão"
+              : !data.invoiceMonth
+                ? "Selecione uma fatura"
+                : "O ano da fatura é obrigatório",
             code: z.ZodIssueCode.custom,
           });
         }
         if (!data.installmentType) {
           ctx.addIssue({
             path: ["installmentType"],
-            message: "Selecione um tipo de parcelamento.",
+            message: "Selecione um tipo de parcelamento",
             code: z.ZodIssueCode.custom,
           });
         }
@@ -51,7 +65,7 @@ export const formSchemas = {
         ) {
           ctx.addIssue({
             path: ["installments"],
-            message: "Selecione pelo menos duas parcelas.",
+            message: "Selecione pelo menos duas parcelas",
             code: z.ZodIssueCode.custom,
           });
         }
@@ -64,7 +78,7 @@ export const formSchemas = {
       ) {
         ctx.addIssue({
           path: ["accountId"],
-          message: "A conta é obrigatória.",
+          message: "A conta é obrigatória",
           code: z.ZodIssueCode.custom,
         });
       }

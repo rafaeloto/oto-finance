@@ -87,9 +87,6 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
     };
   }, [invoices, transaction]);
 
-  const [selectedYear, setSelectedYear] = useState<number>(
-    defaultInvoice?.year || currentYear,
-  );
   const [upserting, setUpserting] = useState(false);
 
   const defaultValues = {
@@ -102,6 +99,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
     cardId: transaction?.cardId || "",
     installmentType: "once" as InstallmentType,
     invoiceMonth: defaultInvoice?.month || currentMonth,
+    invoiceYear: defaultInvoice?.year || currentYear,
     installments: 2,
     date: transaction?.date ? new Date(transaction?.date) : new Date(),
   };
@@ -137,7 +135,6 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
       try {
         await handleCreditTransaction({
           data,
-          selectedYear,
           transactionId,
         });
 
@@ -155,6 +152,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
       delete data.installmentType;
       delete data.installments;
       delete data.invoiceMonth;
+      delete data.invoiceYear;
 
       await upsertExpenseTransaction({ ...data, id: transactionId });
       onSuccess();
@@ -171,7 +169,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex h-full flex-col"
       >
-        <div className="mb-8 flex-1 space-y-8">
+        <div className="mb-8 flex-1 space-y-8 px-1">
           <FormField
             control={form.control}
             name="name"
@@ -311,10 +309,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
           </ShouldRender>
 
           <ShouldRender if={isCreditCard}>
-            <CreditCardFields
-              selectedYear={selectedYear}
-              setSelectedYear={setSelectedYear}
-            />
+            <CreditCardFields />
           </ShouldRender>
         </div>
 
