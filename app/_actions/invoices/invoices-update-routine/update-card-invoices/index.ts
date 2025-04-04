@@ -3,16 +3,19 @@
 import { db } from "@/app/_lib/prisma";
 import { getImportantDates } from "@/app/_utils/date";
 import { auth } from "@clerk/nextjs/server";
-import { Prisma } from "@prisma/client";
+import { Invoice, Prisma } from "@prisma/client";
+
+type InvoiceKeys = "id" | "month" | "year" | "closingDate" | "dueDate";
 
 type UpdateCardInvoicesProps = {
-  creditCardId: string;
+  openInvoices: Pick<Invoice, InvoiceKeys>[];
   client?: Omit<Prisma.TransactionClient, "$transaction">;
 };
 
-export const updateCardInvoices = async (props: UpdateCardInvoicesProps) => {
-  const { creditCardId, client } = props;
-
+export const updateCardInvoices = async ({
+  openInvoices,
+  client,
+}: UpdateCardInvoicesProps) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -27,20 +30,40 @@ export const updateCardInvoices = async (props: UpdateCardInvoicesProps) => {
     year: currentYear,
   } = getImportantDates(new Date());
 
+  const invoicesToClose = openInvoices.filter((invoice) => {
+    const { closingDate, dueDate } = invoice;
+    let { year, month } = invoice;
+
+    // If closingDate > dueDate, it means the closing happens in the previous month
+    if (closingDate > dueDate) {
+      month -= 1;
+      if (month === 0) {
+        month = 12;
+        year -= 1;
+      }
+    }
+
+    // Verifies if the invoice should be closed
+    return (
+      // Invoice year is in the past
+      year < currentYear ||
+      // Invoice year is current and month is in the past
+      (year === currentYear && month < currentMonth) ||
+      // Invoice year and month are current and closing day is in the past
+      (year === currentYear &&
+        month === currentMonth &&
+        closingDate < currentDay)
+    );
+  });
+
+  const idsToClose = invoicesToClose.map((invoice) => invoice.id);
+
+  if (idsToClose.length === 0) return;
+
   // Close all open invoices that should be closed
   await prismaClient.invoice.updateMany({
     where: {
-      creditCardId,
-      status: "OPEN",
-      OR: [
-        { year: { lt: currentYear } },
-        { year: currentYear, month: { lt: currentMonth } },
-        {
-          year: currentYear,
-          month: currentMonth,
-          closingDate: { lt: currentDay },
-        },
-      ],
+      id: { in: idsToClose },
     },
     data: { status: "CLOSED" },
   });

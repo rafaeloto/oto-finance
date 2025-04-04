@@ -15,7 +15,18 @@ export const updateAllUserInvoices = async () => {
   // Find all user credit cards
   const userCreditCards = await db.creditCard.findMany({
     where: { userId },
-    select: { id: true },
+    select: {
+      invoices: {
+        where: { status: "OPEN" },
+        select: {
+          id: true,
+          month: true,
+          year: true,
+          closingDate: true,
+          dueDate: true,
+        },
+      },
+    },
   });
 
   // Group all operations in a single transaction to ensure atomicity
@@ -24,7 +35,7 @@ export const updateAllUserInvoices = async () => {
       // Iterate through all user credit cards and ensure their invoices are up to date
       for (const card of userCreditCards) {
         await updateCardInvoices({
-          creditCardId: card.id,
+          openInvoices: card.invoices,
           client: prismaClient,
         });
       }
