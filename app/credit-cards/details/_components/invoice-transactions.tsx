@@ -56,9 +56,21 @@ const InvoiceTransactions = ({
                       />
                     </div>
                   </ShouldRender>
-                  <p className="text-sm font-bold md:text-base">
-                    {transaction.name}
-                  </p>
+                  <div className="flex gap-3">
+                    <p className="text-sm font-bold md:text-base">
+                      {transaction.name}
+                    </p>
+                    <ShouldRender
+                      if={
+                        !!transaction.installmentId &&
+                        !!transaction.installmentsTotal
+                      }
+                    >
+                      <p className="mt-auto text-sm text-muted-foreground">
+                        {`${transaction.installmentNumber} / ${transaction.installmentsTotal}`}
+                      </p>
+                    </ShouldRender>
+                  </div>
                 </div>
 
                 <p className="w-10 text-sm text-muted-foreground md:w-20 md:text-base">

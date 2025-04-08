@@ -14,5 +14,6 @@ export const upsertExpenseTransactionSchema = z.object({
   invoiceId: z.string().optional(),
   installmentId: z.string().optional(),
   installmentNumber: z.number().optional(),
+  installmentsTotal: z.number().optional(),
   date: z.date(),
 });

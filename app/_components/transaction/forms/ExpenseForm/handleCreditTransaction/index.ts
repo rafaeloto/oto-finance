@@ -70,6 +70,7 @@ const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
         const installmentAmount = data.amount / installments!;
         const installmentMonth = data.invoiceMonth!;
         const installmentYear = data.invoiceYear!;
+        const installmentsTotal = installments!;
 
         // Removes the invoiceMonth and invoiceYear from the data, because they were already parsed
         delete data.invoiceMonth;
@@ -111,6 +112,7 @@ const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
                 invoiceId: installmentInvoice.id,
                 installmentId,
                 installmentNumber: installment.number,
+                installmentsTotal,
               },
               { revalidate: false, client: prismaClient },
             );

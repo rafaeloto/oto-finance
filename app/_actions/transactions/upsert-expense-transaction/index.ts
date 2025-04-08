@@ -24,6 +24,7 @@ interface UpsertExpenseTransactionParams {
   invoiceId?: string;
   installmentId?: string;
   installmentNumber?: number;
+  installmentsTotal?: number;
   date: Date;
 }
 
