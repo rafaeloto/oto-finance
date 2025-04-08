@@ -9,8 +9,8 @@ import {
 } from "@prisma/client";
 import { upsertExpenseTransactionSchema } from "./schema";
 import { revalidatePath } from "next/cache";
-import { updateSingleAccountBalance } from "../../accounts/update-balance";
-import { updateInvoiceAmount } from "../../invoices/update-amount";
+import { updateSingleAccountBalance } from "@actions/accounts/updateBalance";
+import { updateInvoiceAmount } from "@actions/invoices/updateInvoiceAmount";
 import getTransaction from "@/app/_data/get-transaction";
 
 interface UpsertExpenseTransactionParams {

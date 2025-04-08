@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { updateAllUserInvoices } from "@/app/_actions/invoices/invoices-update-routine/update-all-user-invoces";
+import { updateAllUserInvoices } from "@actions/invoices/invoicesUpdateRoutine/updateAllUserInvoces";
 import { auth } from "@clerk/nextjs/server";
 
 export async function POST() {

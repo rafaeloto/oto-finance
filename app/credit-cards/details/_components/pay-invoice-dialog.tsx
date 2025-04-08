@@ -34,7 +34,7 @@ import { useInvoices } from "@/app/_contexts/InvoicesContext";
 import { DatePicker } from "@/app/_components/ui/date-picker";
 import { Loader2Icon } from "lucide-react";
 import { formatCurrency } from "@/app/_utils/currency";
-import { payInvoice } from "@/app/_actions/invoices/pay-invoice";
+import { payInvoice } from "@actions/invoices/payInvoice";
 import { useState } from "react";
 import {
   AlertDialog,

@@ -31,7 +31,7 @@ import {
   SelectValue,
 } from "@/app/_components/ui/select";
 import { BANK_OPTIONS } from "@/app/_constants/account";
-import { createAccount } from "@/app/_actions/accounts/create-account";
+import { createAccount } from "@actions/accounts/createAccount";
 import { toast } from "sonner";
 import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 import { useState } from "react";

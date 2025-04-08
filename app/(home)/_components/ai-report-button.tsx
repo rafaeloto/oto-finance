@@ -13,7 +13,7 @@ import {
 } from "@/app/_components/ui/dialog";
 import { BotIcon, Loader2Icon } from "lucide-react";
 import { useState } from "react";
-import { generateAiReport } from "../_actions/generate-ai-report";
+import { generateAiReport } from "@actions/outsourced/generateAiReport";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import Markdown from "react-markdown";
 import Link from "next/link";

@@ -2,7 +2,7 @@
 
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { updateCardInvoices } from "../update-card-invoices";
+import { updateCardInvoices } from "@actions/invoices/invoicesUpdateRoutine/updateCardInvoices";
 import { revalidatePath } from "next/cache";
 
 export const updateAllUserInvoices = async () => {

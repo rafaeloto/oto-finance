@@ -7,8 +7,8 @@ import getTransaction from "@/app/_data/get-transaction";
 import {
   updateAccountsBalances,
   updateSingleAccountBalance,
-} from "@/app/_actions/accounts/update-balance";
-import { updateInvoiceAmount } from "@/app/_actions/invoices/update-amount";
+} from "@actions/accounts/updateBalance";
+import { updateInvoiceAmount } from "@actions/invoices/updateInvoiceAmount";
 
 export const deleteTransaction = async ({
   transactionId,

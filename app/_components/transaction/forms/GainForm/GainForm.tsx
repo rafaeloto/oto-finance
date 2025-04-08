@@ -4,7 +4,7 @@ import { formSchemas } from "../formSchema";
 import { useAccounts } from "@/app/_contexts/AccountsContext";
 import { GainTransactionCategory, Transaction } from "@prisma/client";
 import { z } from "zod";
-import { upsertGainTransaction } from "@/app/_actions/transactions/upsert-gain-transaction";
+import { upsertGainTransaction } from "@actions/transactions/upsertGainTransaction";
 import { toast } from "sonner";
 import {
   Form,

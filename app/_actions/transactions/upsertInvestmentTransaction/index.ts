@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { InvestmentTransactionCategory } from "@prisma/client";
 import { upsertInvestmentTransactionSchema } from "./schema";
 import { revalidatePath } from "next/cache";
-import { updateSingleAccountBalance } from "../../accounts/update-balance";
+import { updateSingleAccountBalance } from "@actions/accounts/updateBalance";
 import getTransaction from "@/app/_data/get-transaction";
 
 interface UpsertInvestmentTransactionParams {

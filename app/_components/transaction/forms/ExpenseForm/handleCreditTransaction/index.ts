@@ -2,7 +2,7 @@
 
 import { FormSchema } from "@/app/_components/transaction/forms/ExpenseForm/ExpenseForm";
 import { v4 as uuid } from "uuid";
-import { upsertExpenseTransaction } from "../../../../../_actions/transactions/upsert-expense-transaction";
+import { upsertExpenseTransaction } from "@actions/transactions/upsertExpenseTransaction";
 import { db } from "@/app/_lib/prisma";
 import { findOrOpenInvoice, revalidatePaths } from "./utils";
 import { auth } from "@clerk/nextjs/server";

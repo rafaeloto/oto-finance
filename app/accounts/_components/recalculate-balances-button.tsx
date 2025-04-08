@@ -1,6 +1,6 @@
 "use client";
 
-import { recalculateBalances } from "@/app/_actions/accounts/recalculate-balances";
+import { recalculateBalances } from "@actions/accounts/recalculateBalances";
 import {
   AlertDialog,
   AlertDialogAction,

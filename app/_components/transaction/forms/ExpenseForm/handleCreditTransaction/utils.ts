@@ -1,5 +1,5 @@
 import { Invoice, Prisma } from "@prisma/client";
-import { createInvoice } from "@/app/_actions/credit-cards/create-invoice";
+import { createInvoice } from "@actions/creditCards/createInvoice";
 import { toast } from "sonner";
 import { revalidatePath } from "next/cache";
 import { db } from "@/app/_lib/prisma";

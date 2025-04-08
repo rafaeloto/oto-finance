@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 import {
   updateSingleAccountBalance,
   updateAccountsBalances,
-} from "../../accounts/update-balance";
+} from "@actions/accounts/updateBalance";
 import getTransaction from "@/app/_data/get-transaction";
 
 interface UpsertTransferTransactionParams {

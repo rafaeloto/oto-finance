@@ -6,7 +6,7 @@ import { InvestmentTransactionCategory } from "@prisma/client";
 import {
   updateAccountsBalances,
   updateSingleAccountBalance,
-} from "../../accounts/update-balance";
+} from "@actions/accounts/updateBalance";
 import { getAccounts } from "@/app/_data/get-accounts";
 import { revalidatePath } from "next/cache";
 
