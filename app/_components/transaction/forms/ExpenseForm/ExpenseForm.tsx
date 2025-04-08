@@ -54,6 +54,7 @@ interface ExpenseFormProps {
 const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
   const transactionId = transaction?.id;
   const isUpdate = !!transactionId;
+  const isInstallment = !!transaction?.installmentId;
 
   const {
     accounts,
@@ -243,6 +244,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={isInstallment}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -309,7 +311,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
           </ShouldRender>
 
           <ShouldRender if={isCreditCard}>
-            <CreditCardFields />
+            <CreditCardFields transaction={transaction} />
           </ShouldRender>
         </div>
 

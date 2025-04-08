@@ -1,5 +1,6 @@
 import ShouldRender from "@/app/_components/_atoms/should-render";
 import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
+import TransactionInstallments from "@/app/_components/_molecules/TransactionInstallments";
 import {
   FormControl,
   FormField,
@@ -8,6 +9,7 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
+import { Label } from "@/app/_components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
 import {
   Select,
@@ -18,12 +20,19 @@ import {
 } from "@/app/_components/ui/select";
 import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
 import { getInvoiceOptions } from "@/app/_utils/date";
+import { Transaction } from "@prisma/client";
 import { useEffect, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 
 export type InstallmentType = "once" | "split" | undefined;
 
-const CreditCardFields = () => {
+type CreditCardFieldsProps = {
+  transaction?: Transaction;
+};
+
+const CreditCardFields = ({ transaction }: CreditCardFieldsProps) => {
+  const isInstallment = !!transaction?.installmentId;
+
   const { control, watch, setValue, clearErrors } = useFormContext();
   const { creditCards, loading: loadingCreditCards } = useCreditCards();
 
@@ -88,7 +97,7 @@ const CreditCardFields = () => {
               <Select
                 onValueChange={field.onChange}
                 value={field.value}
-                disabled={loadingCreditCards}
+                disabled={loadingCreditCards || isInstallment}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -111,35 +120,44 @@ const CreditCardFields = () => {
           )}
         />
 
-        <FormField
-          control={control}
-          name="installmentType"
-          render={({ field }) => (
-            <FormItem className="mb-3 w-min md:w-2/5">
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  value={field.value || "once"}
-                  className="flex flex-col gap-3 md:flex-row md:gap-5"
-                >
-                  <FormItem className="flex items-center space-x-1 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="once" />
-                    </FormControl>
-                    <FormLabel>À vista</FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-1 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="split" />
-                    </FormControl>
-                    <FormLabel>Parcelado</FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <ShouldRender if={!isInstallment}>
+          <FormField
+            control={control}
+            name="installmentType"
+            render={({ field }) => (
+              <FormItem className="mb-3 w-min md:w-2/5">
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    value={field.value || "once"}
+                    className="flex flex-col gap-3 md:flex-row md:gap-5"
+                  >
+                    <FormItem className="flex items-center space-x-1 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="once" />
+                      </FormControl>
+                      <FormLabel>À vista</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-1 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="split" />
+                      </FormControl>
+                      <FormLabel>Parcelado</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </ShouldRender>
+
+        <ShouldRender if={isInstallment}>
+          <div className="flex flex-col items-center gap-2">
+            <Label>Parcela</Label>
+            <TransactionInstallments transaction={transaction!} />
+          </div>
+        </ShouldRender>
       </div>
 
       <div className="flex w-full space-x-4">
