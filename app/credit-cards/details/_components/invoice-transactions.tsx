@@ -16,6 +16,7 @@ import { Transaction } from "@prisma/client";
 import Image from "next/image";
 import ShouldRender from "@/app/_components/_atoms/should-render";
 import useIsDesktop from "@/app/_utils/useIsDesktop";
+import TransactionInstallments from "@/app/_components/_molecules/TransactionInstallments";
 
 type InvoiceTransactionsProps = {
   transactions: Transaction[] | undefined;
@@ -60,16 +61,7 @@ const InvoiceTransactions = ({
                     <p className="text-sm font-bold md:text-base">
                       {transaction.name}
                     </p>
-                    <ShouldRender
-                      if={
-                        !!transaction.installmentId &&
-                        !!transaction.installmentsTotal
-                      }
-                    >
-                      <p className="mt-auto text-sm text-muted-foreground">
-                        {`${transaction.installmentNumber} / ${transaction.installmentsTotal}`}
-                      </p>
-                    </ShouldRender>
+                    <TransactionInstallments transaction={transaction} />
                   </div>
                 </div>
 

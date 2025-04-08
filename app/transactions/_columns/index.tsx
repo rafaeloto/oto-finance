@@ -15,6 +15,7 @@ import DeleteTransactionButton from "../_components/delete-transaction-button";
 import { Redo2 } from "lucide-react";
 import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 import AmountText from "@/app/_components/_molecules/AmountText";
+import TransactionInstallments from "@/app/_components/_molecules/TransactionInstallments";
 
 interface Props {
   creditCards: CreditCard[];
@@ -31,6 +32,12 @@ export function getTransactionColumns({
     {
       accessorKey: "name",
       header: "Nome",
+      cell: ({ row: { original: transaction } }) => (
+        <div className="flex gap-3">
+          <p>{transaction.name}</p>
+          <TransactionInstallments transaction={transaction} />
+        </div>
+      ),
     },
     {
       accessorKey: "type",

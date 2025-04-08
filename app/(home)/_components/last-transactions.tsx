@@ -1,5 +1,6 @@
 import EmptyListFeedback from "@/app/_components/_atoms/empty-list-feedback";
 import AmountText from "@/app/_components/_molecules/AmountText";
+import TransactionInstallments from "@/app/_components/_molecules/TransactionInstallments";
 import { Button } from "@/app/_components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/app/_components/ui/card";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
@@ -44,7 +45,10 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
                     />
                   </div>
                   <div>
-                    <p className="text-sm font-bold">{transaction.name}</p>
+                    <div className="flex gap-3">
+                      <p className="text-sm font-bold">{transaction.name}</p>
+                      <TransactionInstallments transaction={transaction} />
+                    </div>
                     <p className="text-sm text-muted-foreground">
                       {new Date(transaction.date).toLocaleDateString("pt-BR", {
                         day: "2-digit",
