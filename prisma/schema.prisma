@@ -78,6 +78,7 @@ model Transaction {
   invoiceId         String?
   installmentId     String?
   installmentNumber Int?
+  installmentsTotal Int?
 
   gainCategory       GainTransactionCategory?
   expenseCategory    ExpenseTransactionCategory?
