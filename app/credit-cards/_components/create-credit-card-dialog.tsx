@@ -39,7 +39,7 @@ import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
 import { useInvoices } from "@/app/_contexts/InvoicesContext";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
-import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
+import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 
 interface CreateCreditCardDialogProps {

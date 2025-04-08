@@ -46,7 +46,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/app/_components/ui/alert-dialog";
-import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
+import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 
 interface PayInvoiceDialogProps {

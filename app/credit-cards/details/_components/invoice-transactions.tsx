@@ -16,7 +16,7 @@ import { Transaction } from "@prisma/client";
 import Image from "next/image";
 import ShouldRender from "@atoms/ShouldRender";
 import useIsDesktop from "@/app/_utils/useIsDesktop";
-import TransactionInstallments from "@/app/_components/_molecules/TransactionInstallments";
+import TransactionInstallments from "@molecules/TransactionInstallments";
 
 type InvoiceTransactionsProps = {
   transactions: Transaction[] | undefined;

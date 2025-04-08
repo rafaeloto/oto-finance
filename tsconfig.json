@@ -20,7 +20,8 @@
     "paths": {
       "@/*": ["./*"],
       "@actions/*": ["./app/_actions/*"],
-      "@atoms/*": ["./app/_components/atoms/*"]
+      "@atoms/*": ["./app/_components/atoms/*"],
+      "@molecules/*": ["./app/_components/molecules/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

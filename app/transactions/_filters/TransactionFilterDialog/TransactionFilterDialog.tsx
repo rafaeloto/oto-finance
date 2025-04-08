@@ -1,6 +1,6 @@
-import InputFilter from "@/app/_components/_molecules/InputFilter";
-import SelectFilter from "@/app/_components/_molecules/SelectFilter";
-import TimeSelect from "@/app/_components/_molecules/TimeSelect";
+import InputFilter from "@molecules/InputFilter";
+import SelectFilter from "@molecules/SelectFilter";
+import TimeSelect from "@molecules/TimeSelect";
 import { Button } from "@/app/_components/ui/button";
 import {
   Dialog,
@@ -20,7 +20,7 @@ import TransactionTypeBadge from "../../_components/type-badge";
 import { TransactionType } from "@prisma/client";
 import { useAccounts } from "@/app/_contexts/AccountsContext";
 import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
-import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
+import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 
 export type TransactionFilters = {
   name: string;

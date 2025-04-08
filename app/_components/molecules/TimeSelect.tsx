@@ -1,6 +1,6 @@
 "use client";
 
-import SelectFilter from "@/app/_components/_molecules/SelectFilter";
+import SelectFilter from "@molecules/SelectFilter";
 import { getValidDateFromParams } from "@/app/_utils/date";
 import { getMonthsOptions, getYearsOptions } from "@/app/_utils/select";
 import type { TransactionFilters } from "@/app/transactions/_filters/TransactionFilterDialog";

@@ -1,5 +1,5 @@
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
-import Navbar from "@/app/_components/_molecules/navbar";
+import Navbar from "@molecules/Navbar";
 import { getCreditCardById } from "@/app/_data/get-credit-card-by-id";
 import { getInvoices } from "@/app/_data/get-invoices";
 import { getTransactions } from "@/app/_data/get-transactions";

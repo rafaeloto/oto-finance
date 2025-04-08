@@ -42,7 +42,7 @@ import { getImportantDates } from "@/app/_utils/date";
 import CreditCardFields from "./CreditCardFields";
 import { InstallmentType } from "./CreditCardFields/CreditCardFields";
 import { Loader2Icon } from "lucide-react";
-import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
+import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 
 export type FormSchema = z.infer<typeof formSchemas.expense>;
 

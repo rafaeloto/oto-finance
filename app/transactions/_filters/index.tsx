@@ -6,12 +6,12 @@ import {
 } from "@/app/_constants/transaction";
 import TransactionTypeBadge from "../_components/type-badge";
 import { TransactionType } from "@prisma/client";
-import SelectFilter from "@/app/_components/_molecules/SelectFilter";
+import SelectFilter from "@molecules/SelectFilter";
 import { useAccounts } from "@/app/_contexts/AccountsContext";
 import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
-import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
-import InputFilter from "@/app/_components/_molecules/InputFilter";
-import TimeSelect from "@/app/_components/_molecules/TimeSelect";
+import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
+import InputFilter from "@molecules/InputFilter";
+import TimeSelect from "@molecules/TimeSelect";
 import { Button } from "@/app/_components/ui/button";
 import { FilterIcon } from "lucide-react";
 import TransactionFilterDialog from "./TransactionFilterDialog";

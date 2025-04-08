@@ -13,9 +13,9 @@ import {
 import EditTransactionButton from "../_components/edit-transaction-button";
 import DeleteTransactionButton from "../_components/delete-transaction-button";
 import { Redo2 } from "lucide-react";
-import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
-import AmountText from "@/app/_components/_molecules/AmountText";
-import TransactionInstallments from "@/app/_components/_molecules/TransactionInstallments";
+import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
+import AmountText from "@molecules/AmountText";
+import TransactionInstallments from "@molecules/TransactionInstallments";
 
 interface Props {
   creditCards: CreditCard[];

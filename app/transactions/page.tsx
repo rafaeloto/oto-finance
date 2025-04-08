@@ -1,5 +1,5 @@
 import AddTransactionButton from "../_components/transaction/add-transaction-button";
-import Navbar from "../_components/_molecules/navbar";
+import Navbar from "@molecules/Navbar";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ScrollArea } from "../_components/ui/scroll-area";

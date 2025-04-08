@@ -1,6 +1,6 @@
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
-import AmountText from "@/app/_components/_molecules/AmountText";
-import TransactionInstallments from "@/app/_components/_molecules/TransactionInstallments";
+import AmountText from "@molecules/AmountText";
+import TransactionInstallments from "@molecules/TransactionInstallments";
 import { Button } from "@/app/_components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/app/_components/ui/card";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";

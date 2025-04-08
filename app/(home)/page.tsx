@@ -1,9 +1,9 @@
 // import { auth, clerkClient } from "@clerk/nextjs/server";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import Navbar from "../_components/_molecules/navbar";
+import Navbar from "@molecules/Navbar";
 import SummaryCards from "./_components/summary-cards";
-import TimeSelect from "../_components/_molecules/TimeSelect";
+import TimeSelect from "@molecules/TimeSelect";
 import TransactionsPieChart from "./_components/transactions-pie-chart";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";

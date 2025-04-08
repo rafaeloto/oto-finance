@@ -1,6 +1,6 @@
 import ShouldRender from "@atoms/ShouldRender";
-import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
-import TransactionInstallments from "@/app/_components/_molecules/TransactionInstallments";
+import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
+import TransactionInstallments from "@molecules/TransactionInstallments";
 import {
   FormControl,
   FormField,

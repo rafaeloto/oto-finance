@@ -1,5 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
-import Navbar from "../_components/_molecules/navbar";
+import Navbar from "@molecules/Navbar";
 import { ScrollArea } from "../_components/ui/scroll-area";
 import AddCreditCardButton from "./_components/add-credit-card-button";
 import { redirect } from "next/navigation";

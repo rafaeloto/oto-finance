@@ -27,7 +27,7 @@ import { DialogClose, DialogFooter } from "../../../ui/dialog";
 import { Button } from "../../../ui/button";
 import { TRANSFER_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction";
 import { Transaction, TransferTransactionCategory } from "@prisma/client";
-import { ImageAndLabelOption } from "../../../_molecules/SelectOptions";
+import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
 
