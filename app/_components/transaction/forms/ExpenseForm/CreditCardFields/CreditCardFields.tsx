@@ -120,7 +120,7 @@ const CreditCardFields = () => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   value={field.value || "once"}
-                  className="flex flex-col space-y-2 md:flex-row md:space-x-3"
+                  className="flex flex-col gap-3 md:flex-row md:gap-5"
                 >
                   <FormItem className="flex items-center space-x-1 space-y-0">
                     <FormControl>
