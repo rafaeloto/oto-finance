@@ -8,7 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import UpsertTransactionDialog from "./upsert-transaction-dialog";
+import UpsertTransactionDialog from "@components/transaction/UpsertTransactionDialog";
 import { ArrowDownUpIcon } from "lucide-react";
 import useIsDesktop from "@/app/_utils/useIsDesktop";
 

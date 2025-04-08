@@ -1,4 +1,4 @@
-import AddTransactionButton from "../_components/transaction/add-transaction-button";
+import AddTransactionButton from "@components/transaction/AddTransactionButton";
 import Navbar from "@molecules/Navbar";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";

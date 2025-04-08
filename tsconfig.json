@@ -20,6 +20,7 @@
     "paths": {
       "@/*": ["./*"],
       "@actions/*": ["./app/_actions/*"],
+      "@components/*": ["./app/_components/*"],
       "@atoms/*": ["./app/_components/atoms/*"],
       "@molecules/*": ["./app/_components/molecules/*"]
     }

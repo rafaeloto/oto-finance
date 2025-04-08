@@ -40,7 +40,7 @@ import { useMemo, useState } from "react";
 import handleCreditTransaction from "./handleCreditTransaction";
 import { getImportantDates } from "@/app/_utils/date";
 import CreditCardFields from "./CreditCardFields";
-import { InstallmentType } from "./CreditCardFields/CreditCardFields";
+import type { InstallmentType } from "./CreditCardFields";
 import { Loader2Icon } from "lucide-react";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 

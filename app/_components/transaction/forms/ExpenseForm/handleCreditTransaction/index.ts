@@ -1,6 +1,6 @@
 "use server";
 
-import { FormSchema } from "@/app/_components/transaction/forms/ExpenseForm/ExpenseForm";
+import type { FormSchema } from "@components/transaction/forms/ExpenseForm";
 import { v4 as uuid } from "uuid";
 import { upsertExpenseTransaction } from "@actions/transactions/upsertExpenseTransaction";
 import { db } from "@/app/_lib/prisma";
