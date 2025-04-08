@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ScrollArea } from "../_components/ui/scroll-area";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
-import EmptyListFeedback from "../_components/_atoms/empty-list-feedback";
+import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { getCreditCards } from "../_data/get-credit-cards";
 import { TransactionsTable } from "./_table";
 import { getAccounts } from "../_data/get-accounts";

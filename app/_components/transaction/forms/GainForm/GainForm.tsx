@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "../../../ui/form";
 import { Input } from "../../../ui/input";
-import { MoneyInput } from "../../../_atoms/money-input";
+import { MoneyInput } from "@atoms/MoneyInput";
 import {
   Select,
   SelectContent,

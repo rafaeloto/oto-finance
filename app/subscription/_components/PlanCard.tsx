@@ -2,7 +2,7 @@ import { Badge } from "@/app/_components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
 import { CheckIcon, XIcon } from "lucide-react";
 import AquirePlanButton from "./aquire-plan-button";
-import ShouldRender from "@/app/_components/_atoms/should-render";
+import ShouldRender from "@atoms/ShouldRender";
 
 type PlanCardProps = {
   isActive: boolean;

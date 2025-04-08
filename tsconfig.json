@@ -19,7 +19,8 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@actions/*": ["./app/_actions/*"]
+      "@actions/*": ["./app/_actions/*"],
+      "@atoms/*": ["./app/_components/atoms/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

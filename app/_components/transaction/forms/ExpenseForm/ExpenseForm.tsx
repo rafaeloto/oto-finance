@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "../../../ui/form";
 import { Input } from "../../../ui/input";
-import { MoneyInput } from "../../../_atoms/money-input";
+import { MoneyInput } from "@atoms/MoneyInput";
 import {
   Select,
   SelectContent,
@@ -35,7 +35,7 @@ import {
 import { DatePicker } from "../../../ui/date-picker";
 import { DialogClose, DialogFooter } from "../../../ui/dialog";
 import { Button } from "../../../ui/button";
-import ShouldRender from "../../../_atoms/should-render";
+import ShouldRender from "@atoms/ShouldRender";
 import { useMemo, useState } from "react";
 import handleCreditTransaction from "./handleCreditTransaction";
 import { getImportantDates } from "@/app/_utils/date";

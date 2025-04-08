@@ -1,4 +1,4 @@
-import EmptyListFeedback from "@/app/_components/_atoms/empty-list-feedback";
+import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import AmountText from "@/app/_components/_molecules/AmountText";
 import TransactionInstallments from "@/app/_components/_molecules/TransactionInstallments";
 import { Button } from "@/app/_components/ui/button";

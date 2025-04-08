@@ -5,7 +5,7 @@ import AddAccountButton from "./_components/add-account-button";
 import RecalculateBalancesButton from "./_components/recalculate-balances-button";
 import { redirect } from "next/navigation";
 import AccountCard from "./_components/account-card";
-import EmptyListFeedback from "../_components/_atoms/empty-list-feedback";
+import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { getAccounts } from "../_data/get-accounts";
 
 const Accounts = async () => {

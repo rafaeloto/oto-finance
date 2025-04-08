@@ -1,5 +1,5 @@
 import { Transaction } from "@prisma/client";
-import ShouldRender from "../_atoms/should-render";
+import ShouldRender from "@atoms/ShouldRender";
 
 type TransactionInstallmentsProps = {
   transaction: Transaction;

@@ -1,4 +1,4 @@
-import EmptyListFeedback from "@/app/_components/_atoms/empty-list-feedback";
+import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import Navbar from "@/app/_components/_molecules/navbar";
 import { getCreditCardById } from "@/app/_data/get-credit-card-by-id";
 import { getInvoices } from "@/app/_data/get-invoices";

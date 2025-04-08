@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Loader2Icon } from "lucide-react";
-import ShouldRender from "../_atoms/should-render";
+import ShouldRender from "@atoms/ShouldRender";
 
 function FloatingPaths({ position }: { position: number }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({

@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/app/_components/ui/form";
-import { MoneyInput } from "@/app/_components/_atoms/money-input";
+import { MoneyInput } from "@atoms/MoneyInput";
 import {
   Select,
   SelectContent,

@@ -1,6 +1,6 @@
 "use client";
 
-import ShouldRender from "@/app/_components/_atoms/should-render";
+import ShouldRender from "@atoms/ShouldRender";
 import { Button } from "@/app/_components/ui/button";
 import { EyeIcon } from "lucide-react";
 import { useState } from "react";

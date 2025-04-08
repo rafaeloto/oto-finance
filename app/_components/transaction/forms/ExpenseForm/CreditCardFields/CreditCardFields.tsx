@@ -1,4 +1,4 @@
-import ShouldRender from "@/app/_components/_atoms/should-render";
+import ShouldRender from "@atoms/ShouldRender";
 import { ImageAndLabelOption } from "@/app/_components/_molecules/SelectOptions";
 import TransactionInstallments from "@/app/_components/_molecules/TransactionInstallments";
 import {

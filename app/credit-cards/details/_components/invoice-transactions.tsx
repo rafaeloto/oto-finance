@@ -1,6 +1,6 @@
 "use client";
 
-import EmptyListFeedback from "@/app/_components/_atoms/empty-list-feedback";
+import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import EditTransactionButton from "@/app/transactions/_components/edit-transacti
 import DeleteTransactionButton from "@/app/transactions/_components/delete-transaction-button";
 import { Transaction } from "@prisma/client";
 import Image from "next/image";
-import ShouldRender from "@/app/_components/_atoms/should-render";
+import ShouldRender from "@atoms/ShouldRender";
 import useIsDesktop from "@/app/_utils/useIsDesktop";
 import TransactionInstallments from "@/app/_components/_molecules/TransactionInstallments";
 

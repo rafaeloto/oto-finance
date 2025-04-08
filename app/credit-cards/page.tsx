@@ -4,7 +4,7 @@ import { ScrollArea } from "../_components/ui/scroll-area";
 import AddCreditCardButton from "./_components/add-credit-card-button";
 import { redirect } from "next/navigation";
 import CreditCardUnity from "./_components/credit-card-unity";
-import EmptyListFeedback from "../_components/_atoms/empty-list-feedback";
+import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { getCreditCards } from "../_data/get-credit-cards";
 import { getUser } from "../_data/get-user";
 
