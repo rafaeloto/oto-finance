@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@shadcn/button";
 import { LandmarkIcon } from "lucide-react";
-import CreateAccountDialog from "./create-account-dialog";
+import CreateAccountDialog from "./CreateAccountDialog";
 
 const AddAccountButton = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);

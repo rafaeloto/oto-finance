@@ -1,10 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import Navbar from "@molecules/Navbar";
 import { ScrollArea } from "@shadcn/scroll-area";
-import AddAccountButton from "./_components/add-account-button";
-import RecalculateBalancesButton from "./_components/recalculate-balances-button";
+import AddAccountButton from "./_components/AddAccountButton";
+import RecalculateBalancesButton from "./_components/RecalculateBalancesButton";
 import { redirect } from "next/navigation";
-import AccountCard from "./_components/account-card";
+import AccountCard from "./_components/AccountCard";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { getAccounts } from "@data/getAccounts";
 
