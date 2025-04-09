@@ -24,7 +24,8 @@
       "@atoms/*": ["./app/_components/atoms/*"],
       "@molecules/*": ["./app/_components/molecules/*"],
       "@shadcn/*": ["./app/_components/ui/*"],
-      "@constants/*": ["./app/_constants/*"]
+      "@constants/*": ["./app/_constants/*"],
+      "@contexts/*": ["./app/_contexts/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

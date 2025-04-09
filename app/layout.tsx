@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Mulish } from "next/font/google";
 import "./globals.css";
-import Providers from "./_contexts/Providers";
+import Providers from "@contexts/Providers";
 import { Toaster } from "sonner";
 import InvoiceUpdater from "@molecules/InvoiceUpdater";
 

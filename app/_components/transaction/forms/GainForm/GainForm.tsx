@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchemas } from "../formSchema";
-import { useAccounts } from "@/app/_contexts/AccountsContext";
+import { useAccounts } from "@contexts/AccountsContext";
 import { GainTransactionCategory, Transaction } from "@prisma/client";
 import { z } from "zod";
 import { upsertGainTransaction } from "@actions/transactions/upsertGainTransaction";

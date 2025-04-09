@@ -35,8 +35,8 @@ import {
 } from "@constants/creditCard";
 import { createCreditCard } from "@actions/creditCards/createCreditCard";
 import { toast } from "sonner";
-import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
-import { useInvoices } from "@/app/_contexts/InvoicesContext";
+import { useCreditCards } from "@contexts/CreditCardsContext";
+import { useInvoices } from "@contexts/InvoicesContext";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";

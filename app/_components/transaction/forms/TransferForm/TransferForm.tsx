@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchemas } from "../formSchema";
-import { useAccounts } from "@/app/_contexts/AccountsContext";
+import { useAccounts } from "@contexts/AccountsContext";
 import { z } from "zod";
 import { upsertTransferTransaction } from "@actions/transactions/upsertTransferTransaction";
 import { toast } from "sonner";

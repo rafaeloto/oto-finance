@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shadcn/select";
-import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
+import { useCreditCards } from "@contexts/CreditCardsContext";
 import { getInvoiceOptions } from "@/app/_utils/date";
 import { Transaction } from "@prisma/client";
 import { useEffect, useMemo } from "react";

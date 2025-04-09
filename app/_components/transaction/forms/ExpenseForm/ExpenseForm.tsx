@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchemas } from "../formSchema";
-import { useAccounts } from "@/app/_contexts/AccountsContext";
-import { useInvoices } from "@/app/_contexts/InvoicesContext";
+import { useAccounts } from "@contexts/AccountsContext";
+import { useInvoices } from "@contexts/InvoicesContext";
 import {
   ExpenseTransactionCategory,
   Transaction,

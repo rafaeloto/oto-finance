@@ -7,8 +7,8 @@ import {
 import TransactionTypeBadge from "../_components/type-badge";
 import { TransactionType } from "@prisma/client";
 import SelectFilter from "@molecules/SelectFilter";
-import { useAccounts } from "@/app/_contexts/AccountsContext";
-import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
+import { useAccounts } from "@contexts/AccountsContext";
+import { useCreditCards } from "@contexts/CreditCardsContext";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import InputFilter from "@molecules/InputFilter";
 import TimeSelect from "@molecules/TimeSelect";
