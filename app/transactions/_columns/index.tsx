@@ -2,7 +2,7 @@
 
 import { Account, CreditCard, Invoice, Transaction } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import TransactionTypeBadge from "../_components/type-badge";
+import TransactionTypeBadge from "../_components/TransactionTypeBadge";
 import {
   TRANSACTION_PAYMENT_METHOD_LABELS,
   GAIN_TRANSACTION_CATEGORY_LABELS,
@@ -10,8 +10,8 @@ import {
   INVESTMENT_TRANSACTION_CATEGORY_LABELS,
   TRANSFER_TRANSACTION_CATEGORY_LABELS,
 } from "@constants/transaction";
-import EditTransactionButton from "../_components/edit-transaction-button";
-import DeleteTransactionButton from "../_components/delete-transaction-button";
+import EditTransactionButton from "@components/transaction/EditTransactionButton";
+import DeleteTransactionButton from "@components/transaction/DeleteTransactionButton";
 import { Redo2 } from "lucide-react";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import AmountText from "@molecules/AmountText";

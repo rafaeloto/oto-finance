@@ -16,7 +16,7 @@ import {
 } from "@constants/transaction";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import TransactionTypeBadge from "../../_components/type-badge";
+import TransactionTypeBadge from "../../_components/TransactionTypeBadge";
 import { TransactionType } from "@prisma/client";
 import { useAccounts } from "@contexts/AccountsContext";
 import { useCreditCards } from "@contexts/CreditCardsContext";

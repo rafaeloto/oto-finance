@@ -4,7 +4,7 @@ import {
   TRANSACTION_PAYMENT_METHOD_OPTIONS,
   TRANSACTION_TYPE_OPTIONS,
 } from "@constants/transaction";
-import TransactionTypeBadge from "../_components/type-badge";
+import TransactionTypeBadge from "../_components/TransactionTypeBadge";
 import { TransactionType } from "@prisma/client";
 import SelectFilter from "@molecules/SelectFilter";
 import { useAccounts } from "@contexts/AccountsContext";
