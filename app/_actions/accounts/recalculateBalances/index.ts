@@ -7,7 +7,7 @@ import {
   updateAccountsBalances,
   updateSingleAccountBalance,
 } from "@actions/accounts/updateBalance";
-import { getAccounts } from "@/app/_data/get-accounts";
+import { getAccounts } from "@data/getAccounts";
 import { revalidatePath } from "next/cache";
 
 export const recalculateBalances = async () => {

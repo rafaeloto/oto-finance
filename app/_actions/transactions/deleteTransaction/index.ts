@@ -3,7 +3,7 @@
 import { db } from "@/app/_lib/prisma";
 import { DeleteTransactionSchema } from "./schema";
 import { revalidatePath } from "next/cache";
-import getTransaction from "@/app/_data/get-transaction";
+import getTransaction from "@data/getTransaction";
 import {
   updateAccountsBalances,
   updateSingleAccountBalance,

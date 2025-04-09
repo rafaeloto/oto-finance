@@ -1,10 +1,10 @@
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import Navbar from "@molecules/Navbar";
-import { getCreditCardById } from "@/app/_data/get-credit-card-by-id";
-import { getInvoices } from "@/app/_data/get-invoices";
-import { getTransactions } from "@/app/_data/get-transactions";
+import { getCreditCardById } from "@data/getCreditCardById";
+import { getInvoices } from "@data/getInvoices";
+import { getTransactions } from "@data/getTransactions";
 import InvoiceDetails from "./_components/invoice-details";
-import { getUser } from "@/app/_data/get-user";
+import { getUser } from "@data/getUser";
 
 interface CardDetailsProps {
   searchParams: {

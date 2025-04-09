@@ -6,7 +6,7 @@ import RecalculateBalancesButton from "./_components/recalculate-balances-button
 import { redirect } from "next/navigation";
 import AccountCard from "./_components/account-card";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
-import { getAccounts } from "../_data/get-accounts";
+import { getAccounts } from "@data/getAccounts";
 
 const Accounts = async () => {
   const { userId } = await auth();

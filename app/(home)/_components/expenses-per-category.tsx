@@ -3,7 +3,7 @@ import { CardContent, CardHeader, CardTitle } from "@shadcn/card";
 import { Progress } from "@shadcn/progress";
 import { ScrollArea } from "@shadcn/scroll-area";
 import { EXPENSE_TRANSACTION_CATEGORY_LABELS } from "@constants/transaction";
-import { TotalExpensePerCategory } from "@/app/_data/get-dashboard/types";
+import type { TotalExpensePerCategory } from "@data/getDashboard/types";
 
 interface ExpensesPerCategoryProps {
   expensesPerCategory: TotalExpensePerCategory[];

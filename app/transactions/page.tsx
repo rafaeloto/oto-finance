@@ -3,17 +3,17 @@ import Navbar from "@molecules/Navbar";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ScrollArea } from "@shadcn/scroll-area";
-import { canUserAddTransaction } from "../_data/can-user-add-transaction";
+import { canUserAddTransaction } from "@data/canUserAddTransaction";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
-import { getCreditCards } from "../_data/get-credit-cards";
+import { getCreditCards } from "@data/getCreditCards";
 import { TransactionsTable } from "./_table";
-import { getAccounts } from "../_data/get-accounts";
-import { getInvoices } from "../_data/get-invoices";
+import { getAccounts } from "@data/getAccounts";
+import { getInvoices } from "@data/getInvoices";
 import TransactionFilters from "./_filters";
 import {
   getTransactions,
   type getTransactionsParams,
-} from "../_data/get-transactions";
+} from "@data/getTransactions";
 import { validateSearchParams } from "./_filters/validateFilters";
 
 type PageProps = {

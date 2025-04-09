@@ -9,7 +9,7 @@ import {
   updateSingleAccountBalance,
   updateAccountsBalances,
 } from "@actions/accounts/updateBalance";
-import getTransaction from "@/app/_data/get-transaction";
+import getTransaction from "@data/getTransaction";
 
 interface UpsertTransferTransactionParams {
   id?: string;

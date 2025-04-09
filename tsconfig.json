@@ -25,7 +25,8 @@
       "@molecules/*": ["./app/_components/molecules/*"],
       "@shadcn/*": ["./app/_components/ui/*"],
       "@constants/*": ["./app/_constants/*"],
-      "@contexts/*": ["./app/_contexts/*"]
+      "@contexts/*": ["./app/_contexts/*"],
+      "@data/*": ["./app/_data/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

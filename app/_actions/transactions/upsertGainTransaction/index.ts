@@ -6,7 +6,7 @@ import { GainTransactionCategory } from "@prisma/client";
 import { upsertGainTransactionSchema } from "./schema";
 import { revalidatePath } from "next/cache";
 import { updateSingleAccountBalance } from "@actions/accounts/updateBalance";
-import getTransaction from "@/app/_data/get-transaction";
+import getTransaction from "@data/getTransaction";
 
 interface UpsertGainTransactionParams {
   id?: string;

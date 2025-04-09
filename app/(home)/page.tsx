@@ -1,16 +1,16 @@
-// import { auth, clerkClient } from "@clerk/nextjs/server";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Navbar from "@molecules/Navbar";
 import SummaryCards from "./_components/summary-cards";
 import TimeSelect from "@molecules/TimeSelect";
 import TransactionsPieChart from "./_components/transactions-pie-chart";
-import { getDashboard } from "../_data/get-dashboard";
+import { getDashboard } from "@data/getDashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
-import { canUserAddTransaction } from "../_data/can-user-add-transaction";
+import { canUserAddTransaction } from "@data/canUserAddTransaction";
 // import AiReportButton from "./_components/ai-report-button";
 import { getValidDateFromParams } from "../_utils/date";
+// import { getUser } from "@data/getUser";
 
 interface HomeProps {
   searchParams: {
@@ -30,7 +30,7 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
 
   const dashboard = await getDashboard(validMonth, validYear);
   const userCanAddTransaction = await canUserAddTransaction();
-  // const user = await clerkClient().users.getUser(userId);
+  // const user = await getUser()
 
   return (
     <>

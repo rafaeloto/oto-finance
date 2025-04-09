@@ -5,8 +5,8 @@ import AddCreditCardButton from "./_components/add-credit-card-button";
 import { redirect } from "next/navigation";
 import CreditCardUnity from "./_components/credit-card-unity";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
-import { getCreditCards } from "../_data/get-credit-cards";
-import { getUser } from "../_data/get-user";
+import { getCreditCards } from "@data/getCreditCards";
+import { getUser } from "@data/getUser";
 
 const CreditCards = async () => {
   const { userId } = await auth();

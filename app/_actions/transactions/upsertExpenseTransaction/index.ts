@@ -11,7 +11,7 @@ import { upsertExpenseTransactionSchema } from "./schema";
 import { revalidatePath } from "next/cache";
 import { updateSingleAccountBalance } from "@actions/accounts/updateBalance";
 import { updateInvoiceAmount } from "@actions/invoices/updateInvoiceAmount";
-import getTransaction from "@/app/_data/get-transaction";
+import getTransaction from "@data/getTransaction";
 
 interface UpsertExpenseTransactionParams {
   id?: string;
