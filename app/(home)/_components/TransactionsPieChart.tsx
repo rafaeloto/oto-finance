@@ -1,7 +1,6 @@
 "use client";
 
 import { Pie, PieChart } from "recharts";
-
 import { Card, CardContent } from "@shadcn/card";
 import {
   ChartConfig,
@@ -32,14 +31,14 @@ const chartConfig = {
 
 interface TransactionsPieChartProps {
   typesPercentage: TransactionPercentagePerType;
-  investmentsTotal: number;
+  investmentsEvolution: number;
   gainsTotal: number;
   expensesTotal: number;
 }
 
 const TransactionsPieChart = ({
   typesPercentage,
-  investmentsTotal,
+  investmentsEvolution,
   gainsTotal,
   expensesTotal,
 }: TransactionsPieChartProps) => {
@@ -56,7 +55,7 @@ const TransactionsPieChart = ({
     },
     {
       type: TransactionType.INVESTMENT,
-      amount: investmentsTotal,
+      amount: Math.abs(investmentsEvolution),
       fill: "#FFFFFF",
     },
   ];
@@ -64,14 +63,14 @@ const TransactionsPieChart = ({
   const hasNoData = chartData.every((item) => item.amount === 0);
 
   return (
-    <Card className="flex flex-col px-6">
+    <Card className="flex h-full flex-col px-6">
       {hasNoData ? (
         <EmptyListFeedback message="Nenhuma transação registrada" />
       ) : (
         <CardContent className="flex-1 pb-0">
           <ChartContainer
             config={chartConfig}
-            className="mx-auto aspect-square max-h-[230px]"
+            className="mx-auto aspect-square max-h-[50%]"
           >
             <PieChart>
               <ChartTooltip

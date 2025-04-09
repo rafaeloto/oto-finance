@@ -27,15 +27,6 @@ export const getDashboard = async (month: string, year: string) => {
     )?._sum?.amount,
   );
 
-  const investmentsTotal = Number(
-    (
-      await db.transaction.aggregate({
-        where: { ...where, type: "INVESTMENT" },
-        _sum: { amount: true },
-      })
-    )?._sum?.amount,
-  );
-
   const expensesTotal = Number(
     (
       await db.transaction.aggregate({
@@ -45,7 +36,63 @@ export const getDashboard = async (month: string, year: string) => {
     )?._sum?.amount,
   );
 
-  const balance = gainsTotal - investmentsTotal - expensesTotal;
+  const [positiveReturn, negativeReturn] = await Promise.all([
+    db.transaction.aggregate({
+      where: {
+        ...where,
+        type: "INVESTMENT",
+        investmentCategory: "INVESTMENT_POSITIVE_RETURN",
+      },
+      _sum: { amount: true },
+    }),
+    db.transaction.aggregate({
+      where: {
+        ...where,
+        type: "INVESTMENT",
+        investmentCategory: "INVESTMENT_NEGATIVE_RETURN",
+      },
+      _sum: { amount: true },
+    }),
+  ]);
+
+  const investmentsResult =
+    Number(positiveReturn?._sum?.amount || 0) -
+    Number(negativeReturn?._sum?.amount || 0);
+
+  const [deposit, withdraw] = await Promise.all([
+    db.transaction.aggregate({
+      where: {
+        ...where,
+        type: "TRANSFER",
+        transferCategory: "INVESTMENT_DEPOSIT",
+      },
+      _sum: { amount: true },
+    }),
+    db.transaction.aggregate({
+      where: {
+        ...where,
+        type: "TRANSFER",
+        transferCategory: "INVESTMENT_WITHDRAW",
+      },
+      _sum: { amount: true },
+    }),
+  ]);
+
+  const investmentsBalance =
+    Number(deposit?._sum?.amount || 0) - Number(withdraw?._sum?.amount || 0);
+
+  const investmentsEvolution = investmentsBalance + investmentsResult;
+
+  const result = gainsTotal + investmentsResult - expensesTotal;
+
+  const totalBalance = Number(
+    (
+      await db.account.aggregate({
+        where: { userId },
+        _sum: { balance: true },
+      })
+    )?._sum?.balance,
+  );
 
   const transactionsTotal = Number(
     (
@@ -64,7 +111,7 @@ export const getDashboard = async (month: string, year: string) => {
       ? Math.round((expensesTotal / transactionsTotal) * 100)
       : 0,
     [TransactionType.INVESTMENT]: transactionsTotal
-      ? Math.round((investmentsTotal / transactionsTotal) * 100)
+      ? Math.round((investmentsEvolution / transactionsTotal) * 100)
       : 0,
   };
 
@@ -97,9 +144,11 @@ export const getDashboard = async (month: string, year: string) => {
 
   return {
     gainsTotal,
-    investmentsTotal,
     expensesTotal,
-    balance,
+    investmentsResult,
+    investmentsEvolution,
+    result,
+    totalBalance,
     typesPercentage,
     totalExpensePerCategory,
     lastTransactions: JSON.parse(JSON.stringify(lastTransactions)),

@@ -10,6 +10,7 @@ import LastTransactions from "./_components/LastTransactions";
 import { canUserAddTransaction } from "@data/canUserAddTransaction";
 // import AiReportButton from "./_components/AiReportButton";
 import { getValidDateFromParams } from "@utils/date";
+import AddTransactionButton from "@components/transaction/AddTransactionButton";
 // import { getUser } from "@data/getUser";
 
 interface HomeProps {
@@ -39,6 +40,7 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <div className="flex gap-3">
+            <TimeSelect />
             {/* TODO: Add this back once the AI report feature is fixed */}
             {/* <AiReportButton
               month={validMonth}
@@ -47,14 +49,16 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
                 user?.publicMetadata.subscriptionPlan === "premium"
               }
             /> */}
-            <TimeSelect />
+            <AddTransactionButton
+              userCanAddTransaction={userCanAddTransaction}
+            />
           </div>
         </div>
         <div className="grid flex-1 grid-cols-[2fr,1fr] gap-6 overflow-hidden">
           <div className="flex flex-col gap-6 overflow-hidden">
             <SummaryCards
               {...dashboard}
-              userCanAddTransaction={userCanAddTransaction}
+              period={`${validMonth}/${validYear.slice(-2)}`}
             />
             <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
               <TransactionsPieChart {...dashboard} />
