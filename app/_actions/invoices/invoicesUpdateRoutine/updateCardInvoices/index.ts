@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/app/_lib/prisma";
-import { getImportantDates } from "@/app/_utils/date";
+import { getImportantDates } from "@utils/date";
 import { auth } from "@clerk/nextjs/server";
 import { Invoice, Prisma } from "@prisma/client";
 

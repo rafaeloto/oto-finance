@@ -9,7 +9,7 @@ import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
 import { canUserAddTransaction } from "@data/canUserAddTransaction";
 // import AiReportButton from "./_components/ai-report-button";
-import { getValidDateFromParams } from "../_utils/date";
+import { getValidDateFromParams } from "@utils/date";
 // import { getUser } from "@data/getUser";
 
 interface HomeProps {

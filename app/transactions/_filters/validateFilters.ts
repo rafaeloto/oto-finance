@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { TransactionPaymentMethod, TransactionType } from "@prisma/client";
-import { getValidDateFromParams } from "@/app/_utils/date";
+import { getValidDateFromParams } from "@utils/date";
 
 const searchParamsSchema = z.object({
   name: z.string().optional(),

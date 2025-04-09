@@ -38,7 +38,7 @@ import { Button } from "@shadcn/button";
 import ShouldRender from "@atoms/ShouldRender";
 import { useMemo, useState } from "react";
 import handleCreditTransaction from "./handleCreditTransaction";
-import { getImportantDates } from "@/app/_utils/date";
+import { getImportantDates } from "@utils/date";
 import CreditCardFields from "./CreditCardFields";
 import type { InstallmentType } from "./CreditCardFields";
 import { Loader2Icon } from "lucide-react";

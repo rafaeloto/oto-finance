@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@shadcn/dropdown-menu";
 import { Menu } from "lucide-react";
-import useIsDesktop from "@/app/_utils/useIsDesktop";
+import useIsDesktop from "@utils/useIsDesktop";
 
 const Navbar = () => {
   const pathname = usePathname();

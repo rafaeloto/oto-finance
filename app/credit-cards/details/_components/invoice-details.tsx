@@ -16,7 +16,7 @@ import { useCallback, useMemo, useState } from "react";
 import { ScrollArea } from "@shadcn/scroll-area";
 import { Label } from "@shadcn/label";
 import { Switch } from "@shadcn/switch";
-import useIsDesktop from "@/app/_utils/useIsDesktop";
+import useIsDesktop from "@utils/useIsDesktop";
 
 type InvoiceDetailsProps = {
   creditCard: CreditCard;

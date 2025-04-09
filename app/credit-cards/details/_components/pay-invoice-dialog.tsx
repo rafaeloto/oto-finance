@@ -33,7 +33,7 @@ import { useAccounts } from "@contexts/AccountsContext";
 import { useInvoices } from "@contexts/InvoicesContext";
 import { DatePicker } from "@shadcn/date-picker";
 import { Loader2Icon } from "lucide-react";
-import { formatCurrency } from "@/app/_utils/currency";
+import { formatCurrency } from "@utils/currency";
 import { payInvoice } from "@actions/invoices/payInvoice";
 import { useState } from "react";
 import {

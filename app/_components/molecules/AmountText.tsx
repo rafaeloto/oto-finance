@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/app/_utils/currency";
+import { formatCurrency } from "@utils/currency";
 import { Transaction, TransactionType } from "@prisma/client";
 
 const getColorAndPrefix = (transaction: Transaction) => {
