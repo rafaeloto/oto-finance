@@ -1,4 +1,4 @@
-import { leagueSpartan } from "@/app/_styles/fonts";
+import { leagueSpartan } from "@styles/fonts";
 import Image from "next/image";
 import { Button } from "@shadcn/button";
 import { LogInIcon } from "lucide-react";

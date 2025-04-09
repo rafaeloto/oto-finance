@@ -1,6 +1,6 @@
 "use client";
 
-import { leagueSpartan } from "@/app/_styles/fonts";
+import { leagueSpartan } from "@styles/fonts";
 import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
