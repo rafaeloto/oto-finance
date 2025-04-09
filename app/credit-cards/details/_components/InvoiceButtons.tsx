@@ -4,7 +4,7 @@ import ShouldRender from "@atoms/ShouldRender";
 import { Button } from "@shadcn/button";
 import { EyeIcon } from "lucide-react";
 import { useState } from "react";
-import PayInvoiceDialog from "./pay-invoice-dialog";
+import PayInvoiceDialog from "./PayInvoiceDialog";
 import { Invoice } from "@prisma/client";
 import { cn } from "@/app/_lib/utils";
 

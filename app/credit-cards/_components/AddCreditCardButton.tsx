@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@shadcn/button";
 import { CreditCardIcon } from "lucide-react";
-import CreateCreditCardDialog from "./create-credit-card-dialog";
+import CreateCreditCardDialog from "./CreateCreditCardDialog";
 import useIsDesktop from "@utils/useIsDesktop";
 
 const AddCreditCardButton = () => {

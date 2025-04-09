@@ -3,7 +3,7 @@ import Navbar from "@molecules/Navbar";
 import { getCreditCardById } from "@data/getCreditCardById";
 import { getInvoices } from "@data/getInvoices";
 import { getTransactions } from "@data/getTransactions";
-import InvoiceDetails from "./_components/invoice-details";
+import InvoiceDetails from "./_components/InvoiceDetails";
 import { getUser } from "@data/getUser";
 
 interface CardDetailsProps {

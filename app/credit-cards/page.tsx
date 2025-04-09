@@ -1,9 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
 import Navbar from "@molecules/Navbar";
 import { ScrollArea } from "@shadcn/scroll-area";
-import AddCreditCardButton from "./_components/add-credit-card-button";
+import AddCreditCardButton from "./_components/AddCreditCardButton";
 import { redirect } from "next/navigation";
-import CreditCardUnity from "./_components/credit-card-unity";
+import CreditCardUnity from "./_components/CreditCardUnity";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { getCreditCards } from "@data/getCreditCards";
 import { getUser } from "@data/getUser";
