@@ -1,5 +1,5 @@
 import { format, isMatch } from "date-fns";
-import { MONTH_NAMES } from "../_constants/month";
+import { MONTH_NAMES } from "@constants/month";
 
 /**
  * Calculates the card closing and due dates based on the current date and the

@@ -32,7 +32,7 @@ import {
 import {
   CARD_COLORS_OPTIONS,
   CREDIT_CARD_OPTIONS,
-} from "@/app/_constants/credit-card";
+} from "@constants/creditCard";
 import { createCreditCard } from "@actions/creditCards/createCreditCard";
 import { toast } from "sonner";
 import { useCreditCards } from "@/app/_contexts/CreditCardsContext";

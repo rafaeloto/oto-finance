@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shadcn/select";
-import { BANK_OPTIONS } from "@/app/_constants/account";
+import { BANK_OPTIONS } from "@constants/account";
 import { createAccount } from "@actions/accounts/createAccount";
 import { toast } from "sonner";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";

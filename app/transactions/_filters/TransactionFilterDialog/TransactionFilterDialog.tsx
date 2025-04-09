@@ -13,7 +13,7 @@ import {
 import {
   TRANSACTION_PAYMENT_METHOD_OPTIONS,
   TRANSACTION_TYPE_OPTIONS,
-} from "@/app/_constants/transaction";
+} from "@constants/transaction";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import TransactionTypeBadge from "../../_components/type-badge";

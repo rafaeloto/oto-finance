@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shadcn/select";
-import { GAIN_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction";
+import { GAIN_TRANSACTION_CATEGORY_OPTIONS } from "@constants/transaction";
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";

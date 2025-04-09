@@ -2,7 +2,7 @@ import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { CardContent, CardHeader, CardTitle } from "@shadcn/card";
 import { Progress } from "@shadcn/progress";
 import { ScrollArea } from "@shadcn/scroll-area";
-import { EXPENSE_TRANSACTION_CATEGORY_LABELS } from "@/app/_constants/transaction";
+import { EXPENSE_TRANSACTION_CATEGORY_LABELS } from "@constants/transaction";
 import { TotalExpensePerCategory } from "@/app/_data/get-dashboard/types";
 
 interface ExpensesPerCategoryProps {

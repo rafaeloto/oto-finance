@@ -1,7 +1,7 @@
 "use client";
 
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
-import { INVOICE_STATUS_LABELS } from "@/app/_constants/credit-card";
+import { INVOICE_STATUS_LABELS } from "@constants/creditCard";
 import { formatCurrency } from "@/app/_utils/currency";
 import { Invoice } from "@prisma/client";
 import clsx from "clsx";

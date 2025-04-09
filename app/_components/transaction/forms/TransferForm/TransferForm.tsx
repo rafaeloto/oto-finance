@@ -25,7 +25,7 @@ import {
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
-import { TRANSFER_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction";
+import { TRANSFER_TRANSACTION_CATEGORY_OPTIONS } from "@constants/transaction";
 import { Transaction, TransferTransactionCategory } from "@prisma/client";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";

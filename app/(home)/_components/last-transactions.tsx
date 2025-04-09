@@ -4,7 +4,7 @@ import TransactionInstallments from "@molecules/TransactionInstallments";
 import { Button } from "@shadcn/button";
 import { CardContent, CardHeader, CardTitle } from "@shadcn/card";
 import { ScrollArea } from "@shadcn/scroll-area";
-import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@/app/_constants/transaction";
+import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@constants/transaction";
 import { Transaction } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";

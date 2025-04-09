@@ -31,7 +31,7 @@ import {
 import {
   EXPENSE_TRANSACTION_CATEGORY_OPTIONS,
   TRANSACTION_PAYMENT_METHOD_OPTIONS,
-} from "@/app/_constants/transaction";
+} from "@constants/transaction";
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";

@@ -3,7 +3,7 @@
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/card";
 import { ScrollArea } from "@shadcn/scroll-area";
-import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@/app/_constants/transaction";
+import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@constants/transaction";
 import { formatCurrency } from "@/app/_utils/currency";
 import EditTransactionButton from "@/app/transactions/_components/edit-transaction-button";
 import DeleteTransactionButton from "@/app/transactions/_components/delete-transaction-button";

@@ -3,7 +3,7 @@
 import {
   TRANSACTION_PAYMENT_METHOD_OPTIONS,
   TRANSACTION_TYPE_OPTIONS,
-} from "@/app/_constants/transaction";
+} from "@constants/transaction";
 import TransactionTypeBadge from "../_components/type-badge";
 import { TransactionType } from "@prisma/client";
 import SelectFilter from "@molecules/SelectFilter";

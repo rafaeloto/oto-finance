@@ -4,7 +4,7 @@ import CreditCardUnity from "../../_components/credit-card-unity";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shadcn/tabs";
 import InvoiceList from "./invoice-list";
 import { Card } from "@shadcn/card";
-import { INVOICE_STATUS_LABELS } from "@/app/_constants/credit-card";
+import { INVOICE_STATUS_LABELS } from "@constants/creditCard";
 import InvoiceTransactions from "./invoice-transactions";
 import {
   CreditCard,

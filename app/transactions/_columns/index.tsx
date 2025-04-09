@@ -9,7 +9,7 @@ import {
   EXPENSE_TRANSACTION_CATEGORY_LABELS,
   INVESTMENT_TRANSACTION_CATEGORY_LABELS,
   TRANSFER_TRANSACTION_CATEGORY_LABELS,
-} from "@/app/_constants/transaction";
+} from "@constants/transaction";
 import EditTransactionButton from "../_components/edit-transaction-button";
 import DeleteTransactionButton from "../_components/delete-transaction-button";
 import { Redo2 } from "lucide-react";
