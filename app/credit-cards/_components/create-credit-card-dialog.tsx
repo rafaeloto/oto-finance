@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@shadcn/button";
 import {
   Dialog,
   DialogClose,
@@ -10,7 +10,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/app/_components/ui/dialog";
+} from "@shadcn/dialog";
 import { CreditCardFlag } from "@prisma/client";
 import {
   Form,
@@ -19,8 +19,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
+} from "@shadcn/form";
+import { Input } from "@shadcn/input";
 import { MoneyInput } from "@atoms/MoneyInput";
 import {
   Select,
@@ -28,7 +28,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/_components/ui/select";
+} from "@shadcn/select";
 import {
   CARD_COLORS_OPTIONS,
   CREDIT_CARD_OPTIONS,
@@ -40,7 +40,7 @@ import { useInvoices } from "@/app/_contexts/InvoicesContext";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
-import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import { ScrollArea } from "@shadcn/scroll-area";
 
 interface CreateCreditCardDialogProps {
   isOpen: boolean;

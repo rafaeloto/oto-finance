@@ -2,7 +2,7 @@ import { useAccounts } from "@/app/_contexts/AccountsContext";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@shadcn/button";
 import {
   Dialog,
   DialogClose,
@@ -11,7 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/app/_components/ui/dialog";
+} from "@shadcn/dialog";
 import { Bank } from "@prisma/client";
 import {
   Form,
@@ -20,8 +20,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
+} from "@shadcn/form";
+import { Input } from "@shadcn/input";
 import { MoneyInput } from "@atoms/MoneyInput";
 import {
   Select,
@@ -29,14 +29,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/_components/ui/select";
+} from "@shadcn/select";
 import { BANK_OPTIONS } from "@/app/_constants/account";
 import { createAccount } from "@actions/accounts/createAccount";
 import { toast } from "sonner";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
-import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import { ScrollArea } from "@shadcn/scroll-area";
 
 interface CreateAccountDialogProps {
   isOpen: boolean;

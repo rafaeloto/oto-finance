@@ -1,7 +1,7 @@
 "use client";
 
 import { Account, CreditCard, Invoice, Transaction } from "@prisma/client";
-import { DataTable } from "@/app/_components/ui/data-table";
+import { DataTable } from "@shadcn/data-table";
 import { getTransactionColumns } from "../_columns";
 
 interface TransactionsTableProps {

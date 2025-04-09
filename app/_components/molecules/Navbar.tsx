@@ -10,7 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@shadcn/dropdown-menu";
 import { Menu } from "lucide-react";
 import useIsDesktop from "@/app/_utils/useIsDesktop";
 

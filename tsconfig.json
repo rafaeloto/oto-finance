@@ -22,7 +22,8 @@
       "@actions/*": ["./app/_actions/*"],
       "@components/*": ["./app/_components/*"],
       "@atoms/*": ["./app/_components/atoms/*"],
-      "@molecules/*": ["./app/_components/molecules/*"]
+      "@molecules/*": ["./app/_components/molecules/*"],
+      "@shadcn/*": ["./app/_components/ui/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@shadcn/button";
 import {
   Dialog,
   DialogClose,
@@ -10,7 +10,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/app/_components/ui/dialog";
+} from "@shadcn/dialog";
 import { Invoice } from "@prisma/client";
 import {
   Form,
@@ -19,7 +19,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/_components/ui/form";
+} from "@shadcn/form";
 import { MoneyInput } from "@atoms/MoneyInput";
 import {
   Select,
@@ -27,11 +27,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/_components/ui/select";
+} from "@shadcn/select";
 import { toast } from "sonner";
 import { useAccounts } from "@/app/_contexts/AccountsContext";
 import { useInvoices } from "@/app/_contexts/InvoicesContext";
-import { DatePicker } from "@/app/_components/ui/date-picker";
+import { DatePicker } from "@shadcn/date-picker";
 import { Loader2Icon } from "lucide-react";
 import { formatCurrency } from "@/app/_utils/currency";
 import { payInvoice } from "@actions/invoices/payInvoice";
@@ -45,9 +45,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/app/_components/ui/alert-dialog";
+} from "@shadcn/alert-dialog";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
-import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import { ScrollArea } from "@shadcn/scroll-area";
 
 interface PayInvoiceDialogProps {
   isOpen: boolean;

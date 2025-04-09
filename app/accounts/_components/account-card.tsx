@@ -1,5 +1,5 @@
 import { Account } from "@prisma/client";
-import { Card, CardContent } from "@/app/_components/ui/card";
+import { Card, CardContent } from "@shadcn/card";
 import Image from "next/image";
 
 interface AccountCardProps {

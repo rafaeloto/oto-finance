@@ -7,17 +7,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
-import { Label } from "@/app/_components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
+} from "@shadcn/form";
+import { Input } from "@shadcn/input";
+import { Label } from "@shadcn/label";
+import { RadioGroup, RadioGroupItem } from "@shadcn/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/_components/ui/select";
+} from "@shadcn/select";
 import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
 import { getInvoiceOptions } from "@/app/_utils/date";
 import { Transaction } from "@prisma/client";

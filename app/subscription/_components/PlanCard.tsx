@@ -1,5 +1,5 @@
-import { Badge } from "@/app/_components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
+import { Badge } from "@shadcn/badge";
+import { Card, CardContent, CardHeader } from "@shadcn/card";
 import { CheckIcon, XIcon } from "lucide-react";
 import AquirePlanButton from "./aquire-plan-button";
 import ShouldRender from "@atoms/ShouldRender";

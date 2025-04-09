@@ -2,7 +2,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import Navbar from "@molecules/Navbar";
 import { redirect } from "next/navigation";
 import PlanCard from "./_components/PlanCard";
-import { ScrollArea } from "../_components/ui/scroll-area";
+import { ScrollArea } from "@shadcn/scroll-area";
 import { getCurrentMonthTransactions } from "../_data/get-current-month-transactions";
 
 const SubscriptionPage = async () => {

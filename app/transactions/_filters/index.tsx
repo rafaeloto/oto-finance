@@ -12,7 +12,7 @@ import { useCreditCards } from "@/app/_contexts/CreditCardsContext";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import InputFilter from "@molecules/InputFilter";
 import TimeSelect from "@molecules/TimeSelect";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@shadcn/button";
 import { FilterIcon } from "lucide-react";
 import TransactionFilterDialog from "./TransactionFilterDialog";
 import { useState } from "react";

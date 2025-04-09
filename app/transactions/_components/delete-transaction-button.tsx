@@ -8,8 +8,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/app/_components/ui/alert-dialog";
-import { Button } from "@/app/_components/ui/button";
+} from "@shadcn/alert-dialog";
+import { Button } from "@shadcn/button";
 import { TrashIcon } from "lucide-react";
 import { deleteTransaction } from "@actions/transactions/deleteTransaction";
 import { toast } from "sonner";

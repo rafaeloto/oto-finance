@@ -1,14 +1,9 @@
 "use client";
 
 import CreditCardUnity from "../../_components/credit-card-unity";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/app/_components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shadcn/tabs";
 import InvoiceList from "./invoice-list";
-import { Card } from "@/app/_components/ui/card";
+import { Card } from "@shadcn/card";
 import { INVOICE_STATUS_LABELS } from "@/app/_constants/credit-card";
 import InvoiceTransactions from "./invoice-transactions";
 import {
@@ -18,9 +13,9 @@ import {
   Transaction,
 } from "@prisma/client";
 import { useCallback, useMemo, useState } from "react";
-import { ScrollArea } from "@/app/_components/ui/scroll-area";
-import { Label } from "@/app/_components/ui/label";
-import { Switch } from "@/app/_components/ui/switch";
+import { ScrollArea } from "@shadcn/scroll-area";
+import { Label } from "@shadcn/label";
+import { Switch } from "@shadcn/switch";
 import useIsDesktop from "@/app/_utils/useIsDesktop";
 
 type InvoiceDetailsProps = {

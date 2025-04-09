@@ -2,7 +2,7 @@ import AddTransactionButton from "@components/transaction/AddTransactionButton";
 import Navbar from "@molecules/Navbar";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { ScrollArea } from "../_components/ui/scroll-area";
+import { ScrollArea } from "@shadcn/scroll-area";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { getCreditCards } from "../_data/get-credit-cards";

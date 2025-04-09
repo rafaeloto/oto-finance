@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@shadcn/button";
 import {
   Dialog,
   DialogClose,
@@ -10,11 +10,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/_components/ui/dialog";
+} from "@shadcn/dialog";
 import { BotIcon, Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { generateAiReport } from "@actions/outsourced/generateAiReport";
-import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import { ScrollArea } from "@shadcn/scroll-area";
 import Markdown from "react-markdown";
 import Link from "next/link";
 

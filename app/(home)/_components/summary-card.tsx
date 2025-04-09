@@ -1,5 +1,5 @@
 import AddTransactionButton from "@components/transaction/AddTransactionButton";
-import { Card, CardHeader, CardContent } from "@/app/_components/ui/card";
+import { Card, CardHeader, CardContent } from "@shadcn/card";
 import { ReactNode } from "react";
 
 interface SummaryCardProps {

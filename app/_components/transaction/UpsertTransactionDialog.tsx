@@ -7,13 +7,13 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+} from "@shadcn/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shadcn/tabs";
 import ExpenseForm from "@components/transaction/forms/ExpenseForm";
 import GainForm from "./forms/GainForm";
 import TransferForm from "./forms/TransferForm";
 import InvestmentForm from "./forms/InvestmentForm";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea } from "@shadcn/scroll-area";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;

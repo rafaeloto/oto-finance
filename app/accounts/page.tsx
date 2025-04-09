@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import Navbar from "@molecules/Navbar";
-import { ScrollArea } from "../_components/ui/scroll-area";
+import { ScrollArea } from "@shadcn/scroll-area";
 import AddAccountButton from "./_components/add-account-button";
 import RecalculateBalancesButton from "./_components/recalculate-balances-button";
 import { redirect } from "next/navigation";

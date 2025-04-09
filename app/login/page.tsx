@@ -1,6 +1,6 @@
 import { leagueSpartan } from "@/app/_styles/fonts";
 import Image from "next/image";
-import { Button } from "../_components/ui/button";
+import { Button } from "@shadcn/button";
 import { LogInIcon } from "lucide-react";
 import { SignInButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";

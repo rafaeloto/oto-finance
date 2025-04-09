@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@shadcn/button";
 import { createStripeCheckout } from "@actions/outsourced/createStripeCheckout";
 import { loadStripe } from "@stripe/stripe-js";
 import { useUser } from "@clerk/nextjs";

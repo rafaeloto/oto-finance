@@ -1,7 +1,7 @@
 "use client";
 
 import ShouldRender from "@atoms/ShouldRender";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@shadcn/button";
 import { EyeIcon } from "lucide-react";
 import { useState } from "react";
 import PayInvoiceDialog from "./pay-invoice-dialog";

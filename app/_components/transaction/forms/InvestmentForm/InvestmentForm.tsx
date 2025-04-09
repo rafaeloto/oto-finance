@@ -12,8 +12,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../ui/form";
-import { Input } from "../../../ui/input";
+} from "@shadcn/form";
+import { Input } from "@shadcn/input";
 import { MoneyInput } from "@atoms/MoneyInput";
 import {
   Select,
@@ -21,10 +21,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../ui/select";
-import { DatePicker } from "../../../ui/date-picker";
-import { DialogClose, DialogFooter } from "../../../ui/dialog";
-import { Button } from "../../../ui/button";
+} from "@shadcn/select";
+import { DatePicker } from "@shadcn/date-picker";
+import { DialogClose, DialogFooter } from "@shadcn/dialog";
+import { Button } from "@shadcn/button";
 import { INVESTMENT_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction";
 import { InvestmentTransactionCategory, Transaction } from "@prisma/client";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";

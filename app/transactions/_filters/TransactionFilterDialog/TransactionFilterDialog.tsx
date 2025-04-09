@@ -1,7 +1,7 @@
 import InputFilter from "@molecules/InputFilter";
 import SelectFilter from "@molecules/SelectFilter";
 import TimeSelect from "@molecules/TimeSelect";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@shadcn/button";
 import {
   Dialog,
   DialogClose,
@@ -9,7 +9,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/app/_components/ui/dialog";
+} from "@shadcn/dialog";
 import {
   TRANSACTION_PAYMENT_METHOD_OPTIONS,
   TRANSACTION_TYPE_OPTIONS,

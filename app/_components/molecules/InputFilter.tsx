@@ -1,5 +1,5 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Input } from "../ui/input";
+import { Input } from "@shadcn/input";
 
 type InputFilterProps = {
   paramKey: string;

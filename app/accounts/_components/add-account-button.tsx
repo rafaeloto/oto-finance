@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@shadcn/button";
 import { LandmarkIcon } from "lucide-react";
 import CreateAccountDialog from "./create-account-dialog";
 

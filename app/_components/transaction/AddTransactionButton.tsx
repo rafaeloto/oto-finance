@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@shadcn/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
+} from "@shadcn/tooltip";
 import UpsertTransactionDialog from "@components/transaction/UpsertTransactionDialog";
 import { ArrowDownUpIcon } from "lucide-react";
 import useIsDesktop from "@/app/_utils/useIsDesktop";

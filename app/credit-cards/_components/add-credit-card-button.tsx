@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@shadcn/button";
 import { CreditCardIcon } from "lucide-react";
 import CreateCreditCardDialog from "./create-credit-card-dialog";
 import useIsDesktop from "@/app/_utils/useIsDesktop";

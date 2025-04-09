@@ -1,8 +1,8 @@
 import { CreditCard } from "@prisma/client";
-import { Card } from "@/app/_components/ui/card";
+import { Card } from "@shadcn/card";
 import Image from "next/image";
 import { calculateClosingAndDueDates } from "@/app/_utils/date";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@shadcn/button";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
 import ShouldRender from "@atoms/ShouldRender";

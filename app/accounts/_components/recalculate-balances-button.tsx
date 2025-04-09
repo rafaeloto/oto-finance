@@ -11,8 +11,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/app/_components/ui/alert-dialog";
-import { Button } from "@/app/_components/ui/button";
+} from "@shadcn/alert-dialog";
+import { Button } from "@shadcn/button";
 import { CalculatorIcon, LoaderCircleIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";

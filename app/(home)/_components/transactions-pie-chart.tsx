@@ -2,13 +2,13 @@
 
 import { Pie, PieChart } from "recharts";
 
-import { Card, CardContent } from "@/app/_components/ui/card";
+import { Card, CardContent } from "@shadcn/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/app/_components/ui/chart";
+} from "@shadcn/chart";
 import { TransactionType } from "@prisma/client";
 import { TransactionPercentagePerType } from "@/app/_data/get-dashboard/types";
 import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";

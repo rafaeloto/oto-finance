@@ -18,8 +18,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../ui/form";
-import { Input } from "../../../ui/input";
+} from "@shadcn/form";
+import { Input } from "@shadcn/input";
 import { MoneyInput } from "@atoms/MoneyInput";
 import {
   Select,
@@ -27,14 +27,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../ui/select";
+} from "@shadcn/select";
 import {
   EXPENSE_TRANSACTION_CATEGORY_OPTIONS,
   TRANSACTION_PAYMENT_METHOD_OPTIONS,
 } from "@/app/_constants/transaction";
-import { DatePicker } from "../../../ui/date-picker";
-import { DialogClose, DialogFooter } from "../../../ui/dialog";
-import { Button } from "../../../ui/button";
+import { DatePicker } from "@shadcn/date-picker";
+import { DialogClose, DialogFooter } from "@shadcn/dialog";
+import { Button } from "@shadcn/button";
 import ShouldRender from "@atoms/ShouldRender";
 import { useMemo, useState } from "react";
 import handleCreditTransaction from "./handleCreditTransaction";

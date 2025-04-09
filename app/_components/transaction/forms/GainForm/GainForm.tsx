@@ -13,8 +13,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../ui/form";
-import { Input } from "../../../ui/input";
+} from "@shadcn/form";
+import { Input } from "@shadcn/input";
 import { MoneyInput } from "@atoms/MoneyInput";
 import {
   Select,
@@ -22,11 +22,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../ui/select";
+} from "@shadcn/select";
 import { GAIN_TRANSACTION_CATEGORY_OPTIONS } from "@/app/_constants/transaction";
-import { DatePicker } from "../../../ui/date-picker";
-import { DialogClose, DialogFooter } from "../../../ui/dialog";
-import { Button } from "../../../ui/button";
+import { DatePicker } from "@shadcn/date-picker";
+import { DialogClose, DialogFooter } from "@shadcn/dialog";
+import { Button } from "@shadcn/button";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
