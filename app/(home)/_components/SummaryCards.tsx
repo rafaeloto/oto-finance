@@ -4,7 +4,7 @@ import {
   TrendingUpDownIcon,
   WalletIcon,
 } from "lucide-react";
-import SummaryCard from "./summary-card";
+import SummaryCard from "./SummaryCard";
 
 interface SummaryCardsProps {
   balance: number;

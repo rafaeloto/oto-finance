@@ -1,14 +1,14 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Navbar from "@molecules/Navbar";
-import SummaryCards from "./_components/summary-cards";
+import SummaryCards from "./_components/SummaryCards";
 import TimeSelect from "@molecules/TimeSelect";
-import TransactionsPieChart from "./_components/transactions-pie-chart";
+import TransactionsPieChart from "./_components/TransactionsPieChart";
 import { getDashboard } from "@data/getDashboard";
-import ExpensesPerCategory from "./_components/expenses-per-category";
-import LastTransactions from "./_components/last-transactions";
+import ExpensesPerCategory from "./_components/ExpensesPerCategory";
+import LastTransactions from "./_components/LastTransactions";
 import { canUserAddTransaction } from "@data/canUserAddTransaction";
-// import AiReportButton from "./_components/ai-report-button";
+// import AiReportButton from "./_components/AiReportButton";
 import { getValidDateFromParams } from "@utils/date";
 // import { getUser } from "@data/getUser";
 
