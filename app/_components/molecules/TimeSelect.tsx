@@ -10,9 +10,10 @@ import { Dispatch, SetStateAction } from "react";
 type TimeSelectProps = {
   filters?: { month?: string; year?: string };
   setFilters?: Dispatch<SetStateAction<TransactionFilters>>;
+  className?: string;
 };
 
-const TimeSelect = ({ filters, setFilters }: TimeSelectProps) => {
+const TimeSelect = ({ filters, setFilters, className }: TimeSelectProps) => {
   const searchParams = useSearchParams();
 
   const paramsMonth = searchParams.get("month")?.padStart(2, "0");
@@ -41,6 +42,7 @@ const TimeSelect = ({ filters, setFilters }: TimeSelectProps) => {
           onChange: (value) =>
             setFilters((prev) => ({ ...prev, month: value ?? "" })),
         })}
+        className={className}
       />
 
       <SelectFilter
@@ -52,6 +54,7 @@ const TimeSelect = ({ filters, setFilters }: TimeSelectProps) => {
           onChange: (value) =>
             setFilters((prev) => ({ ...prev, year: value ?? "" })),
         })}
+        className={className}
       />
     </>
   );

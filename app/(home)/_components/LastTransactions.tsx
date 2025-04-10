@@ -17,7 +17,7 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
   const hasNoData = lastTransactions.length === 0;
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col rounded-md border">
+    <div className="flex max-h-[700px] flex-col rounded-md border md:max-h-none md:min-h-0 md:flex-1">
       <CardHeader className="flex-row items-center justify-between space-y-0">
         <CardTitle className="font-bold">Últimas Transações</CardTitle>
         <Button variant="outline" className="rounded-full font-bold" asChild>
@@ -29,11 +29,11 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
         {hasNoData ? (
           <EmptyListFeedback message="Nenhuma transação registrada" />
         ) : (
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 px-3 md:px-6">
             {lastTransactions.map((transaction) => (
               <div
                 key={transaction.id}
-                className="flex items-center justify-between"
+                className="flex items-center justify-between gap-3 md:gap-0"
               >
                 <div className="flex items-center gap-3">
                   <div className="rounded-lg bg-white bg-opacity-[3%] p-3 text-white">
@@ -44,9 +44,11 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
                       alt={transaction.paymentMethod}
                     />
                   </div>
-                  <div>
-                    <div className="flex gap-3">
-                      <p className="text-sm font-bold">{transaction.name}</p>
+                  <div className="md:min-w-none flex min-w-0 flex-1 flex-col md:flex-none">
+                    <div className="md:min-w-none flex min-w-0 gap-3">
+                      <p className="md:min-w-none min-w-0 truncate text-sm font-bold md:whitespace-normal">
+                        {transaction.name}
+                      </p>
                       <TransactionInstallments transaction={transaction} />
                     </div>
                     <p className="text-sm text-muted-foreground">
@@ -58,7 +60,9 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
                     </p>
                   </div>
                 </div>
-                <AmountText transaction={transaction} />
+                <div className="w-20 md:w-auto">
+                  <AmountText transaction={transaction} />
+                </div>
               </div>
             ))}
           </CardContent>

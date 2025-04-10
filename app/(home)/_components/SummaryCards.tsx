@@ -39,7 +39,7 @@ const SummaryCards = async ({
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid gap-6 md:grid-cols-2">
         <SummaryCard
           icon={<WalletIcon size={16} />}
           title="Saldo Total"
@@ -61,7 +61,7 @@ const SummaryCards = async ({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <p className="text-lg font-semibold">Investimentos</p>
@@ -70,7 +70,7 @@ const SummaryCards = async ({
               <p className="text-muted-foreground">{period}</p>
             </ShouldRender>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
             <SummaryCard
               icon={
                 <PiggyBankIcon
@@ -107,7 +107,7 @@ const SummaryCards = async ({
               <p className="text-muted-foreground">{period}</p>
             </ShouldRender>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
             <SummaryCard
               icon={<TrendingUpIcon size={16} className="text-primary" />}
               title="Receita"

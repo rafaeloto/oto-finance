@@ -12,7 +12,7 @@ const TransactionInstallments = ({
     <ShouldRender
       if={!!transaction.installmentId && !!transaction.installmentsTotal}
     >
-      <p className="mt-auto text-sm text-muted-foreground">
+      <p className="mt-auto min-w-[28.3px] text-sm text-muted-foreground">
         {`${transaction.installmentNumber} / ${transaction.installmentsTotal}`}
       </p>
     </ShouldRender>

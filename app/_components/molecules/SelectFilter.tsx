@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/app/_lib/utils";
 import {
   Select,
   SelectContent,
@@ -21,6 +22,7 @@ type SelectFilterProps = {
   placeholder: string;
   value?: string;
   onChange?: (value: string | undefined) => void;
+  className?: string;
 };
 
 const SelectFilter = ({
@@ -29,6 +31,7 @@ const SelectFilter = ({
   placeholder,
   value,
   onChange,
+  className,
 }: SelectFilterProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -64,7 +67,9 @@ const SelectFilter = ({
       value={selectedValue ?? ""}
       disabled={!options.length}
     >
-      <SelectTrigger className="min-w-fit space-x-2 md:rounded-full">
+      <SelectTrigger
+        className={cn("min-w-fit space-x-2 md:rounded-full", className)}
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 

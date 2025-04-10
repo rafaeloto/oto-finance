@@ -35,32 +35,34 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
 
   return (
     <>
-      <Navbar />
-      <div className="flex h-screen flex-col space-y-6 overflow-hidden p-6">
-        <div className="flex justify-between">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+      <div className="sticky top-0 z-10 md:static md:z-0">
+        <Navbar />
+        <div className="flex justify-center p-6 md:justify-between">
+          <h1 className="hidden text-2xl font-bold md:block">Dashboard</h1>
           <div className="flex gap-3">
-            <TimeSelect />
+            <TimeSelect className="rounded-full" />
             {/* TODO: Add this back once the AI report feature is fixed */}
             {/* <AiReportButton
               month={validMonth}
               year={validYear}
               hasPremiumPlan={
                 user?.publicMetadata.subscriptionPlan === "premium"
-              }
-            /> */}
+                }
+                /> */}
             <AddTransactionButton
               userCanAddTransaction={userCanAddTransaction}
             />
           </div>
         </div>
-        <div className="grid flex-1 grid-cols-[2fr,1fr] gap-6 overflow-hidden">
-          <div className="flex flex-col gap-6 overflow-hidden">
+      </div>
+      <div className="flex flex-col space-y-6 overflow-y-auto p-6 pt-0 md:h-screen md:overflow-hidden">
+        <div className="flex flex-col gap-6 md:grid md:flex-1 md:grid-cols-[2fr,1fr] md:overflow-hidden">
+          <div className="flex flex-col gap-6 md:overflow-hidden">
             <SummaryCards
               {...dashboard}
               period={`${validMonth}/${validYear.slice(-2)}`}
             />
-            <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
+            <div className="space-y-6 md:grid md:h-full md:grid-cols-3 md:grid-rows-1 md:gap-6 md:space-y-0 md:overflow-hidden">
               <TransactionsPieChart {...dashboard} />
               <ExpensesPerCategory
                 expensesPerCategory={dashboard.totalExpensePerCategory}

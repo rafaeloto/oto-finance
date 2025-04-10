@@ -15,7 +15,7 @@ const ExpensesPerCategory = ({
   const hasNoData = expensesPerCategory.length === 0;
 
   return (
-    <div className="col-span-2 flex min-h-0 flex-1 flex-col rounded-md border pb-6">
+    <div className="col-span-2 flex max-h-[500px] flex-col rounded-md border pb-6 md:h-auto md:min-h-0 md:flex-1">
       <CardHeader>
         <CardTitle className="font-bold">Gastos por Categoria</CardTitle>
       </CardHeader>
