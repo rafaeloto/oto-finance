@@ -156,6 +156,7 @@ enum ExpenseTransactionCategory {
   OTHER
   PERSONAL
   PET
+  PURCHASE
   SUBSCRIPTION
   TAXES
   TRANSPORTATION

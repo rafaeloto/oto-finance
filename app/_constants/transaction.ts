@@ -37,6 +37,7 @@ export const GAIN_TRANSACTION_CATEGORY_LABELS = {
 
 export const EXPENSE_TRANSACTION_CATEGORY_LABELS = {
   [ExpenseTransactionCategory.FOOD]: "Alimentação",
+  [ExpenseTransactionCategory.PURCHASE]: "Compras",
   [ExpenseTransactionCategory.EDUCATION]: "Educação",
   [ExpenseTransactionCategory.GOALS]: "Metas",
   [ExpenseTransactionCategory.HEALTH]: "Saúde",
