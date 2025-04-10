@@ -95,7 +95,8 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
     amount: Number(transaction?.amount) || 0,
     expenseCategory:
       transaction?.expenseCategory || ExpenseTransactionCategory.FOOD,
-    paymentMethod: transaction?.paymentMethod || TransactionPaymentMethod.DEBIT,
+    paymentMethod:
+      transaction?.paymentMethod || TransactionPaymentMethod.CREDIT,
     accountId: transaction?.accountId || "",
     cardId: transaction?.cardId || "",
     installmentType: "once" as InstallmentType,
