@@ -161,3 +161,24 @@ export const getInvoiceOptions = (
     },
   ];
 };
+
+/**
+ * The function calculates the start and end dates for the given month and year.
+ * The start is the first millisecond of the month, and the end date is the last
+ * millisecond of of the month.
+ *
+ * @param month - The month for which the date range is to be calculated, as a string.
+ * @param year - The year for which the date range is to be calculated, as a string.
+ * @returns An object containing the start and end dates of the specified month.
+ */
+export const getMonthDateRange = (month: string, year: string) => {
+  const paddedMonth = String(month).padStart(2, "0");
+
+  const start = new Date(`${year}-${paddedMonth}-01T00:00:00.000Z`);
+  const nextMonth = new Date(start);
+  nextMonth.setUTCMonth(nextMonth.getUTCMonth() + 1);
+
+  const end = new Date(nextMonth.getTime() - 1); // Último milissegundo do mês atual
+
+  return { start, end };
+};

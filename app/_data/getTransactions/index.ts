@@ -1,7 +1,7 @@
 import { db } from "@/app/_lib/prisma";
+import { getMonthDateRange } from "@utils/date";
 import { auth } from "@clerk/nextjs/server";
 import { TransactionPaymentMethod, TransactionType } from "@prisma/client";
-import { endOfMonth, startOfMonth } from "date-fns";
 
 export type getTransactionsParams = {
   name?: string;
@@ -44,15 +44,11 @@ export const getTransactions = async (params: getTransactionsParams = {}) => {
 
   // Filter by month and year if provided
   if (month && year) {
-    const parsedMonth = parseInt(month, 10) - 1; // `date-fns` uses zero-based index (January = 0)
-    const parsedYear = parseInt(year, 10);
-
-    const startDate = startOfMonth(new Date(parsedYear, parsedMonth));
-    const endDate = endOfMonth(new Date(parsedYear, parsedMonth));
+    const { start, end } = getMonthDateRange(month, year);
 
     filters.date = {
-      gte: startDate,
-      lte: endDate,
+      gte: start,
+      lte: end,
     };
   }
 

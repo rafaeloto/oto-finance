@@ -8,6 +8,7 @@ import {
   updateSingleAccountBalance,
 } from "@actions/accounts/updateBalance";
 import { getAccounts } from "@data/getAccounts";
+import { getTransactions } from "@data/getTransactions";
 import { revalidatePath } from "next/cache";
 
 export const recalculateBalances = async () => {
@@ -18,9 +19,7 @@ export const recalculateBalances = async () => {
   }
 
   // Retrieves all user transactions
-  const transactions = await db.transaction.findMany({
-    where: { userId },
-  });
+  const transactions = await getTransactions();
 
   // Retrieves all paid invoices
   const paidInvoices = await db.invoice.findMany({

@@ -1,10 +1,10 @@
 "use server";
-import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { isMatch } from "date-fns";
 import { generateAiReportSchema, GenerateAiReportSchema } from "./schema";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getUser } from "@data/getUser";
+import { getTransactions } from "@data/getTransactions";
 
 export const generateAiReport = async ({
   month,
@@ -31,14 +31,7 @@ export const generateAiReport = async ({
     throw new Error("User has no premium plan");
   }
 
-  const transactions = await db.transaction.findMany({
-    where: {
-      date: {
-        gte: new Date(`${year}-${month}-01`),
-        lt: new Date(`${year}-${month}-31`),
-      },
-    },
-  });
+  const transactions = await getTransactions({ month, year });
 
   if (!process.env.GEMINI_API_KEY) {
     throw new Error("API key not found");
