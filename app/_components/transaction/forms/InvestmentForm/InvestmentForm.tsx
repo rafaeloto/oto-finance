@@ -89,7 +89,7 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex h-full flex-col"
       >
-        <div className="mb-8 flex-1 space-y-8">
+        <div className="mb-8 flex-1 space-y-8 px-1">
           <FormField
             control={form.control}
             name="name"
