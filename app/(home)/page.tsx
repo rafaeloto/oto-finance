@@ -55,7 +55,7 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col space-y-6 overflow-y-auto p-6 pt-0 md:h-screen md:overflow-hidden">
+      <div className="flex flex-col space-y-6 overflow-y-auto p-3 pt-0 md:h-screen md:overflow-hidden md:px-6 md:pb-6">
         <div className="flex flex-col gap-6 md:grid md:flex-1 md:grid-cols-[2fr,1fr] md:overflow-hidden">
           <div className="flex flex-col gap-6 md:overflow-hidden">
             <SummaryCards
