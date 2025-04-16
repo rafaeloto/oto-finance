@@ -87,7 +87,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
   return (
     <div className="flex flex-col gap-6 md:h-full md:flex-row md:gap-10">
       {/* Left section */}
-      <div className="flex max-h-[700px] min-h-[500px] w-full flex-col space-y-6 md:h-full md:max-h-full md:w-1/2">
+      <div className="flex h-full max-h-[700px] min-h-[500px] w-full flex-col space-y-6 md:max-h-full md:w-1/2">
         {/* Card */}
         <div className="flex items-center justify-center">
           <CreditCardUnity
