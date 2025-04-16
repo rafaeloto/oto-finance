@@ -79,3 +79,26 @@ body {
     @apply h-full bg-background text-foreground;
   }
 }
+
+/* WebKit-based browsers scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border)); /* igual ao bg-border do shadcn */
+  border-radius: 9999px;
+  border: 2px solid transparent; /* espaço interno, como padding visual */
+  background-clip: content-box;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}

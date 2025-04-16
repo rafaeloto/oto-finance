@@ -12,6 +12,7 @@ interface SummaryCardProps {
   size?: "small" | "large";
   textColor?: string;
   period?: string;
+  className?: string;
 }
 
 // Mapping styles by size variant
@@ -36,11 +37,12 @@ const SummaryCard = ({
   size = "small",
   textColor,
   period,
+  className = "",
 }: SummaryCardProps) => {
   const styles = sizeStyles[size];
 
   return (
-    <Link href={link}>
+    <Link href={link} className={className}>
       <Card className={styles.card}>
         <CardHeader className="flex-row items-center gap-2 space-y-0">
           {icon}

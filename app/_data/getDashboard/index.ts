@@ -3,6 +3,7 @@ import { ExpenseTransactionCategory, TransactionType } from "@prisma/client";
 import { TotalExpensePerCategory, TransactionPercentagePerType } from "./types";
 import { getMonthDateRange } from "@utils/date";
 import { auth } from "@clerk/nextjs/server";
+import { getTotalBalance } from "@data/getTotalBalance";
 
 export const getDashboard = async (month: string, year: string) => {
   const { userId } = await auth();
@@ -88,14 +89,7 @@ export const getDashboard = async (month: string, year: string) => {
 
   const result = gainsTotal + investmentsResult - expensesTotal;
 
-  const totalBalance = Number(
-    (
-      await db.account.aggregate({
-        where: { userId },
-        _sum: { balance: true },
-      })
-    )?._sum?.balance,
-  );
+  const totalBalance = await getTotalBalance();
 
   const transactionsTotal = Number(
     (
