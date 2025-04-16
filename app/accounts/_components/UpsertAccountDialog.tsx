@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@shadcn/dialog";
-import { Bank } from "@prisma/client";
+import { Account, Bank } from "@prisma/client";
 import {
   Form,
   FormControl,
@@ -31,16 +31,17 @@ import {
   SelectValue,
 } from "@shadcn/select";
 import { BANK_OPTIONS } from "@constants/account";
-import { createAccount } from "@actions/accounts/createAccount";
+import { upsertAccount } from "@actions/accounts/upsertAccount";
 import { toast } from "sonner";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
 import { ScrollArea } from "@shadcn/scroll-area";
 
-interface CreateAccountDialogProps {
+interface UpsertAccountDialogProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  account?: Account;
 }
 
 const formSchema = z.object({
@@ -50,42 +51,47 @@ const formSchema = z.object({
   bank: z.nativeEnum(Bank, {
     required_error: "O banco é obrigatório",
   }),
-  initialBalance: z.number().min(0, "O saldo inicial é obrigatório"),
+  initialBalance: z.number({ required_error: "O saldo inicial é obrigatório" }),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
 
-const CreateAccountDialog = ({
+const UpsertAccountDialog = ({
   isOpen,
   setIsOpen,
-}: CreateAccountDialogProps) => {
+  account,
+}: UpsertAccountDialogProps) => {
+  const accountId = account?.id;
+
+  const isUpdate = !!accountId;
+
   const { reloadAccounts } = useAccounts();
 
-  const [creating, setCreating] = useState(false);
+  const [upserting, setUpserting] = useState(false);
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      bank: Bank.NUBANK,
-      initialBalance: 0,
+      name: account?.name || "",
+      bank: account?.bank || Bank.NUBANK,
+      initialBalance: Number(account?.initialBalance) || 0,
     },
   });
 
   const onSubmit = async (data: FormSchema) => {
-    setCreating(true);
+    setUpserting(true);
 
     try {
-      await createAccount({ ...data });
+      await upsertAccount({ ...data, id: accountId });
       await reloadAccounts();
-      toast.success("Conta criada com sucesso!");
+      toast.success(`Conta ${isUpdate ? "atualizada" : "criada"} com sucesso!`);
       setIsOpen(false);
       form.reset();
     } catch (error) {
       console.error(error);
-      toast.error("Erro ao criar conta!");
+      toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} conta!`);
     } finally {
-      setCreating(false);
+      setUpserting(false);
     }
   };
 
@@ -186,9 +192,11 @@ const CreateAccountDialog = ({
                     Cancelar
                   </Button>
                 </DialogClose>
-                <Button type="submit" disabled={creating} className="min-w-24">
-                  {creating ? (
+                <Button type="submit" disabled={upserting} className="min-w-24">
+                  {upserting ? (
                     <Loader2Icon className="animate-spin" />
+                  ) : isUpdate ? (
+                    "Atualizar"
                   ) : (
                     "Adicionar"
                   )}
@@ -202,4 +210,4 @@ const CreateAccountDialog = ({
   );
 };
 
-export default CreateAccountDialog;
+export default UpsertAccountDialog;

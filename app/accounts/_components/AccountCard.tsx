@@ -1,6 +1,7 @@
 import { Account } from "@prisma/client";
 import { Card, CardContent } from "@shadcn/card";
 import Image from "next/image";
+import EditAccountButton from "./EditAccountButton";
 
 interface AccountCardProps {
   account: Account;
@@ -8,7 +9,9 @@ interface AccountCardProps {
 
 const AccountCard = ({ account }: AccountCardProps) => {
   return (
-    <Card className="flex w-full max-w-[350px] items-center justify-around bg-white/5 px-5 py-10">
+    <Card className="relative flex w-full max-w-[350px] items-center justify-around bg-white/5 px-5 py-10">
+      <EditAccountButton account={account} className="absolute right-3 top-3" />
+
       {/* Imagem à esquerda */}
       <Image
         src={`/banks/${account.bank}.svg`}

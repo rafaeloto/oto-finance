@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@shadcn/button";
 import { LandmarkIcon } from "lucide-react";
-import CreateAccountDialog from "./CreateAccountDialog";
+import UpsertAccountDialog from "./UpsertAccountDialog";
 
 const AddAccountButton = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -18,7 +18,7 @@ const AddAccountButton = () => {
         <LandmarkIcon />
       </Button>
 
-      <CreateAccountDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
+      <UpsertAccountDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
     </>
   );
 };

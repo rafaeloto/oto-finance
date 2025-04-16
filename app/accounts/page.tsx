@@ -44,7 +44,7 @@ const Accounts = async () => {
             amount={totalBalance}
             link="/accounts"
             size="large"
-            className="w-full max-w-[349.16px] md:w-auto"
+            className="w-full max-w-[350px] md:w-[350px]"
           />
         </ShouldRender>
 
