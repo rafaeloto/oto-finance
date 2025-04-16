@@ -60,7 +60,7 @@ export const updateCardInvoices = async ({
 
   if (idsToClose.length === 0) return;
 
-  // Close all open invoices that should be closed
+  // Closes all open invoices that should be closed
   await prismaClient.invoice.updateMany({
     where: {
       id: { in: idsToClose },

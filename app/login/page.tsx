@@ -15,10 +15,10 @@ const LoginPage = async () => {
 
   return (
     <div className="relative flex h-full flex-col md:grid md:grid-cols-2">
-      {/* BACKGROUND IMAGE FOR MOBILE */}
+      {/* Background image for mobile */}
       <div className="absolute inset-0 bg-[url('/login.png')] bg-cover bg-center opacity-10 md:hidden" />
 
-      {/* INFO AND BUTTON */}
+      {/* Info and button */}
       <div className="relative z-10 mx-auto flex h-full max-w-[550px] flex-col justify-center p-8">
         <div className="mb-8 flex items-center gap-3 md:mb-6">
           <Image src="/favicon.ico" alt="Oto Finance" width={60} height={60} />
@@ -43,7 +43,7 @@ const LoginPage = async () => {
         </SignInButton>
       </div>
 
-      {/* IMAGE TO THE RIGHT FOR DESKTOP */}
+      {/* Image to the right for desktop */}
       <div className="relative hidden h-full w-full md:block">
         <Image
           src="/login.png"

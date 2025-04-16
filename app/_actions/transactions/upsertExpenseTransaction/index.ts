@@ -72,7 +72,7 @@ export const upsertExpenseTransaction = async (
   const isNewDebit = params?.paymentMethod === TransactionPaymentMethod.DEBIT;
   const isNewCredit = params?.paymentMethod === TransactionPaymentMethod.CREDIT;
 
-  // Create a copy of `params` to avoid direct mutation
+  // Creates a copy of `params` to avoid direct mutation
   const updatedParams = { ...params };
 
   // If there is no previous transaction
@@ -93,7 +93,7 @@ export const upsertExpenseTransaction = async (
       });
     }
 
-    // Criar a transação
+    // Creates the transaction
     await prismaClient.transaction.create({
       data: { ...updatedParams, userId, type: "EXPENSE" },
     });
@@ -104,7 +104,7 @@ export const upsertExpenseTransaction = async (
 
   // If the previous transaction is debit and the new one is credit
   if (isExistingDebit && isNewCredit) {
-    // Reverse the impact on the account balance
+    // Reverses the impact on the account balance
     if (existingTransaction.accountId) {
       await updateSingleAccountBalance({
         operation: "increment",
@@ -114,7 +114,7 @@ export const upsertExpenseTransaction = async (
       });
     }
 
-    // Apply the impact on the credit card invoice
+    // Applies the impact on the credit card invoice
     if (updatedParams.invoiceId) {
       await updateInvoiceAmount({
         operation: "increment",
@@ -124,12 +124,12 @@ export const upsertExpenseTransaction = async (
       });
     }
 
-    // Ensure the removal of the the `accountId` field
+    // Ensures the removal of the the `accountId` field
     updatedParams.accountId = undefined;
   }
   // If the previous transaction is credit and the new one is debit
   else if (isExistingCredit && isNewDebit) {
-    // Reverse the impact on the invoice amount
+    // Reverses the impact on the invoice amount
     if (existingTransaction.invoiceId) {
       await updateInvoiceAmount({
         operation: "decrement",
@@ -139,7 +139,7 @@ export const upsertExpenseTransaction = async (
       });
     }
 
-    // Apply the impact on the account balance
+    // Applies the impact on the account balance
     if (updatedParams.accountId) {
       await updateSingleAccountBalance({
         operation: "decrement",
@@ -149,7 +149,7 @@ export const upsertExpenseTransaction = async (
       });
     }
 
-    // Ensure the removal of the `cardId` and `invoiceId` fields
+    // Ensures the removal of the `cardId` and `invoiceId` fields
     updatedParams.cardId = undefined;
     updatedParams.invoiceId = undefined;
   }
@@ -161,7 +161,7 @@ export const upsertExpenseTransaction = async (
     if (isNewCredit) {
       // If the invoice has changed
       if (existingTransaction?.invoiceId !== updatedParams.invoiceId) {
-        // Reverse the impact on the old invoice
+        // Reverses the impact on the old invoice
         if (existingTransaction?.invoiceId) {
           await updateInvoiceAmount({
             operation: "decrement",
@@ -171,7 +171,7 @@ export const upsertExpenseTransaction = async (
           });
         }
 
-        // Apply the impact on the new invoice
+        // Applies the impact on the new invoice
         await updateInvoiceAmount({
           operation: "increment",
           amount: updatedParams.amount,
@@ -190,7 +190,7 @@ export const upsertExpenseTransaction = async (
     } else if (isNewDebit) {
       // If the account has changed
       if (existingTransaction?.accountId !== updatedParams.accountId) {
-        // Reverse the balance on old account
+        // Reverses the balance on old account
         if (existingTransaction?.accountId) {
           await updateSingleAccountBalance({
             operation: "increment",
@@ -200,7 +200,7 @@ export const upsertExpenseTransaction = async (
           });
         }
 
-        // Apply the impact on the new account
+        // Applies the impact on the new account
         await updateSingleAccountBalance({
           operation: "decrement",
           amount: updatedParams.amount,
@@ -219,7 +219,7 @@ export const upsertExpenseTransaction = async (
     }
   }
 
-  // Update the transaction
+  // Updates the transaction
   await prismaClient.transaction.update({
     where: { id: updatedParams.id },
     data: { ...updatedParams, userId, type: "EXPENSE" },

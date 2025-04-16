@@ -43,7 +43,7 @@ export const generateAiReport = async ({
   const prompt = `Gere um relatório com insights sobre as minhas finanças, com dicas e orientações de como melhorar minha vida financeira. As transações estão divididas por ponto e vírgula. A estrutura de cada uma é {DATA}-{TIPO}-{VALOR}-{CATEGORIA}. São elas:
         ${transactions
           .map((transaction) => {
-            // Identify the category based on the transaction type
+            // Identifies the category based on the transaction type
             let category = "";
             switch (transaction.type) {
               case "GAIN":
@@ -62,7 +62,7 @@ export const generateAiReport = async ({
                 category = "Não especificado";
             }
 
-            // Generate the transaction format in the expected format
+            // Generates the transaction format in the expected format
             return `${transaction.date.toLocaleDateString("pt-BR")}-R$${transaction.amount}-${transaction.type}-${category}`;
           })
           .join(";")}`;

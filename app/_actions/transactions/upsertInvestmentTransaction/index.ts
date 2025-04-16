@@ -36,7 +36,7 @@ export const upsertInvestmentTransaction = async (
       existingTransaction.investmentCategory !== params.investmentCategory
     : false;
 
-  // Group all operations in a single transaction, to apply transactional processing.
+  // Groups all operations in a single transaction, to apply transactional processing.
   await db.$transaction(async (transaction) => {
     await transaction.transaction.upsert({
       update: { ...params, userId, type: "INVESTMENT", paymentMethod: "DEBIT" },
@@ -45,7 +45,7 @@ export const upsertInvestmentTransaction = async (
     });
 
     if (existingTransaction?.accountId && fieldsAffectingBalanceChanged) {
-      // Reverse the impact of the previous transaction on the account's balance
+      // Reverses the impact of the previous transaction on the account's balance
       const previousOperation =
         existingTransaction.investmentCategory === "INVESTMENT_NEGATIVE_RETURN"
           ? "decrement"
@@ -59,7 +59,7 @@ export const upsertInvestmentTransaction = async (
         transaction,
       });
 
-      // Apply the new transaction's impact on the balance
+      // Applies the new transaction's impact on the balance
       const newOperation =
         params.investmentCategory === "INVESTMENT_NEGATIVE_RETURN"
           ? "decrement"
@@ -72,7 +72,7 @@ export const upsertInvestmentTransaction = async (
         transaction,
       });
     } else if (!existingTransaction) {
-      // Update the balance of the account, if it's a new transaction.
+      // Updates the balance of the account, if it's a new transaction.
       const operation =
         params.investmentCategory === "INVESTMENT_NEGATIVE_RETURN"
           ? "decrement"

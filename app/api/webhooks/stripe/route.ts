@@ -25,7 +25,7 @@ export const POST = async (request: Request) => {
 
   switch (event.type) {
     case "invoice.paid": {
-      // Update user with the new plan
+      // Updates user with the new plan
       const { customer, subscription, subscription_details } =
         event.data.object;
 
@@ -47,7 +47,7 @@ export const POST = async (request: Request) => {
       break;
     }
     case "customer.subscription.deleted": {
-      // Remove user's premium plan
+      // Removes user's premium plan
       const subscription = await stripe.subscriptions.retrieve(
         event.data.object.id,
       );

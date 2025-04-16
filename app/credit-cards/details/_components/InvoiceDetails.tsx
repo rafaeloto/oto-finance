@@ -60,7 +60,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
     return undefined;
   }, [selectedInvoiceId, transactionsByInvoice]);
 
-  // Gets the transactions in the selected invoice
+  // Gets the status of the selected invoice
   const selectedInvoiceStatus = useMemo(() => {
     if (selectedInvoiceId) {
       return invoices.find((invoice) => invoice.id === selectedInvoiceId)

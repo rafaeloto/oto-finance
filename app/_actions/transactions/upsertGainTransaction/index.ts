@@ -30,7 +30,7 @@ export const upsertGainTransaction = async (
 
   const existingTransaction = await getTransaction({ id: params.id });
 
-  // Group all operations in a single transaction, to apply transactional processing.
+  // Groups all operations in a single transaction, to apply transactional processing.
   await db.$transaction(async (transaction) => {
     await transaction.transaction.upsert({
       update: { ...params, userId, type: "GAIN", paymentMethod: "DEBIT" },
@@ -44,7 +44,7 @@ export const upsertGainTransaction = async (
 
       // If the selected account has changed, we adjust the balance of the previous and new account.
       if (existingTransaction.accountId !== params.accountId) {
-        // Revert the balance of the previous account
+        // Reverts the balance of the previous account
         await updateSingleAccountBalance({
           operation: "decrement",
           amount: Number(existingTransaction.amount),
@@ -52,7 +52,7 @@ export const upsertGainTransaction = async (
           transaction,
         });
 
-        // Update the balance of the new account
+        // Updates the balance of the new account
         await updateSingleAccountBalance({
           operation: "increment",
           amount: params.amount,
@@ -60,7 +60,7 @@ export const upsertGainTransaction = async (
           transaction,
         });
       } else if (difference !== 0) {
-        // Update the only the balance of the account, if the ammount has changed.
+        // Updates the balance of the account, if the ammount has changed.
         await updateSingleAccountBalance({
           operation: difference > 0 ? "increment" : "decrement",
           amount: Math.abs(difference),
@@ -69,7 +69,7 @@ export const upsertGainTransaction = async (
         });
       }
     } else {
-      // Update the balance of the account, if it's a new transaction.
+      // Updates the balance of the account, if it's a new transaction.
       await updateSingleAccountBalance({
         operation: "increment",
         amount: params.amount,

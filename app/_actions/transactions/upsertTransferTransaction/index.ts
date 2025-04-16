@@ -34,14 +34,14 @@ export const upsertTransferTransaction = async (
 
   const existingTransaction = await getTransaction({ id: params.id });
 
-  // Identify if there were changes that impact the balances.
+  // Identifies if there were changes that impact the balances.
   const fieldsAffectingBalanceChanged = existingTransaction
     ? Number(existingTransaction.amount) !== params.amount ||
       existingTransaction.fromAccountId !== params.fromAccountId ||
       existingTransaction.toAccountId !== params.toAccountId
     : false;
 
-  // Group all operations in a single transaction, to apply transactional processing.
+  // Groups all operations in a single transaction, to apply transactional processing.
   await db.$transaction(
     async (transaction) => {
       await transaction.transaction.upsert({
@@ -55,7 +55,7 @@ export const upsertTransferTransaction = async (
         existingTransaction?.toAccountId &&
         fieldsAffectingBalanceChanged
       ) {
-        // Reverse the impact of the previous transaction on the balances
+        // Reverses the impact of the previous transaction on the balances
         await Promise.all([
           updateSingleAccountBalance({
             operation: "increment",
@@ -71,7 +71,7 @@ export const upsertTransferTransaction = async (
           }),
         ]);
 
-        // Apply the impact of the new transaction on the balances
+        // Applies the impact of the new transaction on the balances
         await Promise.all([
           updateSingleAccountBalance({
             operation: "decrement",
@@ -87,7 +87,7 @@ export const upsertTransferTransaction = async (
           }),
         ]);
       } else if (!existingTransaction) {
-        // Update the balance of the account, if it's a new transaction.
+        // Updates the balance of the account, if it's a new transaction.
         await updateAccountsBalances({
           amount: params.amount,
           fromAccountId: params.fromAccountId,

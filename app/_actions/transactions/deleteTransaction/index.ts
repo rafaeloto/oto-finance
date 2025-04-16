@@ -13,7 +13,7 @@ import { updateInvoiceAmount } from "@actions/invoices/updateInvoiceAmount";
 export const deleteTransaction = async ({
   transactionId,
 }: DeleteTransactionSchema) => {
-  // Retrieve the transaction
+  // Retrieves the transaction
   const transaction = await getTransaction({ id: transactionId });
 
   if (!transaction) {
@@ -29,13 +29,13 @@ export const deleteTransaction = async ({
     investmentCategory,
   } = transaction;
 
-  // Group all operations in a single transaction to ensure atomicity
+  // Groups all operations in a single transaction to ensure atomicity
   await db.$transaction(
     async (prismaClient) => {
       switch (transaction.type) {
         // Reverting the expense impact
         case "EXPENSE":
-          // Reverting the debit expense: add the amount back to the account
+          // Reverting the debit expense: adds the amount back to the account
           if (accountId) {
             await updateSingleAccountBalance({
               operation: "increment",
@@ -44,7 +44,7 @@ export const deleteTransaction = async ({
               transaction: prismaClient,
             });
           } else if (invoiceId) {
-            // Reverting the credit expense: remove the amount from the invoice total
+            // Reverting the credit expense: removes the amount from the invoice total
             await updateInvoiceAmount({
               operation: "decrement",
               amount: Number(amount),
@@ -54,7 +54,7 @@ export const deleteTransaction = async ({
           }
           break;
 
-        // Reverting the gain: subtract the amount from the account
+        // Reverting the gain: subtracts the amount from the account
         case "GAIN":
           if (accountId) {
             await updateSingleAccountBalance({
@@ -66,7 +66,7 @@ export const deleteTransaction = async ({
           }
           break;
 
-        // Reverting the transfer: move the amount back between the accounts
+        // Reverting the transfer: moves the amount back between the accounts
         case "TRANSFER":
           if (fromAccountId && toAccountId) {
             await updateAccountsBalances({
@@ -82,7 +82,7 @@ export const deleteTransaction = async ({
         case "INVESTMENT":
           if (accountId) {
             if (investmentCategory === "INVESTMENT_NEGATIVE_RETURN") {
-              // Reverting the negative return: add the amount back to the account
+              // Reverting the negative return: adds the amount back to the account
               await updateSingleAccountBalance({
                 operation: "increment",
                 amount: Number(amount),
@@ -90,7 +90,7 @@ export const deleteTransaction = async ({
                 transaction: prismaClient,
               });
             } else if (investmentCategory === "INVESTMENT_POSITIVE_RETURN") {
-              // Reverting the positive return: subtract the amount from the account
+              // Reverting the positive return: subtracts the amount from the account
               await updateSingleAccountBalance({
                 operation: "decrement",
                 amount: Number(amount),
@@ -105,7 +105,7 @@ export const deleteTransaction = async ({
           break;
       }
 
-      // Delete the transaction after adjusting balances
+      // Deletes the transaction after adjusting balances
       await prismaClient.transaction.delete({
         where: { id: transactionId },
       });

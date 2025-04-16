@@ -18,7 +18,7 @@ interface SummaryCardProps {
 // Mapping styles by size variant
 const sizeStyles = {
   small: {
-    card: "", // sem estilo extra
+    card: "", // no extra style
     title: "text-muted-foreground",
     amount: "text-2xl",
   },

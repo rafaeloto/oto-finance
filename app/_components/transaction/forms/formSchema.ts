@@ -71,7 +71,7 @@ export const formSchemas = {
         }
       }
 
-      // If paymentMethod is 'DEBIT', accountId must be required
+      // If paymentMethod is 'DEBIT', accountId is required
       if (
         data.paymentMethod === TransactionPaymentMethod.DEBIT &&
         !data.accountId

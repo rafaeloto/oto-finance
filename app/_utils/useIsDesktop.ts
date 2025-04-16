@@ -10,7 +10,7 @@ const useIsDesktop = () => {
       setIsDesktop(window.innerWidth > 768);
     };
 
-    checkScreenSize(); // Chama na montagem para definir o valor inicial
+    checkScreenSize(); // Calls on mount to set initial value
 
     window.addEventListener("resize", checkScreenSize);
 

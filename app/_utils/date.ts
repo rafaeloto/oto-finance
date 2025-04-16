@@ -178,7 +178,7 @@ export const getMonthDateRange = (month: string, year: string) => {
   const nextMonth = new Date(start);
   nextMonth.setUTCMonth(nextMonth.getUTCMonth() + 1);
 
-  const end = new Date(nextMonth.getTime() - 1); // Último milissegundo do mês atual
+  const end = new Date(nextMonth.getTime() - 1); // Last millisecond of the current month
 
   return { start, end };
 };

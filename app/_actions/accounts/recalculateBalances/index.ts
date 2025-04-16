@@ -53,7 +53,7 @@ export const recalculateBalances = async () => {
         });
       }
 
-      // Remove the amountPaid of paid invoices from the accounts balances
+      // Removes the amountPaid of paid invoices from the accounts balances
       for (const invoice of paidInvoices) {
         if (invoice.paidByAccountId && invoice.paymentAmount) {
           await updateSingleAccountBalance({

@@ -12,7 +12,7 @@ export const updateAllUserInvoices = async () => {
     throw new Error("Unauthorized");
   }
 
-  // Find all user credit cards
+  // Finds all user credit cards
   const userCreditCards = await db.creditCard.findMany({
     where: { userId },
     select: {
@@ -29,10 +29,10 @@ export const updateAllUserInvoices = async () => {
     },
   });
 
-  // Group all operations in a single transaction to ensure atomicity
+  // Groups all operations in a single transaction to ensure atomicity
   await db.$transaction(
     async (prismaClient) => {
-      // Iterate through all user credit cards and ensure their invoices are up to date
+      // Iterates through all user credit cards and ensure their invoices are up to date
       for (const card of userCreditCards) {
         await updateCardInvoices({
           openInvoices: card.invoices,

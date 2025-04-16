@@ -21,7 +21,7 @@ export const payInvoice = async (params: PayInvoiceParams) => {
     throw new Error("Unauthorized");
   }
 
-  // Fetch the invoice to validate its existence and current status
+  // Fetches the invoice to validate its existence and current status
   const invoice = await db.invoice.findUnique({
     where: { id: invoiceId },
   });
@@ -42,9 +42,9 @@ export const payInvoice = async (params: PayInvoiceParams) => {
     throw new Error("Invalid payment amount");
   }
 
-  // Group all operations in a single transaction, to apply transactional processing.
+  // Groups all operations in a single transaction, to apply transactional processing.
   await db.$transaction(async (transaction) => {
-    // Update the invoice details
+    // Updates the invoice details
     await transaction.invoice.update({
       where: { id: invoiceId },
       data: {
@@ -55,7 +55,7 @@ export const payInvoice = async (params: PayInvoiceParams) => {
       },
     });
 
-    // Decrease the balance of the account used for payment
+    // Decreases the balance of the account used for payment
     await updateSingleAccountBalance({
       operation: "decrement",
       amount: paymentAmount,
@@ -64,7 +64,7 @@ export const payInvoice = async (params: PayInvoiceParams) => {
     });
   });
 
-  // Revalidate the necessary paths for UI updates
+  // Revalidates the necessary paths for UI updates
   revalidatePath("/");
   revalidatePath("/accounts");
   revalidatePath("/invoices");

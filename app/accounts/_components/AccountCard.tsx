@@ -10,9 +10,10 @@ interface AccountCardProps {
 const AccountCard = ({ account }: AccountCardProps) => {
   return (
     <Card className="relative flex w-full max-w-[350px] items-center justify-around bg-white/5 px-5 py-10">
+      {/* Edit button on the top right */}
       <EditAccountButton account={account} className="absolute right-3 top-3" />
 
-      {/* Imagem à esquerda */}
+      {/* Image on the left */}
       <Image
         src={`/banks/${account.bank}.svg`}
         alt={account.bank}
@@ -20,7 +21,7 @@ const AccountCard = ({ account }: AccountCardProps) => {
         height={64}
       />
 
-      {/* Conteúdo à direita */}
+      {/* Content on the right */}
       <CardContent className="flex flex-col justify-between gap-3 px-3 py-6">
         <p className="text-lg font-semibold text-white opacity-70">
           {account.name}

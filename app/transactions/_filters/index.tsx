@@ -33,7 +33,7 @@ const TransactionFilters = () => {
 
   return (
     <>
-      {/* DESKTOP */}
+      {/* Desktop */}
       <div className="hidden space-x-4 md:flex">
         <InputFilter paramKey="name" placeholder="Nome" />
 
@@ -88,7 +88,7 @@ const TransactionFilters = () => {
         <TimeSelect />
       </div>
 
-      {/* MOBILE */}
+      {/* Mobile */}
       <div className="block md:hidden">
         <Button
           variant="outline"

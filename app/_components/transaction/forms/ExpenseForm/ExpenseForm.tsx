@@ -132,7 +132,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
 
     setUpserting(true);
 
-    // If it's a credit transaction, upsert credit transaction
+    // If it's a credit transaction, upserts credit transaction
     if (isCreditCard) {
       try {
         await handleCreditTransaction({
@@ -148,7 +148,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
       return;
     }
 
-    // If it's not a credit transaction, upsert debit transaction
+    // If it's not a credit transaction, upserts debit transaction
     try {
       delete data.cardId;
       delete data.installmentType;
