@@ -13,6 +13,7 @@ import {
 } from "@shadcn/dropdown-menu";
 import { Menu } from "lucide-react";
 import useIsDesktop from "@utils/useIsDesktop";
+import { cn } from "@/app/_lib/utils";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -27,9 +28,10 @@ const Navbar = () => {
   ];
 
   const optionColor = (href: string) => {
-    if (pathname === href) {
-      return "font-bold text-primary";
-    }
+    if (pathname === href) return "font-bold text-primary";
+
+    if (!isDesktop) return;
+
     return "text-muted-foreground";
   };
 
@@ -76,12 +78,12 @@ const Navbar = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="w-48 p-3 shadow-sm shadow-primary"
+              className="w-48 border border-white/30 p-3 shadow-sm shadow-primary"
             >
               {navItems.map(({ href, label }) => (
                 <DropdownMenuItem key={href} asChild>
-                  <Link href={href} className={`w-full ${optionColor(href)}`}>
-                    {label}
+                  <Link href={href} className="w-full">
+                    <p className={cn("text-lg", optionColor(href))}>{label}</p>
                   </Link>
                 </DropdownMenuItem>
               ))}
