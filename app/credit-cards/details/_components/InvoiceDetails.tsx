@@ -134,7 +134,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
       {/* Right side */}
       <div
         ref={transactionsRef}
-        className="flex max-h-[700px] w-full flex-col overflow-hidden md:h-full md:max-h-full md:w-1/2"
+        className="flex max-h-[700px] min-h-[250px] w-full flex-col overflow-hidden md:h-full md:max-h-full md:w-1/2"
       >
         <InvoiceTransactions
           transactions={selectedInvoiceTransactions}
