@@ -93,6 +93,7 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
             }
             paramKey="name"
             placeholder="Nome"
+            isInsideModal
           />
 
           <SelectFilter
