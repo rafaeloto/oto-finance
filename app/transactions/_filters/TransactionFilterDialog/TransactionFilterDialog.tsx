@@ -108,6 +108,7 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
               ),
             }))}
             placeholder="Tipo"
+            isInsideModal
           />
 
           <SelectFilter
@@ -121,6 +122,7 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
               label: option.label,
             }))}
             placeholder="Método"
+            isInsideModal
           />
 
           <SelectFilter
@@ -139,6 +141,7 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
               ),
             }))}
             placeholder="Conta"
+            isInsideModal
           />
 
           <SelectFilter
@@ -157,11 +160,13 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
               ),
             }))}
             placeholder="Cartão"
+            isInsideModal
           />
 
           <TimeSelect
             filters={{ month: filters.month, year: filters.year }}
             setFilters={setFilters}
+            isInsideModal
           />
         </div>
 

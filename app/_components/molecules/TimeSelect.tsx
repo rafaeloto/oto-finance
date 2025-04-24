@@ -11,9 +11,15 @@ type TimeSelectProps = {
   filters?: { month?: string; year?: string };
   setFilters?: Dispatch<SetStateAction<TransactionFilters>>;
   className?: string;
+  isInsideModal?: boolean;
 };
 
-const TimeSelect = ({ filters, setFilters, className }: TimeSelectProps) => {
+const TimeSelect = ({
+  filters,
+  setFilters,
+  className,
+  isInsideModal = false,
+}: TimeSelectProps) => {
   const searchParams = useSearchParams();
 
   const paramsMonth = searchParams.get("month")?.padStart(2, "0");
@@ -43,6 +49,8 @@ const TimeSelect = ({ filters, setFilters, className }: TimeSelectProps) => {
             setFilters((prev) => ({ ...prev, month: value ?? "" })),
         })}
         className={className}
+        hideClearButton
+        isInsideModal={isInsideModal}
       />
 
       <SelectFilter
@@ -55,6 +63,8 @@ const TimeSelect = ({ filters, setFilters, className }: TimeSelectProps) => {
             setFilters((prev) => ({ ...prev, year: value ?? "" })),
         })}
         className={className}
+        hideClearButton
+        isInsideModal={isInsideModal}
       />
     </>
   );
