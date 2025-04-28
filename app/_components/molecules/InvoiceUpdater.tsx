@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Cookies from "js-cookie";
 
 const InvoiceUpdater = () => {
-  const hasRun = Cookies.get("invoice-update-ran");
+  const hasRun = Cookies.get("invoice-update-ran") === "true";
 
   useEffect(() => {
     if (!hasRun) {
