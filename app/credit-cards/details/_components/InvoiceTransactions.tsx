@@ -4,28 +4,49 @@ import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/card";
 import { ScrollArea } from "@shadcn/scroll-area";
 import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@constants/transaction";
+import { MONTH_NAMES } from "@constants/month";
 import { formatCurrency } from "@utils/currency";
 import EditTransactionButton from "@components/transaction/EditTransactionButton";
 import DeleteTransactionButton from "@components/transaction/DeleteTransactionButton";
-import { Transaction } from "@prisma/client";
+import { Invoice, Transaction } from "@prisma/client";
 import Image from "next/image";
 import ShouldRender from "@atoms/ShouldRender";
 import useIsDesktop from "@utils/useIsDesktop";
 import TransactionInstallments from "@molecules/TransactionInstallments";
 
+export type TransactionsByInvoice = {
+  id: string;
+  transactions: Transaction[];
+}[];
+
 type InvoiceTransactionsProps = {
-  transactions: Transaction[] | undefined;
-  canChangeTransactions: boolean;
-  invoiceName?: string;
+  transactionsByInvoice: TransactionsByInvoice;
+  invoice: Invoice | undefined;
 };
 
 const InvoiceTransactions = ({
-  transactions,
-  canChangeTransactions,
-  invoiceName,
+  transactionsByInvoice,
+  invoice,
 }: InvoiceTransactionsProps) => {
-  const hasNoData = !transactions?.length;
   const isDesktop = useIsDesktop();
+
+  if (!invoice) {
+    return (
+      <Card className="flex h-full flex-col space-y-4">
+        <CardHeader>
+          <CardTitle className="font-bold">Transações da Fatura</CardTitle>
+        </CardHeader>
+        <EmptyListFeedback message="Nenhuma fatura selecionada" />
+      </Card>
+    );
+  }
+
+  const invoiceTransactions = transactionsByInvoice.find(
+    (invoice) => invoice.id === invoice.id,
+  )?.transactions;
+  const hasNoTransactions = !invoiceTransactions?.length;
+  const invoiceName = `${MONTH_NAMES[invoice.month]}/${invoice.year.toString().slice(-2)}`;
+  const canChangeTransactions = invoice.status !== "PAID";
 
   return (
     <Card className="flex h-full flex-col space-y-4">
@@ -39,12 +60,12 @@ const InvoiceTransactions = ({
         </ShouldRender>
       </CardHeader>
 
-      {hasNoData ? (
+      {hasNoTransactions ? (
         <EmptyListFeedback message="Nenhuma transação na fatura" />
       ) : (
         <ScrollArea className="flex-1">
           <CardContent className="space-y-6 px-3 py-0 md:px-6">
-            {transactions.map((transaction) => (
+            {invoiceTransactions.map((transaction) => (
               <div
                 key={transaction.id}
                 className="border-b-1 flex items-center justify-between border-b pb-4"

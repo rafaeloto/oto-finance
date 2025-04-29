@@ -5,14 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shadcn/tabs";
 import InvoiceList from "./InvoiceList";
 import { Card } from "@shadcn/card";
 import { INVOICE_STATUS_LABELS } from "@constants/creditCard";
-import { MONTH_NAMES } from "@constants/month";
-import InvoiceTransactions from "./InvoiceTransactions";
-import {
-  CreditCard,
-  Invoice,
-  InvoiceStatus,
-  Transaction,
-} from "@prisma/client";
+import InvoiceTransactions, {
+  type TransactionsByInvoice,
+} from "./InvoiceTransactions";
+import { CreditCard, Invoice, InvoiceStatus } from "@prisma/client";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { ScrollArea } from "@shadcn/scroll-area";
 import useIsDesktop from "@utils/useIsDesktop";
@@ -20,10 +16,7 @@ import useIsDesktop from "@utils/useIsDesktop";
 type InvoiceDetailsProps = {
   creditCard: CreditCard;
   invoices: Invoice[];
-  transactionsByInvoice: {
-    id: string;
-    transactions: Transaction[];
-  }[];
+  transactionsByInvoice: TransactionsByInvoice;
   userName?: string;
 };
 
@@ -51,34 +44,10 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
 
   const transactionsRef = useRef<HTMLDivElement | null>(null);
 
-  // Gets the transactions in the selected invoice
-  const selectedInvoiceTransactions = useMemo(() => {
-    if (selectedInvoiceId) {
-      return transactionsByInvoice.find(
-        (invoice) => invoice.id === selectedInvoiceId,
-      )?.transactions;
-    }
-    return undefined;
-  }, [selectedInvoiceId, transactionsByInvoice]);
-
-  const selectedInvoiceName = useMemo(() => {
+  const selectedInvoice = useMemo(() => {
     if (!selectedInvoiceId) return;
 
-    const invoice = invoices.find(
-      (invoice) => invoice.id === selectedInvoiceId,
-    );
-    if (!invoice) return;
-
-    return `${MONTH_NAMES[invoice.month]}/${invoice.year.toString().slice(-2)}`;
-  }, [invoices, selectedInvoiceId]);
-
-  // Gets the status of the selected invoice
-  const selectedInvoiceStatus = useMemo(() => {
-    if (selectedInvoiceId) {
-      return invoices.find((invoice) => invoice.id === selectedInvoiceId)
-        ?.status;
-    }
-    return undefined;
+    return invoices.find((invoice) => invoice.id === selectedInvoiceId);
   }, [invoices, selectedInvoiceId]);
 
   // Function to handle invoice selection, updating the state
@@ -149,9 +118,8 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
         className="flex max-h-[700px] min-h-[250px] w-full flex-col overflow-hidden md:h-full md:max-h-full md:w-1/2"
       >
         <InvoiceTransactions
-          transactions={selectedInvoiceTransactions}
-          canChangeTransactions={selectedInvoiceStatus !== "PAID"}
-          invoiceName={selectedInvoiceName}
+          transactionsByInvoice={transactionsByInvoice}
+          invoice={selectedInvoice}
         />
       </div>
     </div>
