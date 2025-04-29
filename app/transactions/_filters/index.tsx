@@ -15,6 +15,7 @@ import TimeSelect from "@molecules/TimeSelect";
 import { Button } from "@shadcn/button";
 import { FilterIcon } from "lucide-react";
 import TransactionFilterDialog from "./TransactionFilterDialog";
+import ClearFiltersButton from "./ClearFiltersButton";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/app/_lib/utils";
@@ -26,7 +27,10 @@ const TransactionFilters = () => {
   const [open, setOpen] = useState(false);
 
   const searchParams = useSearchParams();
-  // Checks if any filter, except 'month' and 'year', is active
+
+  /**
+   * Checks if any filter, except 'month' and 'year', is active
+   */
   const hasActiveFilters = Array.from(searchParams.entries()).some(
     ([key, value]) => value && key !== "month" && key !== "year",
   );
@@ -86,6 +90,8 @@ const TransactionFilters = () => {
         />
 
         <TimeSelect />
+
+        <ClearFiltersButton shouldRender={hasActiveFilters} />
       </div>
 
       {/* Mobile */}

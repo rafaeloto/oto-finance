@@ -21,6 +21,7 @@ import { TransactionType } from "@prisma/client";
 import { useAccounts } from "@contexts/AccountsContext";
 import { useCreditCards } from "@contexts/CreditCardsContext";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
+import ClearFiltersButton from "../ClearFiltersButton";
 
 export type TransactionFilters = {
   name: string;
@@ -54,6 +55,13 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
     month: "",
     year: "",
   });
+
+  /**
+   * Checks if any filter, except 'month' and 'year', is active
+   */
+  const hasActiveFilters = Array.from(searchParams.entries()).some(
+    ([key, value]) => value && key !== "month" && key !== "year",
+  );
 
   // Fills the filters with the URL values when opening the modal
   useEffect(() => {
@@ -168,6 +176,13 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
             filters={{ month: filters.month, year: filters.year }}
             setFilters={setFilters}
             isInsideModal
+          />
+
+          <ClearFiltersButton
+            shouldRender={hasActiveFilters}
+            onClick={() => {
+              setOpen(false);
+            }}
           />
         </div>
 
