@@ -16,19 +16,27 @@ import TransactionInstallments from "@molecules/TransactionInstallments";
 type InvoiceTransactionsProps = {
   transactions: Transaction[] | undefined;
   canChangeTransactions: boolean;
+  invoiceName?: string;
 };
 
 const InvoiceTransactions = ({
   transactions,
   canChangeTransactions,
+  invoiceName,
 }: InvoiceTransactionsProps) => {
   const hasNoData = !transactions?.length;
   const isDesktop = useIsDesktop();
 
   return (
     <Card className="flex h-full flex-col space-y-4">
-      <CardHeader className="flex-row items-center justify-between px-3 md:px-6">
+      <CardHeader className="flex items-start gap-2 space-y-0 px-3 md:flex-row md:items-baseline md:gap-3 md:px-6">
         <CardTitle className="font-bold">Transações da Fatura</CardTitle>
+        <ShouldRender if={!!invoiceName}>
+          <ShouldRender if={isDesktop}>-</ShouldRender>
+          <p className="text-lg text-muted-foreground md:text-xl">
+            {invoiceName}
+          </p>
+        </ShouldRender>
       </CardHeader>
 
       {hasNoData ? (

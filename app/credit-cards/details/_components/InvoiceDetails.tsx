@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shadcn/tabs";
 import InvoiceList from "./InvoiceList";
 import { Card } from "@shadcn/card";
 import { INVOICE_STATUS_LABELS } from "@constants/creditCard";
+import { MONTH_NAMES } from "@constants/month";
 import InvoiceTransactions from "./InvoiceTransactions";
 import {
   CreditCard,
@@ -59,6 +60,17 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
     }
     return undefined;
   }, [selectedInvoiceId, transactionsByInvoice]);
+
+  const selectedInvoiceName = useMemo(() => {
+    if (!selectedInvoiceId) return;
+
+    const invoice = invoices.find(
+      (invoice) => invoice.id === selectedInvoiceId,
+    );
+    if (!invoice) return;
+
+    return `${MONTH_NAMES[invoice.month]}/${invoice.year.toString().slice(-2)}`;
+  }, [invoices, selectedInvoiceId]);
 
   // Gets the status of the selected invoice
   const selectedInvoiceStatus = useMemo(() => {
@@ -139,6 +151,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
         <InvoiceTransactions
           transactions={selectedInvoiceTransactions}
           canChangeTransactions={selectedInvoiceStatus !== "PAID"}
+          invoiceName={selectedInvoiceName}
         />
       </div>
     </div>
