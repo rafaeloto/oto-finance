@@ -9,15 +9,18 @@ import {
   TooltipTrigger,
 } from "@shadcn/tooltip";
 import UpsertTransactionDialog from "@components/transaction/UpsertTransactionDialog";
-import { ArrowDownUpIcon } from "lucide-react";
+import { ArrowDownUpIcon, PlusIcon } from "lucide-react";
 import useIsDesktop from "@utils/useIsDesktop";
+import ShouldRender from "@atoms/ShouldRender";
 
 interface AddTransactionButtonProps {
-  userCanAddTransaction?: boolean;
+  canUserAddTransaction?: boolean;
+  short?: boolean;
 }
 
 const AddTransactionButton = ({
-  userCanAddTransaction,
+  canUserAddTransaction,
+  short = false,
 }: AddTransactionButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -31,15 +34,21 @@ const AddTransactionButton = ({
             <Button
               className="rounded-full font-bold"
               onClick={() => setIsDialogOpen(true)}
-              disabled={!userCanAddTransaction}
+              disabled={!canUserAddTransaction}
+              {...(short && { size: "icon" })}
             >
-              {isDesktop ? "Adicionar transação" : "Adicionar"}
-              <ArrowDownUpIcon />
+              <ShouldRender if={short}>
+                <PlusIcon />
+              </ShouldRender>
+              <ShouldRender if={!short}>
+                {isDesktop ? "Adicionar transação" : "Adicionar"}
+                <ArrowDownUpIcon />
+              </ShouldRender>
             </Button>
           </TooltipTrigger>
 
           <TooltipContent>
-            {!userCanAddTransaction &&
+            {!canUserAddTransaction &&
               "Você atingiu o limite de transações. Atualize seu plano para criar transações ilimitadas."}
           </TooltipContent>
         </Tooltip>

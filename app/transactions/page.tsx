@@ -3,7 +3,7 @@ import Navbar from "@molecules/Navbar";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ScrollArea } from "@shadcn/scroll-area";
-import { canUserAddTransaction } from "@data/canUserAddTransaction";
+import { getCanUserAddTransaction } from "@data/getCanUserAddTransaction";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { getCreditCards } from "@data/getCreditCards";
 import { TransactionsTable } from "./_table";
@@ -31,7 +31,7 @@ const TransactionsPage = async ({ searchParams }: PageProps) => {
   const transactions = await getTransactions(filters);
   const hasNoData = transactions.length === 0;
 
-  const userCanAddTransaction = await canUserAddTransaction();
+  const canUserAddTransaction = await getCanUserAddTransaction();
   const creditCards = await getCreditCards();
   const accounts = await getAccounts();
   const paidInvoices = await getInvoices({ status: "PAID" });
@@ -46,7 +46,7 @@ const TransactionsPage = async ({ searchParams }: PageProps) => {
           <div className="flex gap-2">
             <TransactionFilters />
             <AddTransactionButton
-              userCanAddTransaction={userCanAddTransaction}
+              canUserAddTransaction={canUserAddTransaction}
             />
           </div>
         </div>

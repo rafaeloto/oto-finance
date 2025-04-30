@@ -7,7 +7,7 @@ import TransactionsPieChart from "./_components/TransactionsPieChart";
 import { getDashboard } from "@data/getDashboard";
 import ExpensesPerCategory from "./_components/ExpensesPerCategory";
 import LastTransactions from "./_components/LastTransactions";
-import { canUserAddTransaction } from "@data/canUserAddTransaction";
+import { getCanUserAddTransaction } from "@data/getCanUserAddTransaction";
 // import AiReportButton from "./_components/AiReportButton";
 import { getValidDateFromParams } from "@utils/date";
 import AddTransactionButton from "@components/transaction/AddTransactionButton";
@@ -30,7 +30,7 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
   const { validMonth, validYear } = getValidDateFromParams(month, year);
 
   const dashboard = await getDashboard(validMonth, validYear);
-  const userCanAddTransaction = await canUserAddTransaction();
+  const canUserAddTransaction = await getCanUserAddTransaction();
   // const user = await getUser()
 
   return (
@@ -50,7 +50,7 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
                 }
                 /> */}
             <AddTransactionButton
-              userCanAddTransaction={userCanAddTransaction}
+              canUserAddTransaction={canUserAddTransaction}
             />
           </div>
         </div>

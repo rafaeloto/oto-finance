@@ -18,10 +18,17 @@ type InvoiceDetailsProps = {
   invoices: Invoice[];
   transactionsByInvoice: TransactionsByInvoice;
   userName?: string;
+  canUserAddTransaction: boolean;
 };
 
 const InvoiceDetails = (props: InvoiceDetailsProps) => {
-  const { creditCard, invoices, transactionsByInvoice, userName } = props;
+  const {
+    creditCard,
+    invoices,
+    transactionsByInvoice,
+    userName,
+    canUserAddTransaction,
+  } = props;
   const isDesktop = useIsDesktop();
 
   // Function to filter invoices by status and sort them
@@ -119,7 +126,8 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
       >
         <InvoiceTransactions
           transactionsByInvoice={transactionsByInvoice}
-          invoice={selectedInvoice}
+          selectedInvoice={selectedInvoice}
+          canUserAddTransaction={canUserAddTransaction}
         />
       </div>
     </div>

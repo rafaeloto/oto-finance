@@ -5,6 +5,7 @@ import { getInvoices } from "@data/getInvoices";
 import { getTransactions } from "@data/getTransactions";
 import InvoiceDetails from "./_components/InvoiceDetails";
 import { getUser } from "@data/getUser";
+import { getCanUserAddTransaction } from "@data/getCanUserAddTransaction";
 
 interface CardDetailsProps {
   searchParams: {
@@ -35,6 +36,8 @@ const CreditCardDetails = async ({
 
   const { fullName: userName } = await getUser();
 
+  const canUserAddTransaction = await getCanUserAddTransaction();
+
   return (
     <>
       <div className="sticky top-0 z-10 md:static md:z-0">
@@ -50,6 +53,7 @@ const CreditCardDetails = async ({
             invoices={invoices}
             transactionsByInvoice={transactionsByInvoice}
             userName={userName || undefined}
+            canUserAddTransaction={canUserAddTransaction}
           />
         )}
       </div>

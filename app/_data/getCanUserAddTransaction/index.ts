@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { getCurrentMonthTransactions } from "@data/getCurrentMonthTransactions";
 import { getUser } from "@data/getUser";
 
-export const canUserAddTransaction = async () => {
+export const getCanUserAddTransaction = async () => {
   const { userId } = await auth();
 
   if (!userId) {

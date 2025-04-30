@@ -13,6 +13,7 @@ import Image from "next/image";
 import ShouldRender from "@atoms/ShouldRender";
 import useIsDesktop from "@utils/useIsDesktop";
 import TransactionInstallments from "@molecules/TransactionInstallments";
+import AddTransactionButton from "@components/transaction/AddTransactionButton";
 
 export type TransactionsByInvoice = {
   id: string;
@@ -21,19 +22,21 @@ export type TransactionsByInvoice = {
 
 type InvoiceTransactionsProps = {
   transactionsByInvoice: TransactionsByInvoice;
-  invoice: Invoice | undefined;
+  selectedInvoice: Invoice | undefined;
+  canUserAddTransaction: boolean;
 };
 
 const InvoiceTransactions = ({
   transactionsByInvoice,
-  invoice,
+  selectedInvoice,
+  canUserAddTransaction,
 }: InvoiceTransactionsProps) => {
   const isDesktop = useIsDesktop();
 
-  if (!invoice) {
+  if (!selectedInvoice) {
     return (
       <Card className="flex h-full flex-col space-y-4">
-        <CardHeader>
+        <CardHeader className="bg-muted">
           <CardTitle className="font-bold">Transações da Fatura</CardTitle>
         </CardHeader>
         <EmptyListFeedback message="Nenhuma fatura selecionada" />
@@ -42,22 +45,30 @@ const InvoiceTransactions = ({
   }
 
   const invoiceTransactions = transactionsByInvoice.find(
-    (invoice) => invoice.id === invoice.id,
+    (invoice) => invoice.id === selectedInvoice.id,
   )?.transactions;
   const hasNoTransactions = !invoiceTransactions?.length;
-  const invoiceName = `${MONTH_NAMES[invoice.month]}/${invoice.year.toString().slice(-2)}`;
-  const canChangeTransactions = invoice.status !== "PAID";
+  const invoiceName = `${MONTH_NAMES[selectedInvoice.month]}/${selectedInvoice.year.toString().slice(-2)}`;
+  const canChangeTransactions = selectedInvoice.status !== "PAID";
 
   return (
     <Card className="flex h-full flex-col space-y-4">
-      <CardHeader className="flex items-start gap-2 space-y-0 px-3 md:flex-row md:items-baseline md:gap-3 md:px-6">
-        <CardTitle className="font-bold">Transações da Fatura</CardTitle>
-        <ShouldRender if={!!invoiceName}>
-          <ShouldRender if={isDesktop}>-</ShouldRender>
-          <p className="text-lg text-muted-foreground md:text-xl">
-            {invoiceName}
-          </p>
-        </ShouldRender>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-muted px-3 pb-4 md:px-6 md:pb-6">
+        <div className="flex flex-col items-start gap-2 md:flex-row md:items-baseline md:gap-3">
+          <CardTitle className="text-xl font-bold md:text-2xl">
+            Transações da Fatura
+          </CardTitle>
+          <ShouldRender if={!!invoiceName}>
+            <ShouldRender if={isDesktop}>-</ShouldRender>
+            <p className="text-lg text-muted-foreground md:text-xl">
+              {invoiceName}
+            </p>
+          </ShouldRender>
+        </div>
+        <AddTransactionButton
+          canUserAddTransaction={canUserAddTransaction}
+          short={!isDesktop}
+        />
       </CardHeader>
 
       {hasNoTransactions ? (
