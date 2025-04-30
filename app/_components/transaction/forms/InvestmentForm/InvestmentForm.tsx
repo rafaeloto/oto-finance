@@ -68,13 +68,13 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
     try {
       await upsertInvestmentTransaction({ ...data, id: transactionId });
       toast.success(
-        `Transação ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
+        `Investimento ${isUpdate ? "atualizado" : "criado"} com sucesso!`,
       );
       setIsOpen(false);
       form.reset();
     } catch (error) {
       console.error(error);
-      toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
+      toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} investimento!`);
     } finally {
       setUpserting(false);
     }

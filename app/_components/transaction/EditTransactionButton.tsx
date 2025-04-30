@@ -32,6 +32,7 @@ const EditTransactionButton = ({
       <UpsertTransactionDialog
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
+        type={transaction.type}
         transaction={transaction}
       />
     </>

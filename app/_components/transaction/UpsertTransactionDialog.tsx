@@ -1,6 +1,6 @@
 "use client";
 
-import { Transaction } from "@prisma/client";
+import { Transaction, TransactionType } from "@prisma/client";
 import {
   Dialog,
   DialogContent,
@@ -8,33 +8,43 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@shadcn/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shadcn/tabs";
 import ExpenseForm from "@components/transaction/forms/ExpenseForm";
 import GainForm from "./forms/GainForm";
 import TransferForm from "./forms/TransferForm";
 import InvestmentForm from "./forms/InvestmentForm";
 import { ScrollArea } from "@shadcn/scroll-area";
+import { TRANSACTION_TYPE_LABELS } from "@/app/_constants/transaction";
+
+const formComponents: Partial<
+  Record<
+    TransactionType,
+    React.ComponentType<{
+      transaction?: Transaction;
+      setIsOpen: (open: boolean) => void;
+    }>
+  >
+> = {
+  GAIN: GainForm,
+  EXPENSE: ExpenseForm,
+  TRANSFER: TransferForm,
+  INVESTMENT: InvestmentForm,
+};
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   transaction?: Transaction;
+  type: TransactionType;
 }
 
 const UpsertTransactionDialog = ({
   isOpen,
   setIsOpen,
   transaction,
+  type,
 }: UpsertTransactionDialogProps) => {
-  const { id: transactionId, type: transactionType } = transaction || {};
-  const isUpdate = !!transactionId;
-
-  const tabValueMap = {
-    EXPENSE: "expense",
-    GAIN: "gain",
-    TRANSFER: "transfer",
-    INVESTMENT: "investment",
-  };
+  const isUpdate = !!transaction?.id;
+  const FormComponent = formComponents[type];
 
   return (
     <Dialog
@@ -46,69 +56,21 @@ const UpsertTransactionDialog = ({
       <DialogContent className="flex h-[85svh] w-[95svw] max-w-lg flex-col py-8 pr-1">
         <DialogHeader>
           <DialogTitle>
-            {isUpdate ? "Atualizar" : "Adicionar"} Transação
+            {isUpdate ? "Atualizar" : "Adicionar"}{" "}
+            {TRANSACTION_TYPE_LABELS[type]}
           </DialogTitle>
           <DialogDescription>Insira as informações abaixo</DialogDescription>
         </DialogHeader>
 
-        <Tabs
-          defaultValue={tabValueMap[transactionType || "EXPENSE"]}
-          className="flex h-0 flex-1 flex-col"
-        >
-          <TabsList className="mr-5 flex h-12 justify-between overflow-x-auto whitespace-nowrap px-2 md:px-5">
-            <TabsTrigger
-              value="expense"
-              disabled={isUpdate && transactionType !== "EXPENSE"}
-            >
-              Despesa
-            </TabsTrigger>
-
-            <TabsTrigger
-              value="gain"
-              disabled={isUpdate && transactionType !== "GAIN"}
-            >
-              Ganho
-            </TabsTrigger>
-
-            <TabsTrigger
-              value="transfer"
-              disabled={isUpdate && transactionType !== "TRANSFER"}
-            >
-              Transferência
-            </TabsTrigger>
-
-            <TabsTrigger
-              value="investment"
-              disabled={isUpdate && transactionType !== "INVESTMENT"}
-            >
-              Investimento
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="expense" className="mt-5 h-0 flex-1">
-            <ScrollArea className="h-full pr-5">
-              <ExpenseForm setIsOpen={setIsOpen} transaction={transaction} />
-            </ScrollArea>
-          </TabsContent>
-
-          <TabsContent value="gain" className="mt-5 h-0 flex-1">
-            <ScrollArea className="h-full pr-5">
-              <GainForm setIsOpen={setIsOpen} transaction={transaction} />
-            </ScrollArea>
-          </TabsContent>
-
-          <TabsContent value="transfer" className="mt-5 h-0 flex-1">
-            <ScrollArea className="h-full pr-5">
-              <TransferForm setIsOpen={setIsOpen} transaction={transaction} />
-            </ScrollArea>
-          </TabsContent>
-
-          <TabsContent value="investment" className="mt-5 h-0 flex-1">
-            <ScrollArea className="h-full pr-5">
-              <InvestmentForm setIsOpen={setIsOpen} transaction={transaction} />
-            </ScrollArea>
-          </TabsContent>
-        </Tabs>
+        <ScrollArea className="h-full pr-5">
+          {FormComponent ? (
+            <FormComponent transaction={transaction} setIsOpen={setIsOpen} />
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Formulário não disponível para este tipo.
+            </p>
+          )}
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

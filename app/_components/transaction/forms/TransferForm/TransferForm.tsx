@@ -68,13 +68,13 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
     try {
       await upsertTransferTransaction({ ...data, id: transactionId });
       toast.success(
-        `Transação ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
+        `Transferência ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
       );
       setIsOpen(false);
       form.reset();
     } catch (error) {
       console.error(error);
-      toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
+      toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transferencia!`);
     } finally {
       setUpserting(false);
     }

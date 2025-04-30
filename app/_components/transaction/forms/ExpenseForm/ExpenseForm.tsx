@@ -118,7 +118,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
     const onSuccess = () => {
       setUpserting(false);
       toast.success(
-        `Transação ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
+        `Despesa ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
       );
       setIsOpen(false);
       form.reset();
@@ -126,7 +126,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
 
     const onError = (error: Error) => {
       setUpserting(false);
-      toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
+      toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} despesa!`);
       console.error(error);
     };
 

@@ -65,14 +65,12 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
 
     try {
       await upsertGainTransaction({ ...data, id: transactionId });
-      toast.success(
-        `Transação ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
-      );
+      toast.success(`Ganho ${isUpdate ? "atualizado" : "criado"} com sucesso!`);
       setIsOpen(false);
       form.reset();
     } catch (error) {
       console.error(error);
-      toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} transação!`);
+      toast.error(`Erro ao ${isUpdate ? "atualizar" : "criar"} ganho!`);
     } finally {
       setUpserting(false);
     }

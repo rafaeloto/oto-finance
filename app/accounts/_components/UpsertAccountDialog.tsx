@@ -107,7 +107,9 @@ const UpsertAccountDialog = ({
     >
       <DialogContent className="flex h-[65svh] w-[95svw] max-w-lg flex-col py-8 pr-1">
         <DialogHeader>
-          <DialogTitle>Adicionar Conta</DialogTitle>
+          <DialogTitle>
+            {isUpdate ? "Atualizar" : "Adicionar"} Conta
+          </DialogTitle>
           <DialogDescription>Insira as informações abaixo</DialogDescription>
         </DialogHeader>
 
