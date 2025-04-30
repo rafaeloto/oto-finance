@@ -13,7 +13,7 @@ import Image from "next/image";
 import ShouldRender from "@atoms/ShouldRender";
 import useIsDesktop from "@utils/useIsDesktop";
 import TransactionInstallments from "@molecules/TransactionInstallments";
-import AddTransactionButton from "@components/transaction/AddTransactionButton";
+import AddExpenseButton from "@components/transaction/AddExpenseButton";
 
 export type TransactionsByInvoice = {
   id: string;
@@ -65,7 +65,8 @@ const InvoiceTransactions = ({
             </p>
           </ShouldRender>
         </div>
-        <AddTransactionButton
+
+        <AddExpenseButton
           canUserAddTransaction={canUserAddTransaction}
           short={!isDesktop}
         />
