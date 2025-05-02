@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { TransactionType } from "@prisma/client";
 
 type GetCategoriesParams = {
-  type: TransactionType;
+  type?: TransactionType;
 };
 
 export const getCategories = async ({ type }: GetCategoriesParams) => {
@@ -15,7 +15,7 @@ export const getCategories = async ({ type }: GetCategoriesParams) => {
 
   return db.category.findMany({
     where: {
-      type,
+      ...(!!type && { type }),
       OR: [{ userId: userId }, { userId: null }],
     },
     orderBy: {

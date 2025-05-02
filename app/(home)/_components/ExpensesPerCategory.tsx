@@ -2,7 +2,6 @@ import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { CardContent, CardHeader, CardTitle } from "@shadcn/card";
 import { Progress } from "@shadcn/progress";
 import { ScrollArea } from "@shadcn/scroll-area";
-import { EXPENSE_TRANSACTION_CATEGORY_LABELS } from "@constants/transaction";
 import type { TotalExpensePerCategory } from "@data/getDashboard/types";
 
 interface ExpensesPerCategoryProps {
@@ -28,9 +27,7 @@ const ExpensesPerCategory = ({
             {expensesPerCategory.map((category) => (
               <div key={category.category} className="space-y-2">
                 <div className="flex w-full justify-between">
-                  <p className="text-sm font-bold">
-                    {EXPENSE_TRANSACTION_CATEGORY_LABELS[category.category]}
-                  </p>
+                  <p className="text-sm font-bold">{category.category}</p>
                   <p className="text-sm font-bold">
                     {category.percentageOfTotal}%
                   </p>

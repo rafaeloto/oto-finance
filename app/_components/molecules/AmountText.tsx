@@ -1,15 +1,14 @@
 import { formatCurrency } from "@utils/currency";
 import { Transaction, TransactionType } from "@prisma/client";
+import { NEGATIVE_RETURN_ID, POSITIVE_RETURN_ID } from "@constants/category";
 
 const getColorAndPrefix = (transaction: Transaction) => {
-  const { type, investmentCategory } = transaction;
+  const { type, categoryId } = transaction;
 
   const isPositive =
-    type === TransactionType.GAIN ||
-    investmentCategory === "INVESTMENT_POSITIVE_RETURN";
+    type === TransactionType.GAIN || categoryId === POSITIVE_RETURN_ID;
   const isNegative =
-    type === TransactionType.EXPENSE ||
-    investmentCategory === "INVESTMENT_NEGATIVE_RETURN";
+    type === TransactionType.EXPENSE || categoryId === NEGATIVE_RETURN_ID;
 
   if (isPositive) {
     return {

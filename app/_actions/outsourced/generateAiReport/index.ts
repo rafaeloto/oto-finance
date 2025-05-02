@@ -5,6 +5,7 @@ import { generateAiReportSchema, GenerateAiReportSchema } from "./schema";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getUser } from "@data/getUser";
 import { getTransactions } from "@data/getTransactions";
+import { getCategoryById } from "@data/getCategoryById";
 
 export const generateAiReport = async ({
   month,
@@ -40,32 +41,17 @@ export const generateAiReport = async ({
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-  const prompt = `Gere um relatório com insights sobre as minhas finanças, com dicas e orientações de como melhorar minha vida financeira. As transações estão divididas por ponto e vírgula. A estrutura de cada uma é {DATA}-{TIPO}-{VALOR}-{CATEGORIA}. São elas:
-        ${transactions
-          .map((transaction) => {
-            // Identifies the category based on the transaction type
-            let category = "";
-            switch (transaction.type) {
-              case "GAIN":
-                category = transaction.gainCategory || "Não especificado";
-                break;
-              case "EXPENSE":
-                category = transaction.expenseCategory || "Não especificado";
-                break;
-              case "INVESTMENT":
-                category = transaction.investmentCategory || "Não especificado";
-                break;
-              case "TRANSFER":
-                category = transaction.transferCategory || "Não especificado";
-                break;
-              default:
-                category = "Não especificado";
-            }
+  const transactionStrings = await Promise.all(
+    transactions.map(async (transaction) => {
+      const category = await getCategoryById({
+        id: transaction.categoryId || "",
+      });
 
-            // Generates the transaction format in the expected format
-            return `${transaction.date.toLocaleDateString("pt-BR")}-R$${transaction.amount}-${transaction.type}-${category}`;
-          })
-          .join(";")}`;
+      return `${transaction.date.toLocaleDateString("pt-BR")}-R$${transaction.amount}-${transaction.type}-${category?.name}`;
+    }),
+  );
+
+  const prompt = `Gere um relatório com insights sobre as minhas finanças, com dicas e orientações de como melhorar minha vida financeira. As transações estão divididas por ponto e vírgula. A estrutura de cada uma é {DATA}-{TIPO}-{VALOR}-{CATEGORIA}. São elas: ${transactionStrings.join(";")}`;
 
   const result = await model.generateContent(prompt);
   const text = result.response.text();

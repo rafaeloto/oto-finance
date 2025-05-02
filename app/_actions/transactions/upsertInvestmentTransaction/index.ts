@@ -7,6 +7,7 @@ import { upsertInvestmentTransactionSchema } from "./schema";
 import { revalidatePath } from "next/cache";
 import { updateSingleAccountBalance } from "@actions/accounts/updateBalance";
 import getTransaction from "@data/getTransaction";
+import { NEGATIVE_RETURN_ID } from "@constants/category";
 
 interface UpsertInvestmentTransactionParams {
   id?: string;
@@ -35,7 +36,7 @@ export const upsertInvestmentTransaction = async (
   const fieldsAffectingBalanceChanged = existingTransaction
     ? Number(existingTransaction.amount) !== params.amount ||
       existingTransaction.accountId !== params.accountId ||
-      existingTransaction.investmentCategory !== params.investmentCategory
+      existingTransaction.categoryId !== params.categoryId
     : false;
 
   // Groups all operations in a single transaction, to apply transactional processing.
@@ -49,7 +50,7 @@ export const upsertInvestmentTransaction = async (
     if (existingTransaction?.accountId && fieldsAffectingBalanceChanged) {
       // Reverses the impact of the previous transaction on the account's balance
       const previousOperation =
-        existingTransaction.investmentCategory === "INVESTMENT_NEGATIVE_RETURN"
+        existingTransaction.categoryId === NEGATIVE_RETURN_ID
           ? "decrement"
           : "increment";
 
@@ -63,9 +64,7 @@ export const upsertInvestmentTransaction = async (
 
       // Applies the new transaction's impact on the balance
       const newOperation =
-        params.investmentCategory === "INVESTMENT_NEGATIVE_RETURN"
-          ? "decrement"
-          : "increment";
+        params.categoryId === NEGATIVE_RETURN_ID ? "decrement" : "increment";
 
       await updateSingleAccountBalance({
         operation: newOperation,
@@ -76,9 +75,7 @@ export const upsertInvestmentTransaction = async (
     } else if (!existingTransaction) {
       // Updates the balance of the account, if it's a new transaction.
       const operation =
-        params.investmentCategory === "INVESTMENT_NEGATIVE_RETURN"
-          ? "decrement"
-          : "increment";
+        params.categoryId === NEGATIVE_RETURN_ID ? "decrement" : "increment";
 
       await updateSingleAccountBalance({
         operation,

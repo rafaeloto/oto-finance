@@ -15,6 +15,7 @@ import {
   type getTransactionsParams,
 } from "@data/getTransactions";
 import { validateSearchParams } from "./_filters/validateFilters";
+import { getCategories } from "@data/getCategories";
 
 type PageProps = {
   searchParams: getTransactionsParams;
@@ -34,6 +35,7 @@ const TransactionsPage = async ({ searchParams }: PageProps) => {
   const canUserAddTransaction = await getCanUserAddTransaction();
   const creditCards = await getCreditCards();
   const accounts = await getAccounts();
+  const categories = await getCategories({});
   const paidInvoices = await getInvoices({ status: "PAID" });
 
   return (
@@ -59,6 +61,7 @@ const TransactionsPage = async ({ searchParams }: PageProps) => {
               transactions={transactions}
               creditCards={creditCards}
               accounts={accounts}
+              categories={categories}
               paidInvoices={paidInvoices}
             />
           </ScrollArea>

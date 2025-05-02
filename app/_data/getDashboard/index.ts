@@ -1,9 +1,16 @@
 import { db } from "@/app/_lib/prisma";
-import { ExpenseTransactionCategory, TransactionType } from "@prisma/client";
+import { TransactionType } from "@prisma/client";
 import { TotalExpensePerCategory, TransactionPercentagePerType } from "./types";
 import { getMonthDateRange } from "@utils/date";
 import { auth } from "@clerk/nextjs/server";
 import { getTotalBalance } from "@data/getTotalBalance";
+import { getCategories } from "@data/getCategories";
+import {
+  INVESTMENT_DEPOSIT_ID,
+  INVESTMENT_WITHDRAW_ID,
+  NEGATIVE_RETURN_ID,
+  POSITIVE_RETURN_ID,
+} from "@constants/category";
 
 export const getDashboard = async (month: string, year: string) => {
   const { userId } = await auth();
@@ -45,7 +52,7 @@ export const getDashboard = async (month: string, year: string) => {
       where: {
         ...where,
         type: "INVESTMENT",
-        investmentCategory: "INVESTMENT_POSITIVE_RETURN",
+        categoryId: POSITIVE_RETURN_ID,
       },
       _sum: { amount: true },
     }),
@@ -53,7 +60,7 @@ export const getDashboard = async (month: string, year: string) => {
       where: {
         ...where,
         type: "INVESTMENT",
-        investmentCategory: "INVESTMENT_NEGATIVE_RETURN",
+        categoryId: NEGATIVE_RETURN_ID,
       },
       _sum: { amount: true },
     }),
@@ -68,7 +75,7 @@ export const getDashboard = async (month: string, year: string) => {
       where: {
         ...where,
         type: "TRANSFER",
-        transferCategory: "INVESTMENT_DEPOSIT",
+        categoryId: INVESTMENT_DEPOSIT_ID,
       },
       _sum: { amount: true },
     }),
@@ -76,7 +83,7 @@ export const getDashboard = async (month: string, year: string) => {
       where: {
         ...where,
         type: "TRANSFER",
-        transferCategory: "INVESTMENT_WITHDRAW",
+        categoryId: INVESTMENT_WITHDRAW_ID,
       },
       _sum: { amount: true },
     }),
@@ -112,9 +119,11 @@ export const getDashboard = async (month: string, year: string) => {
       : 0,
   };
 
+  const categories = await getCategories({});
+
   const totalExpensePerCategory: TotalExpensePerCategory[] = (
     await db.transaction.groupBy({
-      by: ["expenseCategory"],
+      by: ["categoryId"],
       where: {
         ...where,
         type: TransactionType.EXPENSE,
@@ -125,7 +134,9 @@ export const getDashboard = async (month: string, year: string) => {
     })
   )
     .map((category) => ({
-      category: category.expenseCategory as ExpenseTransactionCategory,
+      category:
+        categories.find((c) => c.id === category.categoryId)?.name ??
+        "Categoria desconhecida",
       totalAmount: Number(category._sum.amount),
       percentageOfTotal: Math.round(
         (Number(category._sum.amount) / Number(expensesTotal)) * 100,

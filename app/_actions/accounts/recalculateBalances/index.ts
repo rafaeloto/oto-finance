@@ -2,7 +2,6 @@
 
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { InvestmentTransactionCategory } from "@prisma/client";
 import {
   updateAccountsBalances,
   updateSingleAccountBalance,
@@ -10,6 +9,7 @@ import {
 import { getAccounts } from "@data/getAccounts";
 import { getTransactions } from "@data/getTransactions";
 import { revalidatePath } from "next/cache";
+import { NEGATIVE_RETURN_ID, POSITIVE_RETURN_ID } from "@constants/category";
 
 export const recalculateBalances = async () => {
   const { userId } = await auth();
@@ -107,20 +107,14 @@ export const recalculateBalances = async () => {
           // Subtracts or adds the value to the accounts
           case "INVESTMENT":
             if (transaction.accountId) {
-              if (
-                transaction.investmentCategory ===
-                InvestmentTransactionCategory.INVESTMENT_NEGATIVE_RETURN
-              ) {
+              if (transaction.categoryId === NEGATIVE_RETURN_ID) {
                 await updateSingleAccountBalance({
                   operation: "decrement",
                   amount: Number(transaction.amount),
                   accountId: transaction.accountId,
                   transaction: prismaClient,
                 });
-              } else if (
-                transaction.investmentCategory ===
-                InvestmentTransactionCategory.INVESTMENT_POSITIVE_RETURN
-              ) {
+              } else if (transaction.categoryId === POSITIVE_RETURN_ID) {
                 await updateSingleAccountBalance({
                   operation: "increment",
                   amount: Number(transaction.amount),

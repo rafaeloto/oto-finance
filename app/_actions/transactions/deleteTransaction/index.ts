@@ -9,6 +9,7 @@ import {
   updateSingleAccountBalance,
 } from "@actions/accounts/updateBalance";
 import { updateInvoiceAmount } from "@actions/invoices/updateInvoiceAmount";
+import { NEGATIVE_RETURN_ID, POSITIVE_RETURN_ID } from "@constants/category";
 
 export const deleteTransaction = async ({
   transactionId,
@@ -26,7 +27,7 @@ export const deleteTransaction = async ({
     fromAccountId,
     toAccountId,
     invoiceId,
-    investmentCategory,
+    categoryId,
   } = transaction;
 
   // Groups all operations in a single transaction to ensure atomicity
@@ -81,7 +82,7 @@ export const deleteTransaction = async ({
         // Reverting the investment balance impact
         case "INVESTMENT":
           if (accountId) {
-            if (investmentCategory === "INVESTMENT_NEGATIVE_RETURN") {
+            if (categoryId === NEGATIVE_RETURN_ID) {
               // Reverting the negative return: adds the amount back to the account
               await updateSingleAccountBalance({
                 operation: "increment",
@@ -89,7 +90,7 @@ export const deleteTransaction = async ({
                 accountId,
                 transaction: prismaClient,
               });
-            } else if (investmentCategory === "INVESTMENT_POSITIVE_RETURN") {
+            } else if (categoryId === POSITIVE_RETURN_ID) {
               // Reverting the positive return: subtracts the amount from the account
               await updateSingleAccountBalance({
                 operation: "decrement",

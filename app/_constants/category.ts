@@ -46,3 +46,8 @@ export const transferMap: Record<TransferTransactionCategory, string> = {
   INVESTMENT_DEPOSIT: "7a743975-2b6c-47cc-8426-e93d835049e0",
   INVESTMENT_WITHDRAW: "450932a0-c34a-4283-9916-7e900be25fc7",
 };
+
+export const POSITIVE_RETURN_ID = "f8fad873-907c-4ee6-ba60-a59fbc391854";
+export const NEGATIVE_RETURN_ID = "81ead95a-05ac-49bc-8f06-f3ac113480fe";
+export const INVESTMENT_DEPOSIT_ID = "7a743975-2b6c-47cc-8426-e93d835049e0";
+export const INVESTMENT_WITHDRAW_ID = "450932a0-c34a-4283-9916-7e900be25fc7";
