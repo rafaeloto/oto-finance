@@ -60,6 +60,23 @@ model Invoice {
   paidByAccount Account?      @relation("PaidByAccount", fields: [paidByAccountId], references: [id])
 }
 
+model Category {
+  id        String          @id @default(uuid())
+  name      String
+  icon      String?
+  color     String?
+  type      TransactionType
+  userId    String? // null = global category (default); not null = user created category
+  parentId  String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  parent        Category?  @relation("Subcategories", fields: [parentId], references: [id])
+  subcategories Category[] @relation("Subcategories")
+
+  transactions Transaction[]
+}
+
 model Transaction {
   id            String                   @id @default(uuid())
   name          String
@@ -84,6 +101,9 @@ model Transaction {
   expenseCategory    ExpenseTransactionCategory?
   investmentCategory InvestmentTransactionCategory?
   transferCategory   TransferTransactionCategory?
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
 
   account     Account?    @relation("AccountTransaction", fields: [accountId], references: [id])
   fromAccount Account?    @relation("AccountFromTransaction", fields: [fromAccountId], references: [id])
