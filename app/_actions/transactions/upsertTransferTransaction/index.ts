@@ -15,6 +15,8 @@ interface UpsertTransferTransactionParams {
   id?: string;
   name: string;
   amount: number;
+  categoryId?: string;
+  // TODO: Remove transferCategory
   transferCategory: TransferTransactionCategory;
   fromAccountId: string;
   toAccountId: string;

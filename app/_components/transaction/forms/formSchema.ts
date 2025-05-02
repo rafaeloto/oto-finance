@@ -1,5 +1,4 @@
 import {
-  TransferTransactionCategory,
   InvestmentTransactionCategory,
   TransactionPaymentMethod,
 } from "@prisma/client";
@@ -93,7 +92,7 @@ export const formSchemas = {
   transfer: z.object({
     name: z.string().min(1, "O nome é obrigatório"),
     amount: z.number(),
-    transferCategory: z.nativeEnum(TransferTransactionCategory),
+    categoryId: z.string().min(1, "A categoria é obrigatória"),
     fromAccountId: z.string().min(1, "A conta de origem é obrigatória"),
     toAccountId: z.string().min(1, "A conta de destino é obrigatória"),
     date: z.date({ required_error: "A data é obrigatória" }),

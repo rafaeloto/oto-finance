@@ -25,11 +25,12 @@ import {
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
-import { TRANSFER_TRANSACTION_CATEGORY_OPTIONS } from "@constants/transaction";
+import { useTransferCategories } from "@contexts/CategoriesContext";
+import { transferMap } from "@constants/category";
 import { Transaction, TransferTransactionCategory } from "@prisma/client";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
-import Icon from "@atoms/Icon";
+import Icon, { LucideIconName } from "@atoms/Icon";
 
 type FormSchema = z.infer<typeof formSchemas.transfer>;
 
@@ -43,15 +44,27 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
 
   const isUpdate = !!transactionId;
 
-  const { accounts, loading, error } = useAccounts();
+  const {
+    accounts,
+    loading: loadingAccounts,
+    error: accountsError,
+  } = useAccounts();
+
+  const {
+    categories,
+    loading: loadingCategories,
+    error: categoriesError,
+  } = useTransferCategories();
+
+  const loading = loadingAccounts || loadingCategories;
+  const error = accountsError || categoriesError;
 
   const [upserting, setUpserting] = useState(false);
 
   const defaultValues = {
     name: transaction?.name || "",
     amount: Number(transaction?.amount) || 0,
-    transferCategory:
-      transaction?.transferCategory || TransferTransactionCategory.TRANSFER,
+    categoryId: transaction?.categoryId || categories[0].id,
     fromAccountId: transaction?.fromAccountId || "",
     toAccountId: transaction?.toAccountId || "",
     date: transaction?.date ? new Date(transaction?.date) : new Date(),
@@ -66,7 +79,20 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
     setUpserting(true);
 
     try {
-      await upsertTransferTransaction({ ...data, id: transactionId });
+      // TODO: Remove transferCategory
+      const transferCategory = Object.entries(transferMap).find(
+        ([, value]) => value === data.categoryId,
+      )?.[0] as TransferTransactionCategory;
+
+      if (!transferCategory) {
+        throw new Error("Invalid transfer category");
+      }
+
+      await upsertTransferTransaction({
+        ...data,
+        id: transactionId,
+        transferCategory,
+      });
       toast.success(
         `Transferência ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
       );
@@ -79,9 +105,6 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
       setUpserting(false);
     }
   };
-
-  if (loading) return <div>Carregando contas...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <Form {...form}>
@@ -128,13 +151,14 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
 
           <FormField
             control={form.control}
-            name="transferCategory"
+            name="categoryId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Categoria</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={loadingCategories}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -142,9 +166,15 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {TRANSFER_TRANSACTION_CATEGORY_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
+                    {categories.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        <div className="flex items-center gap-3">
+                          <Icon
+                            name={option.icon as LucideIconName}
+                            {...(option?.color && { color: option.color })}
+                          />
+                          {option.name}
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
