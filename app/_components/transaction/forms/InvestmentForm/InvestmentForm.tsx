@@ -25,11 +25,12 @@ import {
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
-import { INVESTMENT_TRANSACTION_CATEGORY_OPTIONS } from "@constants/transaction";
+import { useInvestmentCategories } from "@contexts/CategoriesContext";
+import { investmentMap } from "@constants/category";
 import { InvestmentTransactionCategory, Transaction } from "@prisma/client";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
-import Icon from "@atoms/Icon";
+import Icon, { LucideIconName } from "@atoms/Icon";
 
 type FormSchema = z.infer<typeof formSchemas.investment>;
 
@@ -43,16 +44,27 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
 
   const isUpdate = !!transactionId;
 
-  const { accounts, loading, error } = useAccounts();
+  const {
+    accounts,
+    loading: loadingAccounts,
+    error: accountsError,
+  } = useAccounts();
+
+  const {
+    categories,
+    loading: loadingCategories,
+    error: categoriesError,
+  } = useInvestmentCategories();
+
+  const loading = loadingAccounts || loadingCategories;
+  const error = accountsError || categoriesError;
 
   const [upserting, setUpserting] = useState(false);
 
   const defaultValues = {
     name: transaction?.name || "",
     amount: Number(transaction?.amount) || 0,
-    investmentCategory:
-      transaction?.investmentCategory ||
-      InvestmentTransactionCategory.INVESTMENT_POSITIVE_RETURN,
+    categoryId: transaction?.categoryId || categories[0].id,
     accountId: transaction?.accountId || "",
     date: transaction?.date ? new Date(transaction?.date) : new Date(),
   };
@@ -66,7 +78,21 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
     setUpserting(true);
 
     try {
-      await upsertInvestmentTransaction({ ...data, id: transactionId });
+      // TODO: Remove investmentCategory
+      const investmentCategory = Object.entries(investmentMap).find(
+        ([, value]) => value === data.categoryId,
+      )?.[0] as InvestmentTransactionCategory;
+
+      if (!investmentCategory) {
+        throw new Error("Invalid investment category");
+      }
+
+      await upsertInvestmentTransaction({
+        ...data,
+        id: transactionId,
+        // TODO: Remove investmentCategory
+        investmentCategory,
+      });
       toast.success(
         `Investimento ${isUpdate ? "atualizado" : "criado"} com sucesso!`,
       );
@@ -79,9 +105,6 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
       setUpserting(false);
     }
   };
-
-  if (loading) return <div>Carregando contas...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <Form {...form}>
@@ -128,13 +151,14 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
 
           <FormField
             control={form.control}
-            name="investmentCategory"
+            name="categoryId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Categoria</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={loadingCategories}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -142,9 +166,15 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {INVESTMENT_TRANSACTION_CATEGORY_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
+                    {categories.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        <div className="flex items-center gap-3">
+                          <Icon
+                            name={option.icon as LucideIconName}
+                            {...(option?.color && { color: option.color })}
+                          />
+                          {option.name}
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -12,6 +12,8 @@ interface UpsertInvestmentTransactionParams {
   id?: string;
   name: string;
   amount: number;
+  categoryId: string;
+  // TODO: Remove investmentCategory
   investmentCategory: InvestmentTransactionCategory;
   accountId: string;
   date: Date;

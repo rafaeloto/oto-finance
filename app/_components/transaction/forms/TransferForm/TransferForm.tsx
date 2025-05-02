@@ -91,6 +91,7 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
       await upsertTransferTransaction({
         ...data,
         id: transactionId,
+        // TODO: Remove transferCategory
         transferCategory,
       });
       toast.success(
