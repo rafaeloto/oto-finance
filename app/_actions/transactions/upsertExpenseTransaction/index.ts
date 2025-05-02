@@ -17,6 +17,8 @@ interface UpsertExpenseTransactionParams {
   id?: string;
   name: string;
   amount: number;
+  categoryId: string;
+  // TODO: Remove expenseCategory
   expenseCategory: ExpenseTransactionCategory;
   paymentMethod: TransactionPaymentMethod;
   accountId?: string;

@@ -1,5 +1,4 @@
 import {
-  ExpenseTransactionCategory,
   TransferTransactionCategory,
   InvestmentTransactionCategory,
   TransactionPaymentMethod,
@@ -11,7 +10,7 @@ export const formSchemas = {
     .object({
       name: z.string().min(1, "O nome é obrigatório"),
       amount: z.number().positive("O valor deve ser positivo"),
-      expenseCategory: z.nativeEnum(ExpenseTransactionCategory),
+      categoryId: z.string().min(1, "A categoria é obrigatória"),
       paymentMethod: z.nativeEnum(TransactionPaymentMethod),
       accountId: z.string().optional(),
       cardId: z.string().optional(),

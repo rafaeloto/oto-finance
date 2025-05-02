@@ -7,6 +7,8 @@ import {
 export const upsertExpenseTransactionSchema = z.object({
   name: z.string().trim().min(1),
   amount: z.number().min(1),
+  categoryId: z.string().trim().min(1),
+  // TODO: Remove expenseCategory
   expenseCategory: z.nativeEnum(ExpenseTransactionCategory),
   paymentMethod: z.nativeEnum(TransactionPaymentMethod),
   accountId: z.string().optional(),

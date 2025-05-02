@@ -6,10 +6,12 @@ import { upsertExpenseTransaction } from "@actions/transactions/upsertExpenseTra
 import { db } from "@/app/_lib/prisma";
 import { findOrOpenInvoice, revalidatePaths } from "./utils";
 import { auth } from "@clerk/nextjs/server";
+import { ExpenseTransactionCategory } from "@prisma/client";
 
 type HandleCreditTransactionProps = {
   transactionId?: string;
-  data: FormSchema;
+  // TODO: Remove expenseCategory
+  data: FormSchema & { expenseCategory: ExpenseTransactionCategory };
 };
 
 const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {

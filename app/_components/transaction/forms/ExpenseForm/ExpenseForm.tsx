@@ -28,10 +28,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shadcn/select";
-import {
-  EXPENSE_TRANSACTION_CATEGORY_OPTIONS,
-  TRANSACTION_PAYMENT_METHOD_OPTIONS,
-} from "@constants/transaction";
+import { TRANSACTION_PAYMENT_METHOD_OPTIONS } from "@constants/transaction";
+import { useExpenseCategories } from "@contexts/CategoriesContext";
+import { expenseMap } from "@constants/category";
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
@@ -41,7 +40,7 @@ import handleCreditTransaction from "./handleCreditTransaction";
 import { getImportantDates } from "@utils/date";
 import CreditCardFields from "./CreditCardFields";
 import type { InstallmentType } from "./CreditCardFields";
-import Icon from "@atoms/Icon";
+import Icon, { LucideIconName } from "@atoms/Icon";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 
 export type FormSchema = z.infer<typeof formSchemas.expense>;
@@ -69,8 +68,14 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
     reloadInvoices,
   } = useInvoices();
 
-  const loading = loadingAccounts || loadingInvoices;
-  const error = accountsError || invoicesError;
+  const {
+    categories,
+    loading: loadingCategories,
+    error: categoriesError,
+  } = useExpenseCategories();
+
+  const loading = loadingAccounts || loadingInvoices || loadingCategories;
+  const error = accountsError || invoicesError || categoriesError;
 
   const { month: currentMonth, year: currentYear } = getImportantDates(
     new Date(),
@@ -93,8 +98,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
   const defaultValues = {
     name: transaction?.name || "",
     amount: Number(transaction?.amount) || 0,
-    expenseCategory:
-      transaction?.expenseCategory || ExpenseTransactionCategory.FOOD,
+    categoryId: transaction?.categoryId || categories[0].id,
     paymentMethod:
       transaction?.paymentMethod || TransactionPaymentMethod.CREDIT,
     accountId: transaction?.accountId || "",
@@ -132,11 +136,24 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
 
     setUpserting(true);
 
+    // TODO: Remove expenseCategory
+    const expenseCategory = Object.entries(expenseMap).find(
+      ([, value]) => value === data.categoryId,
+    )?.[0] as ExpenseTransactionCategory;
+
+    if (!expenseCategory) {
+      throw new Error("Invalid expense category");
+    }
+
     // If it's a credit transaction, upserts credit transaction
     if (isCreditCard) {
       try {
         await handleCreditTransaction({
-          data,
+          data: {
+            ...data,
+            // TODO: Remove expenseCategory
+            expenseCategory,
+          },
           transactionId,
         });
 
@@ -156,14 +173,17 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
       delete data.invoiceMonth;
       delete data.invoiceYear;
 
-      await upsertExpenseTransaction({ ...data, id: transactionId });
+      // TODO: Remove expenseCategory
+      await upsertExpenseTransaction({
+        ...data,
+        id: transactionId,
+        expenseCategory,
+      });
       onSuccess();
     } catch (error) {
       onError(error as Error);
     }
   };
-
-  if (error) return <div>{error}</div>;
 
   return (
     <Form {...form}>
@@ -210,13 +230,14 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
 
           <FormField
             control={form.control}
-            name="expenseCategory"
+            name="categoryId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Categoria</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={loadingCategories}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -224,9 +245,15 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {EXPENSE_TRANSACTION_CATEGORY_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
+                    {categories.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        <div className="flex items-center gap-3">
+                          <Icon
+                            name={option.icon as LucideIconName}
+                            {...(option?.color && { color: option.color })}
+                          />
+                          {option.name}
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>

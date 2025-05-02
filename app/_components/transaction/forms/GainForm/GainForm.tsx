@@ -49,6 +49,7 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
     loading: loadingAccounts,
     error: accountsError,
   } = useAccounts();
+
   const {
     categories,
     loading: loadingCategories,
