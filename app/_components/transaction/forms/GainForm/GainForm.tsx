@@ -23,13 +23,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shadcn/select";
-import { GAIN_TRANSACTION_CATEGORY_OPTIONS } from "@constants/transaction";
+import { useGainCategories } from "@contexts/CategoriesContext";
+import { gainMap } from "@constants/category";
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
-import Icon from "@atoms/Icon";
+import Icon, { type LucideIconName } from "@atoms/Icon";
 
 type FormSchema = z.infer<typeof formSchemas.gain>;
 
@@ -43,14 +44,26 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
 
   const isUpdate = !!transactionId;
 
-  const { accounts, loading, error } = useAccounts();
+  const {
+    accounts,
+    loading: loadingAccounts,
+    error: accountsError,
+  } = useAccounts();
+  const {
+    categories,
+    loading: loadingCategories,
+    error: categoriesError,
+  } = useGainCategories();
+
+  const loading = loadingAccounts || loadingCategories;
+  const error = accountsError || categoriesError;
 
   const [upserting, setUpserting] = useState(false);
 
   const defaultValues = {
     name: transaction?.name || "",
     amount: Number(transaction?.amount) || 0,
-    gainCategory: transaction?.gainCategory || GainTransactionCategory.SALARY,
+    categoryId: transaction?.categoryId || categories[0].id,
     accountId: transaction?.accountId || "",
     date: transaction?.date ? new Date(transaction?.date) : new Date(),
   };
@@ -64,7 +77,21 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
     setUpserting(true);
 
     try {
-      await upsertGainTransaction({ ...data, id: transactionId });
+      // TODO: Remove gainCategory
+      const gainCategory = Object.entries(gainMap).find(
+        ([, value]) => value === data.categoryId,
+      )?.[0] as GainTransactionCategory;
+
+      if (!gainCategory) {
+        throw new Error("Invalid gain category");
+      }
+
+      await upsertGainTransaction({
+        ...data,
+        id: transactionId,
+        // TODO: Remove gainCategory
+        gainCategory,
+      });
       toast.success(`Ganho ${isUpdate ? "atualizado" : "criado"} com sucesso!`);
       setIsOpen(false);
       form.reset();
@@ -75,9 +102,6 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
       setUpserting(false);
     }
   };
-
-  if (loading) return <div>Carregando contas...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <Form {...form}>
@@ -124,13 +148,14 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
 
           <FormField
             control={form.control}
-            name="gainCategory"
+            name="categoryId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Categoria</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={loadingCategories}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -138,9 +163,15 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {GAIN_TRANSACTION_CATEGORY_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
+                    {categories.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        <div className="flex items-center gap-3">
+                          <Icon
+                            name={option.icon as LucideIconName}
+                            {...(option?.color && { color: option.color })}
+                          />
+                          {option.name}
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -159,6 +190,7 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={loadingAccounts}
                 >
                   <FormControl>
                     <SelectTrigger>

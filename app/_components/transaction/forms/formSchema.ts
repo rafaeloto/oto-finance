@@ -1,6 +1,5 @@
 import {
   ExpenseTransactionCategory,
-  GainTransactionCategory,
   TransferTransactionCategory,
   InvestmentTransactionCategory,
   TransactionPaymentMethod,
@@ -87,7 +86,7 @@ export const formSchemas = {
   gain: z.object({
     name: z.string().min(1, "O nome é obrigatório"),
     amount: z.number(),
-    gainCategory: z.nativeEnum(GainTransactionCategory),
+    categoryId: z.string().min(1, "A categoria é obrigatória"),
     accountId: z.string().min(1, "A conta é obrigatória"),
     date: z.date({ required_error: "A data é obrigatória" }),
   }),

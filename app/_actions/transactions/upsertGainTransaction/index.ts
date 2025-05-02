@@ -12,7 +12,9 @@ interface UpsertGainTransactionParams {
   id?: string;
   name: string;
   amount: number;
+  // TODO: Remove gainCategory
   gainCategory: GainTransactionCategory;
+  categoryId: string;
   accountId: string;
   date: Date;
 }
