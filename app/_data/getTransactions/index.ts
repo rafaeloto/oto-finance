@@ -6,6 +6,7 @@ import { TransactionPaymentMethod, TransactionType } from "@prisma/client";
 export type getTransactionsParams = {
   name?: string;
   type?: TransactionType;
+  categoryId?: string;
   paymentMethod?: TransactionPaymentMethod;
   accountId?: string;
   cardId?: string;
@@ -24,6 +25,7 @@ export const getTransactions = async (params: getTransactionsParams = {}) => {
   const {
     name,
     type,
+    categoryId,
     paymentMethod,
     accountId,
     cardId,
@@ -37,6 +39,7 @@ export const getTransactions = async (params: getTransactionsParams = {}) => {
     userId,
     ...(!!name && { name: { contains: name, mode: "insensitive" } }),
     ...(!!type && { type }),
+    ...(!!categoryId && { categoryId }),
     ...(!!paymentMethod && { paymentMethod }),
     ...(!!cardId && { cardId }),
     ...(!!invoiceId && { invoiceId }),

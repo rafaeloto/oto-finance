@@ -13,16 +13,18 @@ import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import InputFilter from "@molecules/InputFilter";
 import TimeSelect from "@molecules/TimeSelect";
 import { Button } from "@shadcn/button";
-import Icon from "@atoms/Icon";
+import Icon, { type LucideIconName } from "@atoms/Icon";
 import TransactionFilterDialog from "./TransactionFilterDialog";
 import ClearFiltersButton from "./ClearFiltersButton";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/app/_lib/utils";
+import { useAllCategories } from "@utils/category";
 
 const TransactionFilters = () => {
   const { accounts } = useAccounts();
   const { creditCards } = useCreditCards();
+  const { categories } = useAllCategories();
 
   const [open, setOpen] = useState(false);
 
@@ -50,6 +52,23 @@ const TransactionFilters = () => {
             ),
           }))}
           placeholder="Tipo"
+        />
+
+        <SelectFilter
+          paramKey="categoryId"
+          options={categories.map((category) => ({
+            value: category.id,
+            label: (
+              <div className="flex items-center gap-3">
+                <Icon
+                  name={category?.icon as LucideIconName}
+                  {...(!!category?.color && { color: category.color })}
+                />
+                <p>{category?.name || "Não especificado"}</p>
+              </div>
+            ),
+          }))}
+          placeholder="Categoria"
         />
 
         <SelectFilter

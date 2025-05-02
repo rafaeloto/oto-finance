@@ -22,10 +22,13 @@ import { useAccounts } from "@contexts/AccountsContext";
 import { useCreditCards } from "@contexts/CreditCardsContext";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import ClearFiltersButton from "../ClearFiltersButton";
+import Icon, { type LucideIconName } from "@/app/_components/atoms/Icon";
+import { useAllCategories } from "@utils/category";
 
 export type TransactionFilters = {
   name: string;
   type: string;
+  categoryId: string;
   paymentMethod: string;
   accountId: string;
   cardId: string;
@@ -43,12 +46,15 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
 
   const { accounts } = useAccounts();
   const { creditCards } = useCreditCards();
+  const { categories } = useAllCategories();
+
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const [filters, setFilters] = useState<TransactionFilters>({
     name: "",
     type: "",
+    categoryId: "",
     paymentMethod: "",
     accountId: "",
     cardId: "",
@@ -69,6 +75,7 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
       setFilters({
         name: searchParams.get("name") || "",
         type: searchParams.get("type") || "",
+        categoryId: searchParams.get("categoryId") || "",
         paymentMethod: searchParams.get("paymentMethod") || "",
         accountId: searchParams.get("accountId") || "",
         cardId: searchParams.get("cardId") || "",
@@ -117,6 +124,28 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
               ),
             }))}
             placeholder="Tipo"
+            isInsideModal
+          />
+
+          <SelectFilter
+            paramKey="categoryId"
+            value={filters.categoryId}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, categoryId: value ?? "" }))
+            }
+            options={categories.map((category) => ({
+              value: category.id,
+              label: (
+                <div className="flex items-center gap-3">
+                  <Icon
+                    name={category?.icon as LucideIconName}
+                    {...(!!category?.color && { color: category.color })}
+                  />
+                  <p>{category?.name || "Não especificado"}</p>
+                </div>
+              ),
+            }))}
+            placeholder="Categoria"
             isInsideModal
           />
 

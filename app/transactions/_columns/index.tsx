@@ -12,7 +12,7 @@ import TransactionTypeBadge from "../_components/TransactionTypeBadge";
 import { TRANSACTION_PAYMENT_METHOD_LABELS } from "@constants/transaction";
 import EditTransactionButton from "@components/transaction/EditTransactionButton";
 import DeleteTransactionButton from "@components/transaction/DeleteTransactionButton";
-import Icon from "@atoms/Icon";
+import Icon, { type LucideIconName } from "@atoms/Icon";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import AmountText from "@molecules/AmountText";
 import TransactionInstallments from "@molecules/TransactionInstallments";
@@ -52,10 +52,19 @@ export function getTransactionColumns({
       accessorKey: "category",
       header: "Categoria",
       cell: ({ row: { original: transaction } }) => {
-        const categoryName =
-          categories?.find((category) => category.id === transaction.categoryId)
-            ?.name || "Não especificado";
-        return <p>{categoryName}</p>;
+        const category = categories?.find(
+          (category) => category.id === transaction.categoryId,
+        );
+
+        return (
+          <div className="flex items-center gap-3">
+            <Icon
+              name={category?.icon as LucideIconName}
+              {...(!!category?.color && { color: category.color })}
+            />
+            <p>{category?.name || "Não especificado"}</p>
+          </div>
+        );
       },
     },
     {

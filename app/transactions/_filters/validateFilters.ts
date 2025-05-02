@@ -5,6 +5,7 @@ import { getValidDateFromParams } from "@utils/date";
 const searchParamsSchema = z.object({
   name: z.string().optional(),
   type: z.nativeEnum(TransactionType).optional(),
+  categoryId: z.string().optional(),
   paymentMethod: z.nativeEnum(TransactionPaymentMethod).optional(),
   accountId: z.string().optional(),
   cardId: z.string().optional(),

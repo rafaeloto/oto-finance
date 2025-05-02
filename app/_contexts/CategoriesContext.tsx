@@ -98,7 +98,7 @@ export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-const useCategoriesContext = () => {
+export const useCategoriesContext = () => {
   const context = useContext(CategoriesContext);
   if (!context) {
     throw new Error("useCategories must be used within a CategoriesProvider");
