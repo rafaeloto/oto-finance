@@ -26,8 +26,7 @@ import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
 import { useTransferCategories } from "@contexts/CategoriesContext";
-import { transferMap } from "@constants/category";
-import { Transaction, TransferTransactionCategory } from "@prisma/client";
+import { Transaction } from "@prisma/client";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
 import Icon, { LucideIconName } from "@atoms/Icon";
@@ -79,20 +78,9 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
     setUpserting(true);
 
     try {
-      // TODO: Remove transferCategory
-      const transferCategory = Object.entries(transferMap).find(
-        ([, value]) => value === data.categoryId,
-      )?.[0] as TransferTransactionCategory;
-
-      if (!transferCategory) {
-        throw new Error("Invalid transfer category");
-      }
-
       await upsertTransferTransaction({
         ...data,
         id: transactionId,
-        // TODO: Remove transferCategory
-        transferCategory,
       });
       toast.success(
         `Transferência ${isUpdate ? "atualizada" : "criada"} com sucesso!`,

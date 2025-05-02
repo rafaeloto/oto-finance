@@ -96,15 +96,9 @@ model Transaction {
   installmentId     String?
   installmentNumber Int?
   installmentsTotal Int?
+  categoryId        String?
 
-  gainCategory       GainTransactionCategory?
-  expenseCategory    ExpenseTransactionCategory?
-  investmentCategory InvestmentTransactionCategory?
-  transferCategory   TransferTransactionCategory?
-
-  categoryId String?
-  category   Category? @relation(fields: [categoryId], references: [id])
-
+  category    Category?   @relation(fields: [categoryId], references: [id])
   account     Account?    @relation("AccountTransaction", fields: [accountId], references: [id])
   fromAccount Account?    @relation("AccountFromTransaction", fields: [fromAccountId], references: [id])
   toAccount   Account?    @relation("AccountToTransaction", fields: [toAccountId], references: [id])
@@ -150,48 +144,6 @@ enum TransactionType {
   EXPENSE
   TRANSFER
   INVESTMENT
-}
-
-enum GainTransactionCategory {
-  CASHBACK
-  GIFT
-  LOAN
-  OTHER
-  REWARD
-  SALE
-  SALARY
-  VARIABLE
-}
-
-enum ExpenseTransactionCategory {
-  CLOTHING
-  EDUCATION
-  ENTERTAINMENT
-  FOOD
-  GIFT
-  GOALS
-  HEALTH
-  LIVING
-  LOAN
-  OTHER
-  PERSONAL
-  PET
-  PURCHASE
-  SUBSCRIPTION
-  TAXES
-  TRANSPORTATION
-  TRAVEL
-}
-
-enum InvestmentTransactionCategory {
-  INVESTMENT_NEGATIVE_RETURN
-  INVESTMENT_POSITIVE_RETURN
-}
-
-enum TransferTransactionCategory {
-  TRANSFER
-  INVESTMENT_DEPOSIT
-  INVESTMENT_WITHDRAW
 }
 
 enum TransactionPaymentMethod {

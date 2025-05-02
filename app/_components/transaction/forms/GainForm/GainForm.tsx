@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchemas } from "../formSchema";
 import { useAccounts } from "@contexts/AccountsContext";
-import { GainTransactionCategory, Transaction } from "@prisma/client";
+import { Transaction } from "@prisma/client";
 import { z } from "zod";
 import { upsertGainTransaction } from "@actions/transactions/upsertGainTransaction";
 import { toast } from "sonner";
@@ -24,7 +24,6 @@ import {
   SelectValue,
 } from "@shadcn/select";
 import { useGainCategories } from "@contexts/CategoriesContext";
-import { gainMap } from "@constants/category";
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
@@ -78,20 +77,9 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
     setUpserting(true);
 
     try {
-      // TODO: Remove gainCategory
-      const gainCategory = Object.entries(gainMap).find(
-        ([, value]) => value === data.categoryId,
-      )?.[0] as GainTransactionCategory;
-
-      if (!gainCategory) {
-        throw new Error("Invalid gain category");
-      }
-
       await upsertGainTransaction({
         ...data,
         id: transactionId,
-        // TODO: Remove gainCategory
-        gainCategory,
       });
       toast.success(`Ganho ${isUpdate ? "atualizado" : "criado"} com sucesso!`);
       setIsOpen(false);

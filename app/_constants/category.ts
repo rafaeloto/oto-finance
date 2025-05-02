@@ -1,11 +1,4 @@
-import {
-  ExpenseTransactionCategory,
-  GainTransactionCategory,
-  InvestmentTransactionCategory,
-  TransferTransactionCategory,
-} from "@prisma/client";
-
-export const gainMap: Record<GainTransactionCategory, string> = {
+export const gainMap: Record<string, string> = {
   CASHBACK: "4878e701-1daa-4735-b33c-17d73fd2edf9",
   GIFT: "26b17439-e4e0-416b-8139-76d605057520",
   LOAN: "565e6139-57b6-44fb-abf9-5d015005ba47",
@@ -16,7 +9,7 @@ export const gainMap: Record<GainTransactionCategory, string> = {
   VARIABLE: "99b74f15-7ecf-4019-b68e-25ef456dbfbe",
 };
 
-export const expenseMap: Record<ExpenseTransactionCategory, string> = {
+export const expenseMap: Record<string, string> = {
   CLOTHING: "6fbeb945-f632-4c70-8219-8668d4bd32a5",
   EDUCATION: "f1b1e9c4-0fa1-42d4-81d5-cb8d06fd7656",
   ENTERTAINMENT: "1d4de633-96cf-414c-9ca6-e9658cb5afb1",
@@ -36,12 +29,12 @@ export const expenseMap: Record<ExpenseTransactionCategory, string> = {
   TRAVEL: "5941184a-3d6b-4135-b2d5-3267c79e2416",
 };
 
-export const investmentMap: Record<InvestmentTransactionCategory, string> = {
+export const investmentMap: Record<string, string> = {
   INVESTMENT_NEGATIVE_RETURN: "81ead95a-05ac-49bc-8f06-f3ac113480fe",
   INVESTMENT_POSITIVE_RETURN: "f8fad873-907c-4ee6-ba60-a59fbc391854",
 };
 
-export const transferMap: Record<TransferTransactionCategory, string> = {
+export const transferMap: Record<string, string> = {
   TRANSFER: "885547a6-eeac-4967-a1ea-383642fd5c55",
   INVESTMENT_DEPOSIT: "7a743975-2b6c-47cc-8426-e93d835049e0",
   INVESTMENT_WITHDRAW: "450932a0-c34a-4283-9916-7e900be25fc7",

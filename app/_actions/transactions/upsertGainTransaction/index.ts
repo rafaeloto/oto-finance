@@ -2,7 +2,6 @@
 
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { GainTransactionCategory } from "@prisma/client";
 import { upsertGainTransactionSchema } from "./schema";
 import { revalidatePath } from "next/cache";
 import { updateSingleAccountBalance } from "@actions/accounts/updateBalance";
@@ -12,8 +11,6 @@ interface UpsertGainTransactionParams {
   id?: string;
   name: string;
   amount: number;
-  // TODO: Remove gainCategory
-  gainCategory: GainTransactionCategory;
   categoryId: string;
   accountId: string;
   date: Date;

@@ -26,8 +26,7 @@ import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
 import { useInvestmentCategories } from "@contexts/CategoriesContext";
-import { investmentMap } from "@constants/category";
-import { InvestmentTransactionCategory, Transaction } from "@prisma/client";
+import { Transaction } from "@prisma/client";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
 import Icon, { LucideIconName } from "@atoms/Icon";
@@ -78,20 +77,9 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
     setUpserting(true);
 
     try {
-      // TODO: Remove investmentCategory
-      const investmentCategory = Object.entries(investmentMap).find(
-        ([, value]) => value === data.categoryId,
-      )?.[0] as InvestmentTransactionCategory;
-
-      if (!investmentCategory) {
-        throw new Error("Invalid investment category");
-      }
-
       await upsertInvestmentTransaction({
         ...data,
         id: transactionId,
-        // TODO: Remove investmentCategory
-        investmentCategory,
       });
       toast.success(
         `Investimento ${isUpdate ? "atualizado" : "criado"} com sucesso!`,

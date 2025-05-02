@@ -3,11 +3,7 @@ import { useForm } from "react-hook-form";
 import { formSchemas } from "../formSchema";
 import { useAccounts } from "@contexts/AccountsContext";
 import { useInvoices } from "@contexts/InvoicesContext";
-import {
-  ExpenseTransactionCategory,
-  Transaction,
-  TransactionPaymentMethod,
-} from "@prisma/client";
+import { Transaction, TransactionPaymentMethod } from "@prisma/client";
 import { z } from "zod";
 import { upsertExpenseTransaction } from "@actions/transactions/upsertExpenseTransaction";
 import { toast } from "sonner";
@@ -30,7 +26,6 @@ import {
 } from "@shadcn/select";
 import { TRANSACTION_PAYMENT_METHOD_OPTIONS } from "@constants/transaction";
 import { useExpenseCategories } from "@contexts/CategoriesContext";
-import { expenseMap } from "@constants/category";
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
@@ -136,24 +131,11 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
 
     setUpserting(true);
 
-    // TODO: Remove expenseCategory
-    const expenseCategory = Object.entries(expenseMap).find(
-      ([, value]) => value === data.categoryId,
-    )?.[0] as ExpenseTransactionCategory;
-
-    if (!expenseCategory) {
-      throw new Error("Invalid expense category");
-    }
-
     // If it's a credit transaction, upserts credit transaction
     if (isCreditCard) {
       try {
         await handleCreditTransaction({
-          data: {
-            ...data,
-            // TODO: Remove expenseCategory
-            expenseCategory,
-          },
+          data,
           transactionId,
         });
 
@@ -173,11 +155,9 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
       delete data.invoiceMonth;
       delete data.invoiceYear;
 
-      // TODO: Remove expenseCategory
       await upsertExpenseTransaction({
         ...data,
         id: transactionId,
-        expenseCategory,
       });
       onSuccess();
     } catch (error) {

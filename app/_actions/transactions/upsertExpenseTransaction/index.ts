@@ -2,11 +2,7 @@
 
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import {
-  ExpenseTransactionCategory,
-  Prisma,
-  TransactionPaymentMethod,
-} from "@prisma/client";
+import { Prisma, TransactionPaymentMethod } from "@prisma/client";
 import { upsertExpenseTransactionSchema } from "./schema";
 import { revalidatePath } from "next/cache";
 import { updateSingleAccountBalance } from "@actions/accounts/updateBalance";
@@ -18,8 +14,6 @@ interface UpsertExpenseTransactionParams {
   name: string;
   amount: number;
   categoryId: string;
-  // TODO: Remove expenseCategory
-  expenseCategory: ExpenseTransactionCategory;
   paymentMethod: TransactionPaymentMethod;
   accountId?: string;
   cardId?: string;

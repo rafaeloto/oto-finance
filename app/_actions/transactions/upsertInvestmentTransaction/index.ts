@@ -2,7 +2,6 @@
 
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { InvestmentTransactionCategory } from "@prisma/client";
 import { upsertInvestmentTransactionSchema } from "./schema";
 import { revalidatePath } from "next/cache";
 import { updateSingleAccountBalance } from "@actions/accounts/updateBalance";
@@ -14,8 +13,6 @@ interface UpsertInvestmentTransactionParams {
   name: string;
   amount: number;
   categoryId: string;
-  // TODO: Remove investmentCategory
-  investmentCategory: InvestmentTransactionCategory;
   accountId: string;
   date: Date;
 }

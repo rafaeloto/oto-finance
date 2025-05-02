@@ -2,7 +2,6 @@
 
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { TransferTransactionCategory } from "@prisma/client";
 import { upsertTransferTransactionSchema } from "./schema";
 import { revalidatePath } from "next/cache";
 import {
@@ -16,8 +15,6 @@ interface UpsertTransferTransactionParams {
   name: string;
   amount: number;
   categoryId?: string;
-  // TODO: Remove transferCategory
-  transferCategory: TransferTransactionCategory;
   fromAccountId: string;
   toAccountId: string;
   date: Date;
