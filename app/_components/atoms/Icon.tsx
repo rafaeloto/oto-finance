@@ -11,6 +11,9 @@ const Icon = ({ name, ...props }: IconProps) => {
   const Icon = LucideIcons[name] as React.ComponentType<
     ComponentProps<typeof LucideIcons.Circle>
   >;
+
+  if (!Icon) return <LucideIcons.Circle {...props} />;
+
   return <Icon {...props} />;
 };
 
