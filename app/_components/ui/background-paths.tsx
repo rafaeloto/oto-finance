@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Loader2Icon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import ShouldRender from "@atoms/ShouldRender";
 
 function FloatingPaths({ position }: { position: number }) {
@@ -79,7 +79,7 @@ export function BackgroundPaths({
           >
             <div className="flex flex-col items-center space-y-4">
               <ShouldRender if={showLoader}>
-                <Loader2Icon className="animate-spin" />
+                <Icon name="Loader2" className="animate-spin" />
               </ShouldRender>
 
               <h1 className="text-xl font-bold tracking-tighter sm:text-2xl md:text-3xl">

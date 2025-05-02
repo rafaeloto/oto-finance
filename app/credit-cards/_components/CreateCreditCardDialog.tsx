@@ -38,7 +38,7 @@ import { toast } from "sonner";
 import { useCreditCards } from "@contexts/CreditCardsContext";
 import { useInvoices } from "@contexts/InvoicesContext";
 import { useState } from "react";
-import { Loader2Icon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { ScrollArea } from "@shadcn/scroll-area";
 
@@ -297,7 +297,7 @@ const CreateCreditCardDialog = ({
                 </DialogClose>
                 <Button type="submit" disabled={creating} className="min-w-24">
                   {creating ? (
-                    <Loader2Icon className="animate-spin" />
+                    <Icon name="Loader2" className="animate-spin" />
                   ) : (
                     "Adicionar"
                   )}

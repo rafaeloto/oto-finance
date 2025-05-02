@@ -41,7 +41,7 @@ import handleCreditTransaction from "./handleCreditTransaction";
 import { getImportantDates } from "@utils/date";
 import CreditCardFields from "./CreditCardFields";
 import type { InstallmentType } from "./CreditCardFields";
-import { Loader2Icon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 
 export type FormSchema = z.infer<typeof formSchemas.expense>;
@@ -328,7 +328,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
             className="min-w-24"
           >
             {upserting ? (
-              <Loader2Icon className="animate-spin" />
+              <Icon name="Loader2" className="animate-spin" />
             ) : isUpdate ? (
               "Atualizar"
             ) : (

@@ -35,7 +35,7 @@ import { upsertAccount } from "@actions/accounts/upsertAccount";
 import { toast } from "sonner";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
-import { Loader2Icon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { ScrollArea } from "@shadcn/scroll-area";
 
 interface UpsertAccountDialogProps {
@@ -196,7 +196,7 @@ const UpsertAccountDialog = ({
                 </DialogClose>
                 <Button type="submit" disabled={upserting} className="min-w-24">
                   {upserting ? (
-                    <Loader2Icon className="animate-spin" />
+                    <Icon name="Loader2" className="animate-spin" />
                   ) : isUpdate ? (
                     "Atualizar"
                   ) : (

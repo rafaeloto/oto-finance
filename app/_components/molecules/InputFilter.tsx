@@ -3,7 +3,7 @@ import { Input } from "@shadcn/input";
 import { useEffect, useMemo, useState } from "react";
 import ShouldRender from "@atoms/ShouldRender";
 import { Button } from "@shadcn/button";
-import { XIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import debounce from "lodash.debounce";
 
 type InputFilterProps = {
@@ -75,7 +75,7 @@ const InputFilter = ({
           className="p-0 hover:scale-110 hover:bg-transparent"
           onClick={() => handleFilterChange("")}
         >
-          <XIcon />
+          <Icon name="X" />
         </Button>
       </ShouldRender>
     </div>

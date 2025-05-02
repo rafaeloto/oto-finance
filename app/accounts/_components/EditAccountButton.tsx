@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@shadcn/button";
-import { PencilIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { Account } from "@prisma/client";
 import { cn } from "@/app/_lib/utils";
 import UpsertAccountDialog from "./UpsertAccountDialog";
@@ -28,7 +28,7 @@ const EditAccountButton = ({
         className={cn("text-muted-foreground", noPadding && "p-0")}
         onClick={() => setIsDialogOpen(true)}
       >
-        <PencilIcon />
+        <Icon name="Pencil" />
       </Button>
 
       <UpsertAccountDialog

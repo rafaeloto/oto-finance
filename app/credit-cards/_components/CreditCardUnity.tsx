@@ -4,7 +4,7 @@ import Image from "next/image";
 import { calculateClosingAndDueDates } from "@utils/date";
 import { Button } from "@shadcn/button";
 import Link from "next/link";
-import { ArrowRightIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import ShouldRender from "@atoms/ShouldRender";
 
 interface CreditCardUnityProps {
@@ -81,7 +81,7 @@ const CreditCardUnity = ({
         >
           <Link href={`/credit-cards/details?id=${creditCard.id}`}>
             <span>Ver detalhes</span>
-            <ArrowRightIcon />
+            <Icon name="ArrowRight" />
           </Link>
         </Button>
       </ShouldRender>

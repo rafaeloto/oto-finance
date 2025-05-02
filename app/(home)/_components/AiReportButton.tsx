@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@shadcn/dialog";
-import { BotIcon, Loader2Icon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { useState } from "react";
 import { generateAiReport } from "@actions/outsourced/generateAiReport";
 import { ScrollArea } from "@shadcn/scroll-area";
@@ -49,7 +49,7 @@ const AiReportButton = ({
       <DialogTrigger asChild>
         <Button variant="ghost">
           Relatório IA
-          <BotIcon />
+          <Icon name="Bot" />
         </Button>
       </DialogTrigger>
 
@@ -80,7 +80,7 @@ const AiReportButton = ({
                 disabled={reportIsLoading}
               >
                 {reportIsLoading && (
-                  <Loader2Icon className="mr-2 animate-spin" />
+                  <Icon name="Loader2" className="mr-2 animate-spin" />
                 )}
                 Gerar relatório
               </Button>

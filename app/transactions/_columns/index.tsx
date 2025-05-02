@@ -12,7 +12,7 @@ import {
 } from "@constants/transaction";
 import EditTransactionButton from "@components/transaction/EditTransactionButton";
 import DeleteTransactionButton from "@components/transaction/DeleteTransactionButton";
-import { Redo2 } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import AmountText from "@molecules/AmountText";
 import TransactionInstallments from "@molecules/TransactionInstallments";
@@ -114,7 +114,7 @@ export function getTransactionColumns({
                 />
               </div>
 
-              <Redo2 size={20} className="rotate-180" />
+              <Icon name="Redo2" size={20} className="rotate-180" />
             </div>
           );
         }

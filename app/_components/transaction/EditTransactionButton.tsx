@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@shadcn/button";
-import { PencilIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { Transaction } from "@prisma/client";
 import { cn } from "@/app/_lib/utils";
 import UpsertTransactionDialog from "@components/transaction/UpsertTransactionDialog";
@@ -26,7 +26,7 @@ const EditTransactionButton = ({
         className={cn("text-muted-foreground", noPadding && "p-0")}
         onClick={() => setIsDialogOpen(true)}
       >
-        <PencilIcon />
+        <Icon name="Pencil" />
       </Button>
 
       <UpsertTransactionDialog

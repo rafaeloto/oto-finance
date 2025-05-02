@@ -29,7 +29,7 @@ import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
-import { Loader2Icon } from "lucide-react";
+import Icon from "@atoms/Icon";
 
 type FormSchema = z.infer<typeof formSchemas.gain>;
 
@@ -206,7 +206,7 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
             className="min-w-24"
           >
             {upserting ? (
-              <Loader2Icon className="animate-spin" />
+              <Icon name="Loader2" className="animate-spin" />
             ) : isUpdate ? (
               "Atualizar"
             ) : (

@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@shadcn/tooltip";
-import { PlusIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import useIsDesktop from "@utils/useIsDesktop";
 import UpsertExpenseDialog from "./UpsertExpenseDialog";
 import { Button } from "@shadcn/button";
@@ -41,7 +41,7 @@ const AddExpenseButton = ({
                 <ShouldRender if={!short}>
                   {isDesktop ? "Adicionar despesa" : "Adicionar"}
                 </ShouldRender>
-                <PlusIcon />
+                <Icon name="Plus" />
               </Button>
             </span>
           </TooltipTrigger>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@shadcn/button";
-import { LandmarkIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import UpsertAccountDialog from "./UpsertAccountDialog";
 
 const AddAccountButton = () => {
@@ -15,7 +15,7 @@ const AddAccountButton = () => {
         onClick={() => setIsDialogOpen(true)}
       >
         Adicionar conta
-        <LandmarkIcon />
+        <Icon name="Landmark" />
       </Button>
 
       <UpsertAccountDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />

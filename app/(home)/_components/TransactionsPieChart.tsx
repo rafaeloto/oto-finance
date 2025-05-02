@@ -10,7 +10,7 @@ import {
 } from "@shadcn/chart";
 import { TransactionType } from "@prisma/client";
 import type { TransactionPercentagePerType } from "@data/getDashboard/types";
-import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import PercentageItem from "./PercentageItem";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 
@@ -88,19 +88,23 @@ const TransactionsPieChart = ({
 
           <div className="space-y-2">
             <PercentageItem
-              icon={<TrendingUpIcon size={16} className="text-primary" />}
+              icon={
+                <Icon name="TrendingUp" size={16} className="text-primary" />
+              }
               title="Receita"
               value={typesPercentage[TransactionType.GAIN]}
             />
 
             <PercentageItem
-              icon={<TrendingDownIcon size={16} className="text-red-500" />}
+              icon={
+                <Icon name="TrendingDown" size={16} className="text-red-500" />
+              }
               title="Despesas"
               value={typesPercentage[TransactionType.EXPENSE]}
             />
 
             <PercentageItem
-              icon={<PiggyBankIcon size={16} />}
+              icon={<Icon name="PiggyBank" size={16} />}
               title="Investido"
               value={typesPercentage[TransactionType.INVESTMENT]}
             />

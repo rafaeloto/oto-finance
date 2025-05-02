@@ -1,4 +1,4 @@
-import { ListXIcon } from "lucide-react";
+import Icon from "./Icon";
 
 interface EmptyListFeedbackProps {
   message: string;
@@ -7,7 +7,7 @@ interface EmptyListFeedbackProps {
 const EmptyListFeedback = ({ message }: EmptyListFeedbackProps) => {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-3">
-      <ListXIcon size={42} className="text-muted-foreground" />
+      <Icon name="ListX" size={42} className="text-muted-foreground" />
       <p className="text-lg text-muted-foreground">{message}</p>
     </div>
   );

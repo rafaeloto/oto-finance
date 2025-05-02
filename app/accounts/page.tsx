@@ -8,7 +8,7 @@ import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { getAccounts } from "@data/getAccounts";
 import { getTotalBalance } from "@data/getTotalBalance";
 import SummaryCard from "../(home)/_components/SummaryCard";
-import { WalletIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import ShouldRender from "../_components/atoms/ShouldRender";
 
 const Accounts = async () => {
@@ -39,7 +39,7 @@ const Accounts = async () => {
       <div className="flex flex-col items-center gap-6 overflow-y-auto px-6 pb-6 md:gap-10 md:px-20 md:pb-10">
         <ShouldRender if={!hasNoData}>
           <SummaryCard
-            icon={<WalletIcon size={16} />}
+            icon={<Icon name="Wallet" size={16} />}
             title="Saldo Total"
             amount={totalBalance}
             link="/accounts"

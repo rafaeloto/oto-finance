@@ -29,7 +29,7 @@ import { TRANSFER_TRANSACTION_CATEGORY_OPTIONS } from "@constants/transaction";
 import { Transaction, TransferTransactionCategory } from "@prisma/client";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
-import { Loader2Icon } from "lucide-react";
+import Icon from "@atoms/Icon";
 
 type FormSchema = z.infer<typeof formSchemas.transfer>;
 
@@ -241,7 +241,7 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
             className="min-w-24"
           >
             {upserting ? (
-              <Loader2Icon className="animate-spin" />
+              <Icon name="Loader2" className="animate-spin" />
             ) : isUpdate ? (
               "Atualizar"
             ) : (

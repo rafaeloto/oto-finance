@@ -11,7 +11,7 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@shadcn/button";
-import { XIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import ShouldRender from "@atoms/ShouldRender";
 
 type Option = {
@@ -98,7 +98,7 @@ const SelectFilter = ({
           className="p-0 hover:scale-110 hover:bg-transparent"
           onClick={() => handleFilterChange(undefined)}
         >
-          <XIcon />
+          <Icon name="X" />
         </Button>
       </ShouldRender>
     </div>

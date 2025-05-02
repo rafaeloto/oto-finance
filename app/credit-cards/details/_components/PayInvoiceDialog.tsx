@@ -32,7 +32,7 @@ import { toast } from "sonner";
 import { useAccounts } from "@contexts/AccountsContext";
 import { useInvoices } from "@contexts/InvoicesContext";
 import { DatePicker } from "@shadcn/date-picker";
-import { Loader2Icon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { formatCurrency } from "@utils/currency";
 import { payInvoice } from "@actions/invoices/payInvoice";
 import { useState } from "react";
@@ -205,7 +205,7 @@ const PayInvoiceDialog = ({
                           </FormControl>
                           <SelectContent>
                             {loadingAccounts && (
-                              <Loader2Icon className="animate-spin" />
+                              <Icon name="Loader2" className="animate-spin" />
                             )}
                             {!loadingAccounts &&
                               accounts?.map((option) => (
@@ -261,7 +261,7 @@ const PayInvoiceDialog = ({
               className="min-w-24"
             >
               {paying ? (
-                <Loader2Icon className="animate-spin" />
+                <Icon name="Loader2" className="animate-spin" />
               ) : (
                 "Confirmar Pagamento"
               )}

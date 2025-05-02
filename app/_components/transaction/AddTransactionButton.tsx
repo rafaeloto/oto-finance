@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@shadcn/tooltip";
-import { ArrowDownIcon, DollarSign, PiggyBankIcon, Repeat } from "lucide-react";
+import Icon from "@atoms/Icon";
 import useIsDesktop from "@utils/useIsDesktop";
 import { TransactionType } from "@prisma/client";
 import FloatingActionMenu from "@shadcn/floating-action-menu";
@@ -36,22 +36,22 @@ const AddTransactionButton = ({
   const options = [
     {
       label: "Despesa",
-      Icon: <ArrowDownIcon className="h-4 w-4 text-red-500" />,
+      Icon: <Icon name="ArrowDown" className="h-4 w-4 text-red-500" />,
       onClick: () => handleOpenDialog("EXPENSE"),
     },
     {
       label: "Receita",
-      Icon: <DollarSign className="h-4 w-4 text-green-500" />,
+      Icon: <Icon name="DollarSign" className="h-4 w-4 text-green-500" />,
       onClick: () => handleOpenDialog("GAIN"),
     },
     {
       label: "Transferência",
-      Icon: <Repeat className="h-4 w-4" />,
+      Icon: <Icon name="Repeat" className="h-4 w-4" />,
       onClick: () => handleOpenDialog("TRANSFER"),
     },
     {
       label: "Investimento",
-      Icon: <PiggyBankIcon className="h-4 w-4 text-yellow-400" />,
+      Icon: <Icon name="PiggyBank" className="h-4 w-4 text-yellow-400" />,
       onClick: () => handleOpenDialog("INVESTMENT"),
     },
   ];

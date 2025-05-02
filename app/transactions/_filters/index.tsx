@@ -13,7 +13,7 @@ import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import InputFilter from "@molecules/InputFilter";
 import TimeSelect from "@molecules/TimeSelect";
 import { Button } from "@shadcn/button";
-import { FilterIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import TransactionFilterDialog from "./TransactionFilterDialog";
 import ClearFiltersButton from "./ClearFiltersButton";
 import { useState } from "react";
@@ -105,7 +105,7 @@ const TransactionFilters = () => {
           )}
           onClick={() => setOpen(true)}
         >
-          <FilterIcon />
+          <Icon name="Filter" />
         </Button>
 
         <TransactionFilterDialog open={open} setOpen={setOpen} />

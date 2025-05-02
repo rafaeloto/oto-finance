@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@shadcn/alert-dialog";
 import { Button } from "@shadcn/button";
-import { CalculatorIcon, LoaderCircleIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -45,12 +45,12 @@ const RecalculateBalancesButton = () => {
           {loading ? (
             <>
               <span className="hidden md:block">Recalculando...</span>
-              <LoaderCircleIcon className="animate-spin" />
+              <Icon name="Loader2" className="animate-spin" />
             </>
           ) : (
             <>
               <span className="hidden md:block">Recalcular saldos</span>
-              <CalculatorIcon />
+              <Icon name="Calculator" />
             </>
           )}
         </Button>

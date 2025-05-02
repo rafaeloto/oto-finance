@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@shadcn/dropdown-menu";
-import { Menu } from "lucide-react";
+import Icon from "@atoms/Icon";
 import useIsDesktop from "@utils/useIsDesktop";
 import { cn } from "@/app/_lib/utils";
 
@@ -73,7 +73,7 @@ const Navbar = () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button aria-label="Abrir menu">
-                <Menu className="h-6 w-6" />
+                <Icon name="Menu" className="h-6 w-6" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent

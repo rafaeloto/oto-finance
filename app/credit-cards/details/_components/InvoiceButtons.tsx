@@ -2,7 +2,7 @@
 
 import ShouldRender from "@atoms/ShouldRender";
 import { Button } from "@shadcn/button";
-import { EyeIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { useState } from "react";
 import PayInvoiceDialog from "./PayInvoiceDialog";
 import { Invoice } from "@prisma/client";
@@ -32,7 +32,7 @@ const InvoiceButtons = ({
           className={cn("text-muted-foreground", noPadding && "p-0")}
           onClick={() => onClickSee()}
         >
-          <EyeIcon />
+          <Icon name="Eye" />
         </Button>
 
         <ShouldRender if={canBePaid}>

@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@shadcn/button";
-import { Plus } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { cn } from "@/app/_lib/utils";
 
 type FloatingActionMenuProps = {
@@ -70,7 +70,7 @@ const FloatingActionMenu = ({
             damping: 20,
           }}
         >
-          <Plus className="h-6 w-6" />
+          <Icon name="Plus" className="h-6 w-6" />
         </motion.div>
       </Button>
 

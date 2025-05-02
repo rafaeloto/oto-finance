@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@shadcn/button";
-import { CreditCardIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import CreateCreditCardDialog from "./CreateCreditCardDialog";
 import useIsDesktop from "@utils/useIsDesktop";
 
@@ -17,7 +17,7 @@ const AddCreditCardButton = () => {
         onClick={() => setIsDialogOpen(true)}
       >
         {`Adicionar${isDesktop ? " cartão de crédito" : ""}`}
-        <CreditCardIcon />
+        <Icon name="CreditCard" />
       </Button>
 
       <CreateCreditCardDialog

@@ -1,10 +1,4 @@
-import {
-  PiggyBankIcon,
-  TrendingDownIcon,
-  TrendingUpDownIcon,
-  TrendingUpIcon,
-  WalletIcon,
-} from "lucide-react";
+import Icon from "@atoms/Icon";
 import SummaryCard from "./SummaryCard";
 import ShouldRender from "@atoms/ShouldRender";
 
@@ -41,7 +35,7 @@ const SummaryCards = async ({
     <div className="space-y-6">
       <div className="grid gap-6 md:grid-cols-2">
         <SummaryCard
-          icon={<WalletIcon size={16} />}
+          icon={<Icon name="Wallet" size={16} />}
           title="Saldo Total"
           amount={totalBalance}
           link="/accounts"
@@ -50,7 +44,11 @@ const SummaryCards = async ({
 
         <SummaryCard
           icon={
-            <TrendingUpDownIcon size={16} className={getTextColor(result)} />
+            <Icon
+              name="TrendingUpDown"
+              size={16}
+              className={getTextColor(result)}
+            />
           }
           title="Resultado do mês"
           amount={result}
@@ -73,7 +71,8 @@ const SummaryCards = async ({
           <div className="grid gap-4 md:grid-cols-2">
             <SummaryCard
               icon={
-                <PiggyBankIcon
+                <Icon
+                  name="PiggyBank"
                   size={16}
                   className={getTextColor(investmentsEvolution)}
                 />
@@ -86,7 +85,8 @@ const SummaryCards = async ({
 
             <SummaryCard
               icon={
-                <TrendingUpDownIcon
+                <Icon
+                  name="TrendingUpDown"
                   size={16}
                   className={getTextColor(investmentsResult)}
                 />
@@ -109,14 +109,18 @@ const SummaryCards = async ({
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             <SummaryCard
-              icon={<TrendingUpIcon size={16} className="text-primary" />}
+              icon={
+                <Icon name="TrendingUp" size={16} className="text-primary" />
+              }
               title="Receita"
               amount={gainsTotal}
               link="/transactions?type=GAIN"
             />
 
             <SummaryCard
-              icon={<TrendingDownIcon size={16} className="text-red-500" />}
+              icon={
+                <Icon name="TrendingDown" size={16} className="text-red-500" />
+              }
               title="Despesas"
               amount={expensesTotal}
               link="/transactions?type=EXPENSE"

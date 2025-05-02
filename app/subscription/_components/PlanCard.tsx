@@ -1,6 +1,6 @@
 import { Badge } from "@shadcn/badge";
 import { Card, CardContent, CardHeader } from "@shadcn/card";
-import { CheckIcon, XIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import AquirePlanButton from "./AquirePlanButton";
 import ShouldRender from "@atoms/ShouldRender";
 
@@ -42,14 +42,14 @@ const PlanCard = (props: PlanCardProps) => {
       <CardContent className="space-y-6 py-8">
         {includedFeatures?.map((feature) => (
           <div className="flex items-center gap-2" key={feature}>
-            <CheckIcon className="text-primary" />
+            <Icon name="Check" className="text-primary" />
             <p>{feature}</p>
           </div>
         ))}
 
         {notIncludedFeatures?.map((feature) => (
           <div className="flex items-center gap-2" key={feature}>
-            <XIcon />
+            <Icon name="X" />
             <p>{feature}</p>
           </div>
         ))}

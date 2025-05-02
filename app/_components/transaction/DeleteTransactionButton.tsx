@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@shadcn/alert-dialog";
 import { Button } from "@shadcn/button";
-import { TrashIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { deleteTransaction } from "@actions/transactions/deleteTransaction";
 import { toast } from "sonner";
 import { cn } from "@/app/_lib/utils";
@@ -42,7 +42,7 @@ const DeleteTransactionButton = ({
           size={noPadding ? "sm" : "icon"}
           className={cn("text-muted-foreground", noPadding && "p-0")}
         >
-          <TrashIcon />
+          <Icon name="Trash" />
         </Button>
       </AlertDialogTrigger>
 

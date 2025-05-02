@@ -1,7 +1,7 @@
 import { leagueSpartan } from "@styles/fonts";
 import Image from "next/image";
 import { Button } from "@shadcn/button";
-import { LogInIcon } from "lucide-react";
+import Icon from "@atoms/Icon";
 import { SignInButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -37,7 +37,7 @@ const LoginPage = async () => {
         </p>
         <SignInButton>
           <Button variant="outline">
-            <LogInIcon className="mr-2" />
+            <Icon name="LogIn" className="mr-2" />
             Fazer login ou criar conta
           </Button>
         </SignInButton>
