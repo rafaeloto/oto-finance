@@ -5,7 +5,7 @@ import { Button } from "@shadcn/button";
 import Icon from "@atoms/Icon";
 import { Transaction } from "@prisma/client";
 import { cn } from "@/app/_lib/utils";
-import UpsertTransactionDialog from "@components/transaction/UpsertTransactionDialog";
+import UpsertTransactionDialog from "@components/transaction/dialogs/UpsertTransactionDialog";
 
 interface EditTransactionButtonProps {
   transaction: Transaction;

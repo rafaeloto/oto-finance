@@ -30,7 +30,7 @@ import { Button } from "@shadcn/button";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
 import Icon from "@atoms/Icon";
-import CategoryField from "@molecules/CategoryField";
+import CategoryField from "@components/category/CategoryField";
 
 type FormSchema = z.infer<typeof formSchemas.gain>;
 

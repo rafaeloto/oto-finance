@@ -6,14 +6,14 @@ import { ScrollArea } from "@shadcn/scroll-area";
 import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@constants/transaction";
 import { MONTH_NAMES } from "@constants/month";
 import { formatCurrency } from "@utils/currency";
-import EditTransactionButton from "@components/transaction/EditTransactionButton";
-import DeleteTransactionButton from "@components/transaction/DeleteTransactionButton";
+import EditTransactionButton from "@components/transaction/buttons/EditTransactionButton";
+import DeleteTransactionButton from "@components/transaction/buttons/DeleteTransactionButton";
 import { Invoice, Transaction } from "@prisma/client";
 import Image from "next/image";
 import ShouldRender from "@atoms/ShouldRender";
 import useIsDesktop from "@utils/useIsDesktop";
 import TransactionInstallments from "@molecules/TransactionInstallments";
-import AddExpenseButton from "@components/transaction/AddExpenseButton";
+import AddExpenseButton from "@components/transaction/buttons/AddExpenseButton";
 
 export type TransactionsByInvoice = {
   id: string;

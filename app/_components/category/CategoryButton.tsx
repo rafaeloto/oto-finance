@@ -1,6 +1,6 @@
 import { Category } from "@prisma/client";
 import Icon, { type LucideIconName } from "@atoms/Icon";
-import ShouldRender from "../atoms/ShouldRender";
+import ShouldRender from "@atoms/ShouldRender";
 
 type CategoryButtonProps = {
   category: Category | undefined;

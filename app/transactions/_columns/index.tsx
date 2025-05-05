@@ -10,8 +10,8 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import TransactionTypeBadge from "../_components/TransactionTypeBadge";
 import { TRANSACTION_PAYMENT_METHOD_LABELS } from "@constants/transaction";
-import EditTransactionButton from "@components/transaction/EditTransactionButton";
-import DeleteTransactionButton from "@components/transaction/DeleteTransactionButton";
+import EditTransactionButton from "@components/transaction/buttons/EditTransactionButton";
+import DeleteTransactionButton from "@components/transaction/buttons/DeleteTransactionButton";
 import Icon, { type LucideIconName } from "@atoms/Icon";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import AmountText from "@molecules/AmountText";

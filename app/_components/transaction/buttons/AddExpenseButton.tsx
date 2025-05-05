@@ -9,7 +9,7 @@ import {
 } from "@shadcn/tooltip";
 import Icon from "@atoms/Icon";
 import useIsDesktop from "@utils/useIsDesktop";
-import UpsertExpenseDialog from "./UpsertExpenseDialog";
+import UpsertExpenseDialog from "@components/transaction/dialogs/UpsertExpenseDialog";
 import { Button } from "@shadcn/button";
 import ShouldRender from "@atoms/ShouldRender";
 

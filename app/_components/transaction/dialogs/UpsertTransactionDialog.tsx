@@ -9,9 +9,9 @@ import {
   DialogTitle,
 } from "@shadcn/dialog";
 import ExpenseForm from "@components/transaction/forms/ExpenseForm";
-import GainForm from "./forms/GainForm";
-import TransferForm from "./forms/TransferForm";
-import InvestmentForm from "./forms/InvestmentForm";
+import GainForm from "@components/transaction/forms/GainForm";
+import TransferForm from "@components/transaction/forms/TransferForm";
+import InvestmentForm from "@components/transaction/forms/InvestmentForm";
 import { ScrollArea } from "@shadcn/scroll-area";
 import { TRANSACTION_TYPE_LABELS } from "@/app/_constants/transaction";
 

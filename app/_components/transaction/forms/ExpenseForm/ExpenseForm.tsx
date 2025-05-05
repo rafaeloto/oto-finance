@@ -37,7 +37,7 @@ import CreditCardFields from "./CreditCardFields";
 import type { InstallmentType } from "./CreditCardFields";
 import Icon from "@atoms/Icon";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
-import CategoryField from "@molecules/CategoryField";
+import CategoryField from "@components/category/CategoryField";
 
 export type FormSchema = z.infer<typeof formSchemas.expense>;
 

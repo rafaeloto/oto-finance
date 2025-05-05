@@ -11,7 +11,7 @@ import Icon from "@atoms/Icon";
 import useIsDesktop from "@utils/useIsDesktop";
 import { TransactionType } from "@prisma/client";
 import FloatingActionMenu from "@shadcn/floating-action-menu";
-import UpsertTransactionDialog from "./UpsertTransactionDialog";
+import UpsertTransactionDialog from "@components/transaction/dialogs/UpsertTransactionDialog";
 
 interface AddTransactionButtonProps {
   canUserAddTransaction?: boolean;

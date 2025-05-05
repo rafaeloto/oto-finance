@@ -10,7 +10,7 @@ import LastTransactions from "./_components/LastTransactions";
 import { getCanUserAddTransaction } from "@data/getCanUserAddTransaction";
 // import AiReportButton from "./_components/AiReportButton";
 import { getValidDateFromParams } from "@utils/date";
-import AddTransactionButton from "@components/transaction/AddTransactionButton";
+import AddTransactionButton from "@components/transaction/buttons/AddTransactionButton";
 // import { getUser } from "@data/getUser";
 
 interface HomeProps {

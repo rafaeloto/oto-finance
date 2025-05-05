@@ -12,7 +12,7 @@ import {
 } from "@shadcn/dialog";
 import ShouldRender from "@atoms/ShouldRender";
 import { Button } from "@shadcn/button";
-import CategoryButton from "./CategoryButton";
+import CategoryButton from "@components/category/CategoryButton";
 
 type CategoryFieldProps = {
   categories: Category[];
