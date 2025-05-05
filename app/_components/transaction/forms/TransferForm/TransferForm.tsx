@@ -29,7 +29,8 @@ import { useTransferCategories } from "@contexts/CategoriesContext";
 import { Transaction } from "@prisma/client";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
-import Icon, { LucideIconName } from "@atoms/Icon";
+import Icon from "@atoms/Icon";
+import CategoryField from "@molecules/CategoryField";
 
 type FormSchema = z.infer<typeof formSchemas.transfer>;
 
@@ -138,40 +139,7 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="categoryId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Categoria</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  disabled={loadingCategories}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione uma categoria..." />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {categories.map((option) => (
-                      <SelectItem key={option.id} value={option.id}>
-                        <div className="flex items-center gap-3">
-                          <Icon
-                            name={option.icon as LucideIconName}
-                            {...(option?.color && { color: option.color })}
-                          />
-                          {option.name}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <CategoryField categories={categories} />
 
           <FormField
             control={form.control}
