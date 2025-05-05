@@ -79,7 +79,7 @@ const CreditCardFields = ({ transaction }: CreditCardFieldsProps) => {
       return;
     }
 
-    const fisrtInvoice = invoiceOptions[0];
+    const fisrtInvoice = invoiceOptions[1];
     setValue("invoiceMonth", fisrtInvoice?.value);
     setValue("invoiceYear", fisrtInvoice?.year);
     clearErrors(["invoiceMonth", "invoiceYear"]);

@@ -141,6 +141,7 @@ export const getInvoiceOptions = (
     }
   }
 
+  // Next invoice
   let secondInvoiceMonth = firstInvoiceMonth + 1;
   let secondInvoiceYear = firstInvoiceYear;
   if (secondInvoiceMonth > 12) {
@@ -148,7 +149,20 @@ export const getInvoiceOptions = (
     secondInvoiceYear += 1;
   }
 
+  // Previous invoice
+  let previousInvoiceMonth = firstInvoiceMonth - 1;
+  let previousInvoiceYear = firstInvoiceYear;
+  if (previousInvoiceMonth < 1) {
+    previousInvoiceMonth = 12;
+    previousInvoiceYear -= 1;
+  }
+
   return [
+    {
+      value: previousInvoiceMonth,
+      label: MONTH_NAMES[previousInvoiceMonth],
+      year: previousInvoiceYear,
+    },
     {
       value: firstInvoiceMonth,
       label: MONTH_NAMES[firstInvoiceMonth],
