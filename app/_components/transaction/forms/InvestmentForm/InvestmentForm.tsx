@@ -138,7 +138,7 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
             )}
           />
 
-          <CategoryField categories={categories} />
+          <CategoryField categories={categories} type="INVESTMENT" />
 
           <FormField
             control={form.control}

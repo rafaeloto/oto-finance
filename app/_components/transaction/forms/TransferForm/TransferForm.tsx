@@ -139,7 +139,7 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
             )}
           />
 
-          <CategoryField categories={categories} />
+          <CategoryField categories={categories} type="TRANSFER" />
 
           <FormField
             control={form.control}

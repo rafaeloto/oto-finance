@@ -209,7 +209,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
             )}
           />
 
-          <CategoryField categories={categories} />
+          <CategoryField categories={categories} type="EXPENSE" />
 
           <FormField
             control={form.control}

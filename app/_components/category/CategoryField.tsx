@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import { useMemo, useState } from "react";
-import { Category } from "@prisma/client";
+import { Category, TransactionType } from "@prisma/client";
 import { FormField, FormItem, FormLabel } from "@shadcn/form";
 import Icon from "@atoms/Icon";
 import {
@@ -13,15 +13,18 @@ import {
 import ShouldRender from "@atoms/ShouldRender";
 import { Button } from "@shadcn/button";
 import CategoryButton from "@components/category/CategoryButton";
+import CategoryFormDialog from "./CategoryFormDialog";
 
 type CategoryFieldProps = {
   categories: Category[];
+  type: TransactionType;
 };
 
-const CategoryField = ({ categories }: CategoryFieldProps) => {
+const CategoryField = ({ categories, type }: CategoryFieldProps) => {
   const { control, setValue } = useFormContext();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [formModalOpen, setFormModalOpen] = useState(false);
   const [selectedParent, setSelectedParent] = useState<Category | null>(null);
 
   const parentCategories = useMemo(
@@ -132,8 +135,6 @@ const CategoryField = ({ categories }: CategoryFieldProps) => {
           </div>
 
           <DialogFooter>
-            {/* TODO: Add buttons for creating a new category */}
-
             {/* Option to not select a subcategory */}
             <ShouldRender if={!!selectedParent}>
               <Button
@@ -147,9 +148,35 @@ const CategoryField = ({ categories }: CategoryFieldProps) => {
                 Não selecionar subcategoria
               </Button>
             </ShouldRender>
+
+            {/* Create category button */}
+            <Button
+              variant="outline"
+              onClick={() => setFormModalOpen(true)}
+              className="w-full"
+            >
+              Criar {selectedParent ? "subcategoria" : "categoria"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <CategoryFormDialog
+        open={formModalOpen}
+        onOpenChange={setFormModalOpen}
+        type={type}
+        parentCategory={selectedParent || undefined}
+        onSuccess={(newCategory) => {
+          if (selectedParent) {
+            setValue("categoryId", newCategory.id);
+            setModalOpen(false);
+            setSelectedParent(null);
+          } else {
+            setSelectedParent(newCategory);
+          }
+          setFormModalOpen(false);
+        }}
+      />
     </>
   );
 };

@@ -136,7 +136,7 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
             )}
           />
 
-          <CategoryField categories={categories} />
+          <CategoryField categories={categories} type="GAIN" />
 
           <FormField
             control={form.control}
@@ -151,7 +151,7 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecione o conta..." />
+                      <SelectValue placeholder="Selecione a conta..." />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>

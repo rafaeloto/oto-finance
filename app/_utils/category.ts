@@ -1,4 +1,5 @@
 import { useCategoriesContext } from "@contexts/CategoriesContext";
+import { TransactionType } from "@prisma/client";
 import { useMemo } from "react";
 
 export const useAllCategories = () => {
@@ -30,6 +31,6 @@ export const useAllCategories = () => {
     categories: allCategories,
     loading: isLoading,
     error: hasError,
-    reload: () => reloadCategories(),
+    reload: (type?: TransactionType) => reloadCategories(type),
   };
 };
