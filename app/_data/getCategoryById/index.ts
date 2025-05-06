@@ -19,7 +19,7 @@ export const getCategoryById = async ({ id }: params) => {
   return db.category.findUnique({
     where: {
       id,
-      userId,
+      OR: [{ userId: userId }, { userId: null }],
     },
   });
 };

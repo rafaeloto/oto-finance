@@ -10,6 +10,8 @@ interface UpsertCategoryParams {
   name: string;
   type: TransactionType;
   parentId?: string;
+  icon?: string;
+  color?: string;
 }
 
 export const upsertCategory = async (params: UpsertCategoryParams) => {
@@ -21,11 +23,9 @@ export const upsertCategory = async (params: UpsertCategoryParams) => {
     throw new Error("Unauthorized");
   }
 
-  const category = await db.category.upsert({
+  await db.category.upsert({
     update: { ...params, userId },
     create: { ...params, userId },
     where: { id: params?.id ?? "" },
   });
-
-  return category;
 };
