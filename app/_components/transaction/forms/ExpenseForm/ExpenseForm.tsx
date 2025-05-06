@@ -94,7 +94,7 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
   const defaultValues = {
     name: transaction?.name || "",
     amount: Number(transaction?.amount) || 0,
-    categoryId: transaction?.categoryId || categories[0].id,
+    categoryId: transaction?.categoryId || categories[0]?.id,
     paymentMethod:
       transaction?.paymentMethod || TransactionPaymentMethod.CREDIT,
     accountId: transaction?.accountId || "",

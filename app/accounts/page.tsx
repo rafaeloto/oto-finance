@@ -9,7 +9,7 @@ import { getAccounts } from "@data/getAccounts";
 import { getTotalBalance } from "@data/getTotalBalance";
 import SummaryCard from "../(home)/_components/SummaryCard";
 import Icon from "@atoms/Icon";
-import ShouldRender from "../_components/atoms/ShouldRender";
+import ShouldRender from "@atoms/ShouldRender";
 
 const Accounts = async () => {
   const { userId } = await auth();

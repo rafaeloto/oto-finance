@@ -64,7 +64,7 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
   const defaultValues = {
     name: transaction?.name || "",
     amount: Number(transaction?.amount) || 0,
-    categoryId: transaction?.categoryId || categories[0].id,
+    categoryId: transaction?.categoryId || categories[0]?.id,
     accountId: transaction?.accountId || "",
     date: transaction?.date ? new Date(transaction?.date) : new Date(),
   };

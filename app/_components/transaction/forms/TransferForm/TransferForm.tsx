@@ -64,7 +64,7 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
   const defaultValues = {
     name: transaction?.name || "",
     amount: Number(transaction?.amount) || 0,
-    categoryId: transaction?.categoryId || categories[0].id,
+    categoryId: transaction?.categoryId || categories[0]?.id,
     fromAccountId: transaction?.fromAccountId || "",
     toAccountId: transaction?.toAccountId || "",
     date: transaction?.date ? new Date(transaction?.date) : new Date(),
