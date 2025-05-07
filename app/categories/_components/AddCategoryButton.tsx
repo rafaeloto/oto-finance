@@ -11,12 +11,14 @@ type AddCategoryButtonProps = {
   modal?: "open" | "closed";
   type?: TransactionType;
   parentCategory?: Category;
+  category?: Category;
 };
 
 const AddCategoryButton = ({
   modal,
   type,
   parentCategory,
+  category,
 }: AddCategoryButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(modal === "open");
   const [dialogType, setDialogType] = useState<TransactionType>(
@@ -57,6 +59,7 @@ const AddCategoryButton = ({
         setIsOpen={setIsDialogOpen}
         type={dialogType}
         parentCategory={parentCategory}
+        initialCategory={category}
       />
     </>
   );

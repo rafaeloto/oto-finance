@@ -14,6 +14,8 @@ import { Button } from "@shadcn/button";
 import CategoryButton from "@components/category/CategoryButton";
 import { useRouter } from "next/navigation";
 import BackButton from "@atoms/BackButton";
+import Icon from "@atoms/Icon";
+import { cn } from "@/app/_lib/utils";
 
 type CategoryFieldProps = {
   categories: Category[];
@@ -53,11 +55,12 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
     return subcategoriesMap[selectedParent.id] || [];
   }, [selectedParent, subcategoriesMap]);
 
-  const handleClickCreateCategory = () => {
+  const handleClickUpsertCategory = (categoryId?: string) => {
     const params = new URLSearchParams();
     params.set("modal", "open");
     params.set("type", type);
     if (selectedParent) params.set("parentId", selectedParent.id);
+    if (categoryId) params.set("categoryId", categoryId);
 
     router.push(`/categories?${params.toString()}`);
   };
@@ -109,18 +112,31 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
             <ShouldRender if={!selectedParent}>
               <div className="min-h-[40vh] space-y-2">
                 {parentCategories.map((cat) => (
-                  <CategoryButton
-                    key={cat.id}
-                    category={cat}
-                    onClick={() => {
-                      if (canCreateCategory) setSelectedParent(cat);
-                      else {
-                        setValue("categoryId", cat.id);
-                        setModalOpen(false);
-                        setSelectedParent(null);
-                      }
-                    }}
-                  />
+                  <div className="flex items-center gap-2" key={cat.id}>
+                    <CategoryButton
+                      category={cat}
+                      onClick={() => {
+                        if (canCreateCategory) setSelectedParent(cat);
+                        else {
+                          setValue("categoryId", cat.id);
+                          setModalOpen(false);
+                          setSelectedParent(null);
+                        }
+                      }}
+                    />
+
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={cn(
+                        "text-muted-foreground",
+                        !cat.userId && "hidden",
+                      )}
+                      onClick={() => handleClickUpsertCategory(cat.id)}
+                    >
+                      <Icon name="Pencil" />
+                    </Button>
+                  </div>
                 ))}
               </div>
             </ShouldRender>
@@ -129,15 +145,28 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
               <ShouldRender if={!!parentSubcategories.length}>
                 <div className="min-h-[40vh] space-y-2">
                   {parentSubcategories.map((cat) => (
-                    <CategoryButton
-                      key={cat.id}
-                      category={cat}
-                      onClick={() => {
-                        setValue("categoryId", cat.id);
-                        setModalOpen(false);
-                        setSelectedParent(null);
-                      }}
-                    />
+                    <div className="flex items-center gap-2" key={cat.id}>
+                      <CategoryButton
+                        category={cat}
+                        onClick={() => {
+                          setValue("categoryId", cat.id);
+                          setModalOpen(false);
+                          setSelectedParent(null);
+                        }}
+                      />
+
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className={cn(
+                          "text-muted-foreground",
+                          !cat.userId && "hidden",
+                        )}
+                        onClick={() => handleClickUpsertCategory(cat.id)}
+                      >
+                        <Icon name="Pencil" />
+                      </Button>
+                    </div>
                   ))}
                 </div>
               </ShouldRender>
@@ -171,7 +200,7 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={handleClickCreateCategory}
+                onClick={() => handleClickUpsertCategory()}
                 className="w-full"
               >
                 Criar {selectedParent ? "subcategoria" : "categoria"}

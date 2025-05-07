@@ -81,7 +81,13 @@ const UpsertCategoryDialog = ({
     parentCategory ?? null,
   );
   const [categoryLevel, setCategoryLevel] = useState<CategoryLevel | null>(
-    !!parentCategory ? "subcategory" : null,
+    isUpdate
+      ? !!initialCategory?.parentId
+        ? "subcategory"
+        : "category"
+      : !!parentCategory
+        ? "subcategory"
+        : "category",
   );
 
   const parentCategories = useMemo(

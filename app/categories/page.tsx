@@ -10,11 +10,12 @@ type CategoriesProps = {
     modal?: "open" | "closed";
     type?: TransactionType;
     parentId?: string;
+    categoryId?: string;
   };
 };
 
 const Categories = async ({
-  searchParams: { modal, type, parentId },
+  searchParams: { modal, type, parentId, categoryId },
 }: CategoriesProps) => {
   const { userId } = await auth();
 
@@ -26,7 +27,9 @@ const Categories = async ({
     ? await getCategoryById({ id: parentId })
     : undefined;
 
-  console.log({ parentCategory });
+  const category = categoryId
+    ? await getCategoryById({ id: categoryId })
+    : undefined;
 
   return (
     <>
@@ -38,6 +41,7 @@ const Categories = async ({
             modal={modal}
             type={type}
             {...(!!parentCategory && { parentCategory })}
+            {...(!!category && { category })}
           />
         </div>
       </div>
