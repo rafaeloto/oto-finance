@@ -6,8 +6,8 @@ import { CardContent, CardHeader, CardTitle } from "@shadcn/card";
 import { ScrollArea } from "@shadcn/scroll-area";
 import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@constants/transaction";
 import { Transaction } from "@prisma/client";
-import Image from "next/image";
 import Link from "next/link";
+import Icon, { type LucideIconName } from "@atoms/Icon";
 
 interface LastTransactionsProps {
   lastTransactions: Transaction[];
@@ -37,11 +37,15 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
               >
                 <div className="flex items-center gap-3">
                   <div className="rounded-lg bg-white bg-opacity-[3%] p-3 text-white">
-                    <Image
-                      src={`/${TRANSACTION_PAYMENT_METHOD_ICONS[transaction.paymentMethod]}`}
-                      height={20}
-                      width={20}
-                      alt={transaction.paymentMethod}
+                    <Icon
+                      name={
+                        TRANSACTION_PAYMENT_METHOD_ICONS[
+                          transaction.paymentMethod
+                        ] as LucideIconName
+                      }
+                      size={20}
+                      opacity={0.7}
+                      color="white"
                     />
                   </div>
                   <div className="md:min-w-none flex min-w-0 flex-1 flex-col md:flex-none">

@@ -9,11 +9,11 @@ import { formatCurrency } from "@utils/currency";
 import EditTransactionButton from "@components/transaction/buttons/EditTransactionButton";
 import DeleteTransactionButton from "@components/transaction/buttons/DeleteTransactionButton";
 import { Invoice, Transaction } from "@prisma/client";
-import Image from "next/image";
 import ShouldRender from "@atoms/ShouldRender";
 import useIsDesktop from "@utils/useIsDesktop";
 import TransactionInstallments from "@molecules/TransactionInstallments";
 import AddExpenseButton from "@components/transaction/buttons/AddExpenseButton";
+import Icon, { type LucideIconName } from "@atoms/Icon";
 
 export type TransactionsByInvoice = {
   id: string;
@@ -85,11 +85,15 @@ const InvoiceTransactions = ({
                 <div className="flex w-[35%] items-center gap-3 md:w-[45%]">
                   <ShouldRender if={isDesktop}>
                     <div className="rounded-lg bg-white bg-opacity-[3%] p-3 text-white">
-                      <Image
-                        src={`/${TRANSACTION_PAYMENT_METHOD_ICONS[transaction.paymentMethod]}`}
-                        height={20}
-                        width={20}
-                        alt={transaction.paymentMethod}
+                      <Icon
+                        name={
+                          TRANSACTION_PAYMENT_METHOD_ICONS[
+                            transaction.paymentMethod
+                          ] as LucideIconName
+                        }
+                        size={20}
+                        opacity={0.7}
+                        color="white"
                       />
                     </div>
                   </ShouldRender>

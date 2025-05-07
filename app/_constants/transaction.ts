@@ -1,8 +1,8 @@
 import { TransactionType, TransactionPaymentMethod } from "@prisma/client";
 
 export const TRANSACTION_PAYMENT_METHOD_ICONS = {
-  [TransactionPaymentMethod.CREDIT]: "credit-card.svg",
-  [TransactionPaymentMethod.DEBIT]: "pix.svg",
+  [TransactionPaymentMethod.CREDIT]: "CreditCard",
+  [TransactionPaymentMethod.DEBIT]: "Banknote",
 };
 
 export const TRANSACTION_TYPE_LABELS = {
@@ -29,4 +29,5 @@ export const TRANSACTION_PAYMENT_METHOD_OPTIONS = Object.entries(
 ).map(([value, label]) => ({
   value,
   label,
+  icon: TRANSACTION_PAYMENT_METHOD_ICONS[value as TransactionPaymentMethod],
 }));
