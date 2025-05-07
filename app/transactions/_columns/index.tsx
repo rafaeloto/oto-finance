@@ -16,6 +16,7 @@ import Icon, { type LucideIconName } from "@atoms/Icon";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import AmountText from "@molecules/AmountText";
 import TransactionInstallments from "@molecules/TransactionInstallments";
+import ShouldRender from "@atoms/ShouldRender";
 
 interface Props {
   creditCards: CreditCard[];
@@ -56,13 +57,24 @@ export function getTransactionColumns({
           (category) => category.id === transaction.categoryId,
         );
 
+        const parentCategory = categories?.find(
+          (cat) => cat.id === category?.parentId,
+        );
+
         return (
           <div className="flex items-center gap-3">
             <Icon
               name={category?.icon as LucideIconName}
-              {...(!!category?.color && { color: category.color })}
+              {...(category?.color && { color: category.color })}
             />
-            <p>{category?.name || "Não especificado"}</p>
+            <div className="flex flex-col items-start">
+              <span>{category?.name}</span>
+              <ShouldRender if={!!parentCategory}>
+                <p className="text-xs text-muted-foreground">
+                  {parentCategory?.name}
+                </p>
+              </ShouldRender>
+            </div>
           </div>
         );
       },

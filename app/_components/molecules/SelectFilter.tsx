@@ -28,6 +28,12 @@ type SelectFilterProps = {
   className?: string;
   hideClearButton?: boolean;
   isInsideModal?: boolean;
+  disabled?: boolean;
+  /**
+   * If defined, the query parameters with the given keys
+   *  will be removed when the select value is cleared.
+   */
+  paramsToRemove?: string[];
 };
 
 const SelectFilter = ({
@@ -39,6 +45,8 @@ const SelectFilter = ({
   className,
   hideClearButton = false,
   isInsideModal = false,
+  disabled = false,
+  paramsToRemove = [],
 }: SelectFilterProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -49,7 +57,10 @@ const SelectFilter = ({
   );
 
   useEffect(() => {
-    if (isInsideModal) return;
+    if (isInsideModal) {
+      setSelectedValue(value || undefined);
+      return;
+    }
     setSelectedValue(value || searchParams.get(paramKey) || undefined);
   }, [isInsideModal, value, searchParams, paramKey]);
 
@@ -64,6 +75,7 @@ const SelectFilter = ({
       setSelectedValue(undefined);
       if (onChange) return onChange(value);
       params.delete(paramKey);
+      paramsToRemove?.forEach((key) => params.delete(key));
     }
 
     replace(`${pathname}?${params.toString()}`);
@@ -74,7 +86,7 @@ const SelectFilter = ({
       <Select
         onValueChange={handleFilterChange}
         value={selectedValue ?? ""}
-        disabled={!options.length}
+        disabled={disabled || !options.length}
       >
         <SelectTrigger
           className={cn("min-w-fit space-x-2 md:rounded-full", className)}

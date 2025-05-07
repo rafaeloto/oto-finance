@@ -115,7 +115,11 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
             paramKey="type"
             value={filters.type}
             onChange={(value) =>
-              setFilters((prev) => ({ ...prev, type: value ?? "" }))
+              setFilters((prev) => ({
+                ...prev,
+                type: value ?? "",
+                categoryId: "",
+              }))
             }
             options={TRANSACTION_TYPE_OPTIONS.map((option) => ({
               value: option.value,
@@ -133,31 +137,46 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
             onChange={(value) =>
               setFilters((prev) => ({ ...prev, categoryId: value ?? "" }))
             }
-            options={categories.map((category) => ({
-              value: category.id,
-              label: (
-                <div className="flex items-center gap-3">
-                  <Icon
-                    name={category?.icon as LucideIconName}
-                    {...(!!category?.color && { color: category.color })}
-                  />
-                  <p>{category?.name || "Não especificado"}</p>
-                </div>
-              ),
-            }))}
+            options={categories
+              .filter(
+                (cat) => cat.parentId === null && cat.type === filters.type,
+              )
+              .map((category) => ({
+                value: category.id,
+                label: (
+                  <div className="flex items-center gap-3">
+                    <Icon
+                      name={category?.icon as LucideIconName}
+                      {...(!!category?.color && { color: category.color })}
+                    />
+                    <p>{category?.name || "Não especificado"}</p>
+                  </div>
+                ),
+              }))}
             placeholder="Categoria"
             isInsideModal
+            disabled={!filters.type}
           />
 
           <SelectFilter
             paramKey="paymentMethod"
             value={filters.paymentMethod}
             onChange={(value) =>
-              setFilters((prev) => ({ ...prev, paymentMethod: value ?? "" }))
+              setFilters((prev) => ({
+                ...prev,
+                paymentMethod: value ?? "",
+                accountId: "",
+                cardId: "",
+              }))
             }
             options={TRANSACTION_PAYMENT_METHOD_OPTIONS.map((option) => ({
               value: option.value,
-              label: option.label,
+              label: (
+                <div className="flex items-center gap-3">
+                  <Icon name={option.icon as LucideIconName} />
+                  <p>{option.label}</p>
+                </div>
+              ),
             }))}
             placeholder="Método"
             isInsideModal
@@ -180,6 +199,7 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
             }))}
             placeholder="Conta"
             isInsideModal
+            disabled={filters.paymentMethod !== "DEBIT"}
           />
 
           <SelectFilter
@@ -199,6 +219,7 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
             }))}
             placeholder="Cartão"
             isInsideModal
+            disabled={filters.paymentMethod !== "CREDIT"}
           />
 
           <TimeSelect

@@ -52,32 +52,45 @@ const TransactionFilters = () => {
             ),
           }))}
           placeholder="Tipo"
+          paramsToRemove={["categoryId"]}
         />
 
         <SelectFilter
           paramKey="categoryId"
-          options={categories.map((category) => ({
-            value: category.id,
-            label: (
-              <div className="flex items-center gap-3">
-                <Icon
-                  name={category?.icon as LucideIconName}
-                  {...(!!category?.color && { color: category.color })}
-                />
-                <p>{category?.name || "Não especificado"}</p>
-              </div>
-            ),
-          }))}
+          options={categories
+            .filter(
+              (cat) =>
+                cat.parentId === null && cat.type === searchParams.get("type"),
+            )
+            .map((category) => ({
+              value: category.id,
+              label: (
+                <div className="flex items-center gap-3">
+                  <Icon
+                    name={category?.icon as LucideIconName}
+                    {...(!!category?.color && { color: category.color })}
+                  />
+                  <p>{category?.name || "Não especificado"}</p>
+                </div>
+              ),
+            }))}
           placeholder="Categoria"
+          disabled={!searchParams.get("type")}
         />
 
         <SelectFilter
           paramKey="paymentMethod"
           options={TRANSACTION_PAYMENT_METHOD_OPTIONS.map((option) => ({
             value: option.value,
-            label: option.label,
+            label: (
+              <div className="flex items-center gap-3">
+                <Icon name={option.icon as LucideIconName} />
+                <p>{option.label}</p>
+              </div>
+            ),
           }))}
           placeholder="Método"
+          paramsToRemove={["accountId", "cardId"]}
         />
 
         <SelectFilter
@@ -92,6 +105,7 @@ const TransactionFilters = () => {
             ),
           }))}
           placeholder="Conta"
+          disabled={searchParams.get("paymentMethod") !== "DEBIT"}
         />
 
         <SelectFilter
@@ -106,6 +120,7 @@ const TransactionFilters = () => {
             ),
           }))}
           placeholder="Cartão"
+          disabled={searchParams.get("paymentMethod") !== "CREDIT"}
         />
 
         <TimeSelect />

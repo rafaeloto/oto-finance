@@ -35,7 +35,7 @@ import handleCreditTransaction from "./handleCreditTransaction";
 import { getImportantDates } from "@utils/date";
 import CreditCardFields from "./CreditCardFields";
 import type { InstallmentType } from "./CreditCardFields";
-import Icon from "@atoms/Icon";
+import Icon, { type LucideIconName } from "@atoms/Icon";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import CategoryField from "@components/category/CategoryField";
 
@@ -230,7 +230,10 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
                   <SelectContent>
                     {TRANSACTION_PAYMENT_METHOD_OPTIONS.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
-                        {option.label}
+                        <div className="flex items-center gap-3">
+                          <Icon name={option.icon as LucideIconName} />
+                          <p>{option.label}</p>
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>

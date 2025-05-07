@@ -39,7 +39,6 @@ export const getTransactions = async (params: getTransactionsParams = {}) => {
     userId,
     ...(!!name && { name: { contains: name, mode: "insensitive" } }),
     ...(!!type && { type }),
-    ...(!!categoryId && { categoryId }),
     ...(!!paymentMethod && { paymentMethod }),
     ...(!!cardId && { cardId }),
     ...(!!invoiceId && { invoiceId }),
@@ -61,6 +60,18 @@ export const getTransactions = async (params: getTransactionsParams = {}) => {
       { accountId },
       { fromAccountId: accountId },
       { toAccountId: accountId },
+    ];
+  }
+
+  // Filter by category
+  if (categoryId) {
+    filters.OR = [
+      { categoryId },
+      {
+        category: {
+          parentId: categoryId,
+        },
+      },
     ];
   }
 
