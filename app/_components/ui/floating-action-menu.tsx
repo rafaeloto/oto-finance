@@ -17,6 +17,7 @@ type FloatingActionMenuProps = {
   disabled?: boolean;
   size?: "default" | "sm" | "lg" | "icon";
   triggerLabel?: string;
+  divLeftAdjustment?: number;
 };
 
 const FloatingActionMenu = ({
@@ -25,6 +26,7 @@ const FloatingActionMenu = ({
   disabled = false,
   size,
   triggerLabel,
+  divLeftAdjustment = 140,
 }: FloatingActionMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [buttonPosition, setButtonPosition] = useState<{
@@ -43,7 +45,7 @@ const FloatingActionMenu = ({
       const rect = buttonRef.current.getBoundingClientRect();
       setButtonPosition({
         top: rect.bottom + 8,
-        left: rect.right - 140,
+        left: rect.right - divLeftAdjustment,
       });
     }
 

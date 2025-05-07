@@ -51,6 +51,7 @@ const AddCategoryButton = ({
         options={options}
         className="rounded-full font-bold"
         triggerLabel={isDesktop ? "Adicionar categoria" : "Adicionar"}
+        divLeftAdjustment={105}
       />
 
       <UpsertCategoryDialog
