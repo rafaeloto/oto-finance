@@ -2,7 +2,6 @@ import { useFormContext } from "react-hook-form";
 import { useMemo, useState } from "react";
 import { Category, TransactionType } from "@prisma/client";
 import { FormField, FormItem, FormLabel } from "@shadcn/form";
-import Icon from "@atoms/Icon";
 import {
   Dialog,
   DialogContent,
@@ -13,7 +12,8 @@ import {
 import ShouldRender from "@atoms/ShouldRender";
 import { Button } from "@shadcn/button";
 import CategoryButton from "@components/category/CategoryButton";
-import CategoryFormDialog from "./CategoryFormDialog";
+import { useRouter } from "next/navigation";
+import BackButton from "@atoms/BackButton";
 
 type CategoryFieldProps = {
   categories: Category[];
@@ -22,10 +22,15 @@ type CategoryFieldProps = {
 
 const CategoryField = ({ categories, type }: CategoryFieldProps) => {
   const { control, setValue } = useFormContext();
+  const router = useRouter();
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [formModalOpen, setFormModalOpen] = useState(false);
   const [selectedParent, setSelectedParent] = useState<Category | null>(null);
+
+  const canCreateCategory = useMemo(() => {
+    if (type === "INVESTMENT" || type === "TRANSFER") return false;
+    return true;
+  }, [type]);
 
   const parentCategories = useMemo(
     () => categories.filter((c) => c.parentId === null),
@@ -47,6 +52,15 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
     if (!selectedParent) return [];
     return subcategoriesMap[selectedParent.id] || [];
   }, [selectedParent, subcategoriesMap]);
+
+  const handleClickCreateCategory = () => {
+    const params = new URLSearchParams();
+    params.set("modal", "open");
+    params.set("type", type);
+    if (selectedParent) params.set("parentId", selectedParent.id);
+
+    router.push(`/categories?${params.toString()}`);
+  };
 
   return (
     <>
@@ -76,24 +90,19 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
 
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
         <DialogContent className="w-[95svw] max-w-lg">
-          <DialogHeader className="mb-3 space-y-2">
-            <DialogTitle>
+          <DialogHeader className="m-3 space-y-3">
+            <DialogTitle className="text-center">
               {selectedParent
                 ? "Selecione uma subcategoria"
                 : "Selecione uma categoria"}
             </DialogTitle>
 
-            <ShouldRender if={!!selectedParent}>
-              {/* Back button */}
-              <Button
-                onClick={() => setSelectedParent(null)}
-                variant="ghost"
-                className="flex items-center justify-start gap-3 px-0"
-              >
-                <Icon name="ArrowLeft" />
-                <p>Voltar para categorias</p>
-              </Button>
-            </ShouldRender>
+            {/* Back button */}
+            <BackButton
+              onClick={() => setSelectedParent(null)}
+              label="Voltar para categorias"
+              shouldRender={!!selectedParent}
+            />
           </DialogHeader>
 
           <div className="flex max-h-[60vh] flex-col justify-between overflow-y-auto">
@@ -103,7 +112,14 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
                   <CategoryButton
                     key={cat.id}
                     category={cat}
-                    onClick={() => setSelectedParent(cat)}
+                    onClick={() => {
+                      if (canCreateCategory) setSelectedParent(cat);
+                      else {
+                        setValue("categoryId", cat.id);
+                        setModalOpen(false);
+                        setSelectedParent(null);
+                      }
+                    }}
                   />
                 ))}
               </div>
@@ -134,10 +150,11 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
             </ShouldRender>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="flex flex-col gap-3 md:flex-col md:gap-3 md:space-x-0">
             {/* Option to not select a subcategory */}
             <ShouldRender if={!!selectedParent}>
               <Button
+                type="button"
                 onClick={() => {
                   setValue("categoryId", selectedParent?.id);
                   setModalOpen(false);
@@ -150,33 +167,19 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
             </ShouldRender>
 
             {/* Create category button */}
-            <Button
-              variant="outline"
-              onClick={() => setFormModalOpen(true)}
-              className="w-full"
-            >
-              Criar {selectedParent ? "subcategoria" : "categoria"}
-            </Button>
+            <ShouldRender if={canCreateCategory}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleClickCreateCategory}
+                className="w-full"
+              >
+                Criar {selectedParent ? "subcategoria" : "categoria"}
+              </Button>
+            </ShouldRender>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      <CategoryFormDialog
-        open={formModalOpen}
-        onOpenChange={setFormModalOpen}
-        type={type}
-        parentCategory={selectedParent || undefined}
-        onSuccess={(newCategory) => {
-          if (selectedParent) {
-            setValue("categoryId", newCategory.id);
-            setModalOpen(false);
-            setSelectedParent(null);
-          } else {
-            setSelectedParent(newCategory);
-          }
-          setFormModalOpen(false);
-        }}
-      />
     </>
   );
 };

@@ -13,7 +13,7 @@ import GainForm from "@components/transaction/forms/GainForm";
 import TransferForm from "@components/transaction/forms/TransferForm";
 import InvestmentForm from "@components/transaction/forms/InvestmentForm";
 import { ScrollArea } from "@shadcn/scroll-area";
-import { TRANSACTION_TYPE_LABELS } from "@/app/_constants/transaction";
+import { TRANSACTION_TYPE_LABELS } from "@constants/transaction";
 
 const formComponents: Partial<
   Record<

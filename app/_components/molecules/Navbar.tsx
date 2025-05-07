@@ -25,6 +25,8 @@ const Navbar = () => {
     { href: "/accounts", label: "Contas" },
     { href: "/credit-cards", label: "Cartões" },
     { href: "/subscription", label: "Assinatura" },
+    // TODO: Add this back once the categories page is ready
+    // { href: "/categories", label: "Categorias" },
   ];
 
   const optionColor = (href: string) => {
