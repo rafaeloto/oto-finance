@@ -12,19 +12,27 @@ import {
 import ShouldRender from "@atoms/ShouldRender";
 import { Button } from "@shadcn/button";
 import CategoryButton from "@components/category/CategoryButton";
-import { useRouter } from "next/navigation";
 import BackButton from "@atoms/BackButton";
 import Icon from "@atoms/Icon";
 import { cn } from "@/app/_lib/utils";
 
+export type openCategoryDialogProps = {
+  category?: Category;
+  parent?: Category;
+};
+
 type CategoryFieldProps = {
   categories: Category[];
   type: TransactionType;
+  openCategoryDialog: (props: openCategoryDialogProps) => void;
 };
 
-const CategoryField = ({ categories, type }: CategoryFieldProps) => {
+const CategoryField = ({
+  categories,
+  type,
+  openCategoryDialog,
+}: CategoryFieldProps) => {
   const { control, setValue } = useFormContext();
-  const router = useRouter();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedParent, setSelectedParent] = useState<Category | null>(null);
@@ -55,16 +63,6 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
     return subcategoriesMap[selectedParent.id] || [];
   }, [selectedParent, subcategoriesMap]);
 
-  const handleClickUpsertCategory = (categoryId?: string) => {
-    const params = new URLSearchParams();
-    params.set("modal", "open");
-    params.set("type", type);
-    if (selectedParent) params.set("parentId", selectedParent.id);
-    if (categoryId) params.set("categoryId", categoryId);
-
-    router.push(`/categories?${params.toString()}`);
-  };
-
   return (
     <>
       <div>
@@ -91,7 +89,13 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
         />
       </div>
 
-      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+      <Dialog
+        open={modalOpen}
+        onOpenChange={(open) => {
+          setModalOpen(open);
+          if (!open) setSelectedParent(null);
+        }}
+      >
         <DialogContent className="w-[95svw] max-w-lg">
           <DialogHeader className="m-3 space-y-3">
             <DialogTitle className="text-center">
@@ -110,7 +114,7 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
 
           <div className="flex max-h-[60vh] flex-col justify-between overflow-y-auto">
             <ShouldRender if={!selectedParent}>
-              <div className="min-h-[40vh] space-y-2">
+              <div className="space-y-2">
                 {parentCategories.map((cat) => (
                   <div className="flex items-center gap-2" key={cat.id}>
                     <CategoryButton
@@ -132,7 +136,7 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
                         "text-muted-foreground",
                         !cat.userId && "hidden",
                       )}
-                      onClick={() => handleClickUpsertCategory(cat.id)}
+                      onClick={() => openCategoryDialog({ category: cat })}
                     >
                       <Icon name="Pencil" />
                     </Button>
@@ -143,7 +147,7 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
 
             <ShouldRender if={!!selectedParent}>
               <ShouldRender if={!!parentSubcategories.length}>
-                <div className="min-h-[40vh] space-y-2">
+                <div className="space-y-2">
                   {parentSubcategories.map((cat) => (
                     <div className="flex items-center gap-2" key={cat.id}>
                       <CategoryButton
@@ -162,7 +166,12 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
                           "text-muted-foreground",
                           !cat.userId && "hidden",
                         )}
-                        onClick={() => handleClickUpsertCategory(cat.id)}
+                        onClick={() => {
+                          openCategoryDialog({
+                            category: cat,
+                            ...(selectedParent && { parent: selectedParent }),
+                          });
+                        }}
                       >
                         <Icon name="Pencil" />
                       </Button>
@@ -200,7 +209,11 @@ const CategoryField = ({ categories, type }: CategoryFieldProps) => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => handleClickUpsertCategory()}
+                onClick={() => {
+                  openCategoryDialog({
+                    ...(selectedParent && { parent: selectedParent }),
+                  });
+                }}
                 className="w-full"
               >
                 Criar {selectedParent ? "subcategoria" : "categoria"}

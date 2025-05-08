@@ -30,16 +30,23 @@ import { Button } from "@shadcn/button";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
 import Icon from "@atoms/Icon";
-import CategoryField from "@components/category/CategoryField";
+import CategoryField, {
+  type openCategoryDialogProps,
+} from "@components/category/CategoryField";
 
 type FormSchema = z.infer<typeof formSchemas.gain>;
 
 interface GainFormProps {
   setIsOpen: (open: boolean) => void;
   transaction?: Transaction;
+  openCategoryDialog: (props: openCategoryDialogProps) => void;
 }
 
-const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
+const GainForm = ({
+  setIsOpen,
+  transaction,
+  openCategoryDialog,
+}: GainFormProps) => {
   const transactionId = transaction?.id;
 
   const isUpdate = !!transactionId;
@@ -136,7 +143,11 @@ const GainForm = ({ setIsOpen, transaction }: GainFormProps) => {
             )}
           />
 
-          <CategoryField categories={categories} type="GAIN" />
+          <CategoryField
+            categories={categories}
+            type="GAIN"
+            openCategoryDialog={openCategoryDialog}
+          />
 
           <FormField
             control={form.control}

@@ -37,16 +37,23 @@ import CreditCardFields from "./CreditCardFields";
 import type { InstallmentType } from "./CreditCardFields";
 import Icon, { type LucideIconName } from "@atoms/Icon";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
-import CategoryField from "@components/category/CategoryField";
+import CategoryField, {
+  type openCategoryDialogProps,
+} from "@components/category/CategoryField";
 
 export type FormSchema = z.infer<typeof formSchemas.expense>;
 
 interface ExpenseFormProps {
   setIsOpen: (open: boolean) => void;
   transaction?: Transaction;
+  openCategoryDialog: (props: openCategoryDialogProps) => void;
 }
 
-const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
+const ExpenseForm = ({
+  setIsOpen,
+  transaction,
+  openCategoryDialog,
+}: ExpenseFormProps) => {
   const transactionId = transaction?.id;
   const isUpdate = !!transactionId;
   const isInstallment = !!transaction?.installmentId;
@@ -209,7 +216,11 @@ const ExpenseForm = ({ setIsOpen, transaction }: ExpenseFormProps) => {
             )}
           />
 
-          <CategoryField categories={categories} type="EXPENSE" />
+          <CategoryField
+            categories={categories}
+            type="EXPENSE"
+            openCategoryDialog={openCategoryDialog}
+          />
 
           <FormField
             control={form.control}

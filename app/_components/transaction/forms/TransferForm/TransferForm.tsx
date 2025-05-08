@@ -30,16 +30,23 @@ import { Transaction } from "@prisma/client";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
 import Icon from "@atoms/Icon";
-import CategoryField from "@components/category/CategoryField";
+import CategoryField, {
+  type openCategoryDialogProps,
+} from "@components/category/CategoryField";
 
 type FormSchema = z.infer<typeof formSchemas.transfer>;
 
 interface TransferFormProps {
   setIsOpen: (open: boolean) => void;
   transaction?: Transaction;
+  openCategoryDialog: (props: openCategoryDialogProps) => void;
 }
 
-const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
+const TransferForm = ({
+  setIsOpen,
+  transaction,
+  openCategoryDialog,
+}: TransferFormProps) => {
   const transactionId = transaction?.id;
 
   const isUpdate = !!transactionId;
@@ -139,7 +146,11 @@ const TransferForm = ({ setIsOpen, transaction }: TransferFormProps) => {
             )}
           />
 
-          <CategoryField categories={categories} type="TRANSFER" />
+          <CategoryField
+            categories={categories}
+            type="TRANSFER"
+            openCategoryDialog={openCategoryDialog}
+          />
 
           <FormField
             control={form.control}

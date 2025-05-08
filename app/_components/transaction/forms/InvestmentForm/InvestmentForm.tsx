@@ -30,16 +30,23 @@ import { Transaction } from "@prisma/client";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
 import Icon from "@atoms/Icon";
-import CategoryField from "@components/category/CategoryField";
+import CategoryField, {
+  type openCategoryDialogProps,
+} from "@components/category/CategoryField";
 
 type FormSchema = z.infer<typeof formSchemas.investment>;
 
 interface InvestmentFormProps {
   setIsOpen: (open: boolean) => void;
   transaction?: Transaction;
+  openCategoryDialog: (props: openCategoryDialogProps) => void;
 }
 
-const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
+const InvestmentForm = ({
+  setIsOpen,
+  transaction,
+  openCategoryDialog,
+}: InvestmentFormProps) => {
   const transactionId = transaction?.id;
 
   const isUpdate = !!transactionId;
@@ -138,7 +145,11 @@ const InvestmentForm = ({ setIsOpen, transaction }: InvestmentFormProps) => {
             )}
           />
 
-          <CategoryField categories={categories} type="INVESTMENT" />
+          <CategoryField
+            categories={categories}
+            type="INVESTMENT"
+            openCategoryDialog={openCategoryDialog}
+          />
 
           <FormField
             control={form.control}

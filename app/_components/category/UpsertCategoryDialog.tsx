@@ -30,7 +30,6 @@ import { upsertCategory } from "@actions/categories/upsertCategory";
 import { useAllCategories } from "@utils/category";
 import { ColorInput } from "@shadcn/color-input";
 import IconPicker, { ICON_OPTIONS } from "@molecules/IconPicker";
-import { useRouter } from "next/navigation";
 import { TRANSACTION_TYPE_LABELS } from "@constants/transaction";
 import ShouldRender from "@atoms/ShouldRender";
 import CategoryButton from "./CategoryButton";
@@ -74,7 +73,6 @@ const UpsertCategoryDialog = ({
   const isUpdate = !!categoryId;
 
   const { reload: reloadCategories, categories } = useAllCategories();
-  const router = useRouter();
 
   const [upserting, setUpserting] = useState(false);
   const [selectedParent, setSelectedParent] = useState<Category | null>(
@@ -137,9 +135,6 @@ const UpsertCategoryDialog = ({
   const handleCloseDialog = () => {
     setIsOpen(false);
     form.reset();
-    setSelectedParent(null);
-    setCategoryLevel(null);
-    router.replace("/transactions");
   };
 
   const onSubmit = async (data: FormSchema) => {
