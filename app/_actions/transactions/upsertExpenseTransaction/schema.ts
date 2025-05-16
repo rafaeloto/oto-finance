@@ -3,7 +3,7 @@ import { TransactionPaymentMethod } from "@prisma/client";
 
 export const upsertExpenseTransactionSchema = z.object({
   name: z.string().trim().min(1),
-  amount: z.number().min(1),
+  amount: z.number().positive(),
   categoryId: z.string().trim().min(1),
   paymentMethod: z.nativeEnum(TransactionPaymentMethod),
   accountId: z.string().optional(),

@@ -80,7 +80,7 @@ export const formSchemas = {
 
   gain: z.object({
     name: z.string().min(1, "O nome é obrigatório"),
-    amount: z.number(),
+    amount: z.number().positive("O valor deve ser positivo"),
     categoryId: z.string().min(1, "A categoria é obrigatória"),
     accountId: z.string().min(1, "A conta é obrigatória"),
     date: z.date({ required_error: "A data é obrigatória" }),
@@ -88,7 +88,7 @@ export const formSchemas = {
 
   transfer: z.object({
     name: z.string().min(1, "O nome é obrigatório"),
-    amount: z.number(),
+    amount: z.number().positive("O valor deve ser positivo"),
     categoryId: z.string().min(1, "A categoria é obrigatória"),
     fromAccountId: z.string().min(1, "A conta de origem é obrigatória"),
     toAccountId: z.string().min(1, "A conta de destino é obrigatória"),
