@@ -222,8 +222,8 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
             disabled={filters.paymentMethod !== "CREDIT"}
           />
 
-          <TimeSelect
-            filters={{ month: filters.month, year: filters.year }}
+          <TimeSelect<TransactionFilters>
+            filters={filters}
             setFilters={setFilters}
             isInsideModal
           />

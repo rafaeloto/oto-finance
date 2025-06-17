@@ -6,13 +6,19 @@ import { auth } from "@clerk/nextjs/server";
 import { getTotalBalance } from "@data/getTotalBalance";
 import { getCategories } from "@data/getCategories";
 import {
+  GAIN_MAP,
+  EXPENSE_MAP,
   INVESTMENT_DEPOSIT_ID,
   INVESTMENT_WITHDRAW_ID,
   NEGATIVE_RETURN_ID,
   POSITIVE_RETURN_ID,
 } from "@constants/category";
 
-export const getDashboard = async (month: string, year: string) => {
+export const getDashboard = async (
+  month: string,
+  year: string,
+  ignoreLoans?: string,
+) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -27,6 +33,9 @@ export const getDashboard = async (month: string, year: string) => {
       gte: start,
       lte: end,
     },
+    ...(ignoreLoans === "true" && {
+      NOT: [{ categoryId: GAIN_MAP.LOAN }, { categoryId: EXPENSE_MAP.LOAN }],
+    }),
   };
 
   const gainsTotal = Number(

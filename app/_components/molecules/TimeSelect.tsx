@@ -3,23 +3,27 @@
 import SelectFilter from "@molecules/SelectFilter";
 import { getValidDateFromParams } from "@utils/date";
 import { getMonthsOptions, getYearsOptions } from "@utils/select";
-import type { TransactionFilters } from "@/app/transactions/_filters/TransactionFilterDialog";
 import { useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 
-type TimeSelectProps = {
-  filters?: { month?: string; year?: string };
-  setFilters?: Dispatch<SetStateAction<TransactionFilters>>;
+type TimeFilter = {
+  month?: string;
+  year?: string;
+};
+
+type TimeSelectProps<T extends TimeFilter> = {
+  filters?: T;
+  setFilters?: Dispatch<SetStateAction<T>>;
   className?: string;
   isInsideModal?: boolean;
 };
 
-const TimeSelect = ({
+const TimeSelect = <T extends TimeFilter>({
   filters,
   setFilters,
   className,
   isInsideModal = false,
-}: TimeSelectProps) => {
+}: TimeSelectProps<T>) => {
   const searchParams = useSearchParams();
 
   const paramsMonth = searchParams.get("month")?.padStart(2, "0");
@@ -46,7 +50,7 @@ const TimeSelect = ({
         value={filters?.month || validMonth}
         {...(hasFilters && {
           onChange: (value) =>
-            setFilters((prev) => ({ ...prev, month: value ?? "" })),
+            setFilters((prev: T) => ({ ...prev, month: value ?? "" }) as T),
         })}
         className={className}
         hideClearButton
@@ -60,7 +64,7 @@ const TimeSelect = ({
         value={filters?.year || validYear}
         {...(hasFilters && {
           onChange: (value) =>
-            setFilters((prev) => ({ ...prev, year: value ?? "" })),
+            setFilters((prev: T) => ({ ...prev, year: value ?? "" }) as T),
         })}
         className={className}
         hideClearButton

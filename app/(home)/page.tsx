@@ -2,7 +2,6 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Navbar from "@molecules/Navbar";
 import SummaryCards from "./_components/SummaryCards";
-import TimeSelect from "@molecules/TimeSelect";
 import TransactionsPieChart from "./_components/TransactionsPieChart";
 import { getDashboard } from "@data/getDashboard";
 import ExpensesPerCategory from "./_components/ExpensesPerCategory";
@@ -12,15 +11,20 @@ import AiReportButton from "./_components/AiReportButton";
 import { getValidDateFromParams } from "@utils/date";
 import AddTransactionButton from "@components/transaction/buttons/AddTransactionButton";
 import { getUser } from "@data/getUser";
+import DashboardFilter from "./_components/DashboardFilter";
+import { MONTH_NAMES } from "@constants/month";
 
 interface HomeProps {
   searchParams: {
     month: string;
     year: string;
+    ignoreLoans?: string;
   };
 }
 
-const Home = async ({ searchParams: { month, year } }: HomeProps) => {
+const Home = async ({
+  searchParams: { month, year, ignoreLoans },
+}: HomeProps) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -29,7 +33,7 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
 
   const { validMonth, validYear } = getValidDateFromParams(month, year);
 
-  const dashboard = await getDashboard(validMonth, validYear);
+  const dashboard = await getDashboard(validMonth, validYear, ignoreLoans);
   const canUserAddTransaction = await getCanUserAddTransaction();
   const user = await getUser();
 
@@ -37,10 +41,17 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
     <>
       <div className="sticky top-0 z-10 md:static md:z-0">
         <Navbar />
-        <div className="flex justify-center px-3 py-6 md:justify-between md:px-6">
-          <h1 className="hidden text-2xl font-bold md:block">Dashboard</h1>
+        <div className="flex items-center justify-between space-x-2 px-3 py-6 md:space-x-4 md:px-6">
+          <div className="flex items-center space-x-2">
+            <h1 className="hidden text-2xl font-bold md:block">Dashboard</h1>
+            <h1 className="hidden text-2xl font-bold md:block">-</h1>
+            <h1 className="text-2xl font-bold">
+              {MONTH_NAMES[Number(validMonth)]}/{validYear.slice(-2)}
+            </h1>
+          </div>
+
           <div className="scrollbar-hidden flex gap-1 overflow-x-auto md:gap-3 md:overflow-x-visible">
-            <TimeSelect className="rounded-full" />
+            <DashboardFilter />
             <AiReportButton
               month={validMonth}
               year={validYear}
