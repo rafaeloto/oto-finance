@@ -41,10 +41,11 @@ const SwitchFilter = ({
   }, [isInsideModal, value, searchParams, paramKey]);
 
   const handleFilterChange = (value: boolean) => {
-    const params = new URLSearchParams(searchParams.toString());
     setChecked(value);
 
     if (onChange) return onChange(value);
+
+    const params = new URLSearchParams(searchParams.toString());
 
     if (value) {
       params.set(paramKey, "true");
@@ -69,7 +70,18 @@ const SwitchFilter = ({
           onCheckedChange={handleFilterChange}
         />
 
-        <Label htmlFor="ignore-loans" className="whitespace-nowrap text-sm">
+        <Label
+          htmlFor="ignore-loans"
+          className="cursor-pointer whitespace-nowrap text-sm"
+          onClick={(e) => {
+            // Prevent default form submission behavior when clicking the label
+            if (isInsideModal) {
+              e.preventDefault();
+              const newValue = !checked;
+              handleFilterChange(newValue);
+            }
+          }}
+        >
           Ignorar empréstimos
         </Label>
       </div>
