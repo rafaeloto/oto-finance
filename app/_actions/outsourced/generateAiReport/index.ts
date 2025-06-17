@@ -11,7 +11,7 @@ export const generateAiReport = async ({
   month,
   year,
 }: GenerateAiReportSchema) => {
-  generateAiReportSchema.parse({ month });
+  generateAiReportSchema.parse({ month, year });
 
   if (!isMatch(month, "MM")) {
     throw new Error("Invalid month");
@@ -39,7 +39,7 @@ export const generateAiReport = async ({
   }
 
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
   const transactionStrings = await Promise.all(
     transactions.map(async (transaction) => {

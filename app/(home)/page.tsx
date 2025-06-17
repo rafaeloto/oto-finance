@@ -8,10 +8,10 @@ import { getDashboard } from "@data/getDashboard";
 import ExpensesPerCategory from "./_components/ExpensesPerCategory";
 import LastTransactions from "./_components/LastTransactions";
 import { getCanUserAddTransaction } from "@data/getCanUserAddTransaction";
-// import AiReportButton from "./_components/AiReportButton";
+import AiReportButton from "./_components/AiReportButton";
 import { getValidDateFromParams } from "@utils/date";
 import AddTransactionButton from "@components/transaction/buttons/AddTransactionButton";
-// import { getUser } from "@data/getUser";
+import { getUser } from "@data/getUser";
 
 interface HomeProps {
   searchParams: {
@@ -31,7 +31,7 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
 
   const dashboard = await getDashboard(validMonth, validYear);
   const canUserAddTransaction = await getCanUserAddTransaction();
-  // const user = await getUser()
+  const user = await getUser();
 
   return (
     <>
@@ -41,14 +41,13 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
           <h1 className="hidden text-2xl font-bold md:block">Dashboard</h1>
           <div className="flex gap-3">
             <TimeSelect className="rounded-full" />
-            {/* TODO: Add this back once the AI report feature is fixed */}
-            {/* <AiReportButton
+            <AiReportButton
               month={validMonth}
               year={validYear}
               hasPremiumPlan={
                 user?.publicMetadata.subscriptionPlan === "premium"
-                }
-                /> */}
+              }
+            />
             <AddTransactionButton
               canUserAddTransaction={canUserAddTransaction}
             />
