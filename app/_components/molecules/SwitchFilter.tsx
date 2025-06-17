@@ -3,6 +3,13 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Switch } from "@shadcn/switch";
 import { Label } from "@shadcn/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@shadcn/tooltip";
+import Icon from "@atoms/Icon";
 import { useState, useEffect } from "react";
 import { cn } from "@/app/_lib/utils";
 
@@ -64,9 +71,30 @@ const SwitchFilter = ({
         checked={checked}
         onCheckedChange={handleFilterChange}
       />
+
       <Label htmlFor="ignore-loans" className="whitespace-nowrap text-sm">
         Ignorar empréstimos
       </Label>
+
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <Icon name="HelpCircle" size={18} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="max-w-[250px]">
+            <p>
+              Quando ativado, as transações de ganho e despesa com a categoria
+              &quot;Empréstimo&quot; não serão considerados nas informações
+              abaixo
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 };
