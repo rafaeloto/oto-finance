@@ -15,6 +15,7 @@ import CategoryButton from "@components/category/CategoryButton";
 import BackButton from "@atoms/BackButton";
 import Icon from "@atoms/Icon";
 import { cn } from "@/app/_lib/utils";
+import { isLoanCategory } from "@utils/category";
 
 export type openCategoryDialogProps = {
   category?: Category;
@@ -120,7 +121,8 @@ const CategoryField = ({
                     <CategoryButton
                       category={cat}
                       onClick={() => {
-                        if (canCreateCategory) setSelectedParent(cat);
+                        if (canCreateCategory && !isLoanCategory(cat.id))
+                          setSelectedParent(cat);
                         else {
                           setValue("categoryId", cat.id);
                           setModalOpen(false);

@@ -80,7 +80,7 @@ const DashboardFilterDialog = ({
               setFilters((prev) => ({ ...prev, ignoreLoans: value }))
             }
             isInsideModal
-            tooltip={<LoanTooltip />}
+            tooltip={<LoanTooltip context="dashboard" />}
           />
         </div>
 

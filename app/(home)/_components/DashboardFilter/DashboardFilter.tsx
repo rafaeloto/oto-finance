@@ -27,7 +27,10 @@ const DashboardFilter = () => {
       {/* Desktop */}
       <div className="hidden space-x-4 md:flex">
         <TimeSelect />
-        <SwitchFilter paramKey="ignoreLoans" tooltip={<LoanTooltip />} />
+        <SwitchFilter
+          paramKey="ignoreLoans"
+          tooltip={<LoanTooltip context="dashboard" />}
+        />
       </div>
 
       {/* Mobile */}
