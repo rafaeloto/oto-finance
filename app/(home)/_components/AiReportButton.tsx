@@ -17,6 +17,7 @@ import { generateAiReport } from "@actions/outsourced/generateAiReport";
 import { ScrollArea } from "@shadcn/scroll-area";
 import Markdown from "react-markdown";
 import Link from "next/link";
+import useIsDesktop from "@utils/useIsDesktop";
 
 interface AiReportButtonProps {
   hasPremiumPlan: boolean;
@@ -31,6 +32,8 @@ const AiReportButton = ({
 }: AiReportButtonProps) => {
   const [reportIsLoading, setReportIsLoading] = useState(false);
   const [report, setReport] = useState<string | null>(null);
+
+  const isDesktop = useIsDesktop();
 
   const handleGenerateReportClick = async () => {
     try {
@@ -47,8 +50,8 @@ const AiReportButton = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost">
-          Relatório IA
+        <Button variant="outline" className="rounded-full">
+          {isDesktop ? "Relatório IA" : "IA"}
           <Icon name="Bot" />
         </Button>
       </DialogTrigger>
