@@ -37,9 +37,9 @@ const Home = async ({ searchParams: { month, year } }: HomeProps) => {
     <>
       <div className="sticky top-0 z-10 md:static md:z-0">
         <Navbar />
-        <div className="flex justify-center p-6 md:justify-between">
+        <div className="flex justify-center px-3 py-6 md:justify-between md:px-6">
           <h1 className="hidden text-2xl font-bold md:block">Dashboard</h1>
-          <div className="flex gap-1 md:gap-3">
+          <div className="scrollbar-hidden flex gap-1 overflow-x-auto md:gap-3 md:overflow-x-visible">
             <TimeSelect className="rounded-full" />
             <AiReportButton
               month={validMonth}
