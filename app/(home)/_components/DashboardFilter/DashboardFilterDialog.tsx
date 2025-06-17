@@ -13,6 +13,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import TimeSelect from "@molecules/TimeSelect";
 import { useState, useEffect } from "react";
 import SwitchFilter from "@molecules/SwitchFilter";
+import LoanTooltip from "@molecules/LoanTooltip";
 
 export type DashboardFilters = {
   month: string;
@@ -79,6 +80,7 @@ const DashboardFilterDialog = ({
               setFilters((prev) => ({ ...prev, ignoreLoans: value }))
             }
             isInsideModal
+            tooltip={<LoanTooltip />}
           />
         </div>
 

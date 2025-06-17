@@ -3,13 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Switch } from "@shadcn/switch";
 import { Label } from "@shadcn/label";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@shadcn/tooltip";
-import Icon from "@atoms/Icon";
+import ShouldRender from "@atoms/ShouldRender";
 import { useState, useEffect } from "react";
 import { cn } from "@/app/_lib/utils";
 
@@ -19,6 +13,7 @@ type SwitchFilterProps = {
   onChange?: (value: boolean) => void;
   className?: string;
   isInsideModal?: boolean;
+  tooltip?: React.ReactNode;
 };
 
 const SwitchFilter = ({
@@ -27,6 +22,7 @@ const SwitchFilter = ({
   onChange,
   className,
   isInsideModal = false,
+  tooltip,
 }: SwitchFilterProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -62,39 +58,23 @@ const SwitchFilter = ({
   return (
     <div
       className={cn(
-        "flex items-center space-x-2 rounded-md border border-input bg-background px-3 py-2 md:rounded-full md:px-4",
+        "flex items-center justify-between space-x-2 rounded-md border border-input bg-background px-3 py-2 md:rounded-full md:px-4",
         className,
       )}
     >
-      <Switch
-        id="ignore-loans"
-        checked={checked}
-        onCheckedChange={handleFilterChange}
-      />
+      <div className="flex items-center space-x-4 md:space-x-2">
+        <Switch
+          id="ignore-loans"
+          checked={checked}
+          onCheckedChange={handleFilterChange}
+        />
 
-      <Label htmlFor="ignore-loans" className="whitespace-nowrap text-sm">
-        Ignorar empréstimos
-      </Label>
+        <Label htmlFor="ignore-loans" className="whitespace-nowrap text-sm">
+          Ignorar empréstimos
+        </Label>
+      </div>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              type="button"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <Icon name="HelpCircle" size={18} />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="top" className="max-w-[250px]">
-            <p>
-              Quando ativado, as transações de ganho e despesa com a categoria
-              &quot;Empréstimo&quot; não serão considerados nas informações
-              abaixo
-            </p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <ShouldRender if={!!tooltip}>{tooltip}</ShouldRender>
     </div>
   );
 };
