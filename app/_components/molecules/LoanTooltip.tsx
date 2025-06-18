@@ -25,15 +25,14 @@ const LoanTooltip = ({ position, context }: LoanTooltipProps) => {
     return "left";
   }, [position, isDesktop]);
 
-  const button = useMemo(
+  const icon = useMemo(
     () => (
-      <button
-        type="button"
+      <span
         onClick={(e) => e.stopPropagation()}
-        className="animate-pulse text-muted-foreground hover:animate-none hover:text-foreground"
+        className="animate-pulse cursor-pointer text-muted-foreground hover:animate-none hover:text-foreground"
       >
         <Icon name="HelpCircle" size={18} />
-      </button>
+      </span>
     ),
     [],
   );
@@ -79,7 +78,7 @@ const LoanTooltip = ({ position, context }: LoanTooltipProps) => {
       <div className="hidden items-center md:flex">
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>{button}</TooltipTrigger>
+            <TooltipTrigger asChild>{icon}</TooltipTrigger>
             <TooltipContent
               side={side}
               className="max-w-[350px] space-y-4 p-6 shadow shadow-foreground"
@@ -93,7 +92,7 @@ const LoanTooltip = ({ position, context }: LoanTooltipProps) => {
       {/* Mobile Popover */}
       <div className="flex items-center md:hidden">
         <Popover>
-          <PopoverTrigger asChild>{button}</PopoverTrigger>
+          <PopoverTrigger asChild>{icon}</PopoverTrigger>
           <PopoverContent
             side={side}
             className="max-w-[60vw] space-y-4 p-4 shadow-sm shadow-foreground"
