@@ -23,7 +23,7 @@ import { useCreditCards } from "@contexts/CreditCardsContext";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import ClearFiltersButton from "../ClearFiltersButton";
 import Icon, { type LucideIconName } from "@/app/_components/atoms/Icon";
-import { useAllCategories } from "@utils/category";
+import { useAllCategories } from "@contexts/CategoriesContext";
 
 export type TransactionFilters = {
   name: string;
@@ -139,7 +139,7 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
             }
             options={categories
               .filter(
-                (cat) => cat.parentId === null && cat.type === filters.type,
+                (cat) => cat?.parentId === null && cat?.type === filters.type,
               )
               .map((category) => ({
                 value: category.id,

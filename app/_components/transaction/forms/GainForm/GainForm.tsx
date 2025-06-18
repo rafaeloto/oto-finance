@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shadcn/select";
-import { useGainCategories } from "@contexts/CategoriesContext";
+import { useCategories } from "@contexts/CategoriesContext";
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
@@ -61,7 +61,7 @@ const GainForm = ({
     categories,
     loading: loadingCategories,
     error: categoriesError,
-  } = useGainCategories();
+  } = useCategories("GAIN");
 
   const loading = loadingAccounts || loadingCategories;
   const error = accountsError || categoriesError;

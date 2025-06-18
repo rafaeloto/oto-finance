@@ -16,10 +16,10 @@ import { Button } from "@shadcn/button";
 import Icon, { type LucideIconName } from "@atoms/Icon";
 import TransactionFilterDialog from "./TransactionFilterDialog";
 import ClearFiltersButton from "./ClearFiltersButton";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/app/_lib/utils";
-import { useAllCategories } from "@utils/category";
+import { useAllCategories } from "@contexts/CategoriesContext";
 
 const TransactionFilters = () => {
   const { accounts } = useAccounts();
@@ -29,6 +29,13 @@ const TransactionFilters = () => {
   const [open, setOpen] = useState(false);
 
   const searchParams = useSearchParams();
+  const selectedType = searchParams.get("type");
+
+  const filteredCategories = useMemo(() => {
+    return categories.filter(
+      (cat) => cat?.parentId === null && cat?.type === selectedType,
+    );
+  }, [categories, selectedType]);
 
   /**
    * Checks if any filter, except 'month' and 'year', is active
@@ -57,23 +64,18 @@ const TransactionFilters = () => {
 
         <SelectFilter
           paramKey="categoryId"
-          options={categories
-            .filter(
-              (cat) =>
-                cat.parentId === null && cat.type === searchParams.get("type"),
-            )
-            .map((category) => ({
-              value: category.id,
-              label: (
-                <div className="flex items-center gap-3">
-                  <Icon
-                    name={category?.icon as LucideIconName}
-                    {...(!!category?.color && { color: category.color })}
-                  />
-                  <p>{category?.name || "Não especificado"}</p>
-                </div>
-              ),
-            }))}
+          options={filteredCategories.map((category) => ({
+            value: category.id,
+            label: (
+              <div className="flex items-center gap-3">
+                <Icon
+                  name={category?.icon as LucideIconName}
+                  {...(!!category?.color && { color: category.color })}
+                />
+                <p>{category?.name || "Não especificado"}</p>
+              </div>
+            ),
+          }))}
           placeholder="Categoria"
           disabled={!searchParams.get("type")}
         />

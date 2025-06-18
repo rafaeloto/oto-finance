@@ -27,7 +27,7 @@ import { Input } from "@shadcn/input";
 import { Button } from "@shadcn/button";
 import Icon, { type LucideIconName } from "@atoms/Icon";
 import { upsertCategory } from "@actions/categories/upsertCategory";
-import { useAllCategories } from "@utils/category";
+import { useCategories } from "@contexts/CategoriesContext";
 import { ColorInput } from "@shadcn/color-input";
 import IconPicker, { ICON_OPTIONS } from "@molecules/IconPicker";
 import { TRANSACTION_TYPE_LABELS } from "@constants/transaction";
@@ -72,7 +72,7 @@ const UpsertCategoryDialog = ({
   const categoryId = initialCategory?.id;
   const isUpdate = !!categoryId;
 
-  const { reload: reloadCategories, categories } = useAllCategories();
+  const { reload: reloadCategories, categories } = useCategories(type);
 
   const [upserting, setUpserting] = useState(false);
   const [selectedParent, setSelectedParent] = useState<Category | null>(
@@ -89,8 +89,8 @@ const UpsertCategoryDialog = ({
   );
 
   const parentCategories = useMemo(
-    () => categories.filter((c) => c.parentId === null && c.type === type),
-    [categories, type],
+    () => categories.filter((c) => c?.parentId === null),
+    [categories],
   );
 
   const isSubcategory = categoryLevel === "subcategory";
@@ -147,7 +147,7 @@ const UpsertCategoryDialog = ({
         id: categoryId,
         ...(isSubcategory && { parentId: selectedParent?.id }),
       });
-      await reloadCategories(type);
+      await reloadCategories();
       toast.success(
         `${isSubcategory ? "Subcategoria" : "Categoria"} ${isUpdate ? "atualizada" : "criada"} com sucesso!`,
       );
@@ -194,14 +194,18 @@ const UpsertCategoryDialog = ({
         </DialogHeader>
 
         <ShouldRender if={currentStep === "form" && isSubcategory}>
-          <DialogDescription className="mb-2 space-y-2">
-            <p>Subcategoria para:</p>
-            <div className="flex items-center gap-3">
-              <Icon
-                name={selectedParent?.icon as LucideIconName}
-                {...(selectedParent?.color && { color: selectedParent.color })}
-              />
-              <p>{selectedParent?.name}</p>
+          <DialogDescription className="mb-2 space-y-2" asChild>
+            <div>
+              <span>Subcategoria para:</span>
+              <div className="flex items-center gap-3">
+                <Icon
+                  name={selectedParent?.icon as LucideIconName}
+                  {...(selectedParent?.color && {
+                    color: selectedParent.color,
+                  })}
+                />
+                <span>{selectedParent?.name}</span>
+              </div>
             </div>
           </DialogDescription>
         </ShouldRender>

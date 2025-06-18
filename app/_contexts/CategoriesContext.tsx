@@ -5,7 +5,9 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
+  useMemo,
 } from "react";
 import { Category, TransactionType } from "@prisma/client";
 
@@ -17,6 +19,7 @@ type CategoriesContextValue = {
   categories: CategoryMap;
   loading: LoadingMap;
   error: ErrorMap;
+  getCategories: (type: TransactionType) => Promise<Category[]>;
   reloadCategories: (type?: TransactionType) => Promise<void>;
 };
 
@@ -31,68 +34,147 @@ const transactionTypes: TransactionType[] = [
   "INVESTMENT",
 ];
 
-export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [categories, setCategories] = useState<CategoryMap>({
+const initialState = {
+  categories: {
     GAIN: [],
     EXPENSE: [],
     TRANSFER: [],
     INVESTMENT: [],
-  });
-
-  const [loading, setLoading] = useState<LoadingMap>({
-    GAIN: true,
-    EXPENSE: true,
-    TRANSFER: true,
-    INVESTMENT: true,
-  });
-
-  const [error, setError] = useState<ErrorMap>({
+  } as CategoryMap,
+  loading: {
+    GAIN: false,
+    EXPENSE: false,
+    TRANSFER: false,
+    INVESTMENT: false,
+  } as LoadingMap,
+  error: {
     GAIN: null,
     EXPENSE: null,
     TRANSFER: null,
     INVESTMENT: null,
+  } as ErrorMap,
+};
+
+export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [state, setState] = useState(initialState);
+  const cacheRef = useRef<CategoryMap>({ ...initialState.categories });
+  const fetchInProgressRef = useRef<Record<TransactionType, boolean>>({
+    GAIN: false,
+    EXPENSE: false,
+    TRANSFER: false,
+    INVESTMENT: false,
   });
 
   const fetchCategories = useCallback(async (type: TransactionType) => {
-    setLoading((prev) => ({ ...prev, [type]: true }));
-    setError((prev) => ({ ...prev, [type]: null }));
+    // If already in cache, return immediately
+    if (cacheRef.current[type]?.length > 0) {
+      return cacheRef.current[type];
+    }
+
+    // If already fetching, don't start a new request
+    if (fetchInProgressRef.current[type]) {
+      return;
+    }
 
     try {
+      fetchInProgressRef.current[type] = true;
+
+      setState((prev) => ({
+        ...prev,
+        loading: { ...prev.loading, [type]: true },
+        error: { ...prev.error, [type]: null },
+      }));
+
       const res = await fetch(`/api/categories?type=${type}`);
       if (!res.ok) throw new Error(`Failed to fetch ${type} categories`);
 
       const data = await res.json();
-      setCategories((prev) => ({ ...prev, [type]: data }));
+
+      // Update cache
+      cacheRef.current = {
+        ...cacheRef.current,
+        [type]: data,
+      };
+
+      setState((prev) => ({
+        ...prev,
+        categories: {
+          ...prev.categories,
+          [type]: data,
+        },
+        loading: {
+          ...prev.loading,
+          [type]: false,
+        },
+      }));
+
+      return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
-      setError((prev) => ({ ...prev, [type]: err.message }));
+      setState((prev) => ({
+        ...prev,
+        error: { ...prev.error, [type]: err.message },
+        loading: { ...prev.loading, [type]: false },
+      }));
+      throw err;
     } finally {
-      setLoading((prev) => ({ ...prev, [type]: false }));
+      fetchInProgressRef.current[type] = false;
     }
   }, []);
+
+  const getCategories = useCallback(
+    async (type: TransactionType) => {
+      // Return from cache if available
+      if (cacheRef.current[type]?.length > 0) {
+        return cacheRef.current[type];
+      }
+
+      // Otherwise, fetch from server
+      return fetchCategories(type);
+    },
+    [fetchCategories],
+  );
 
   const reloadCategories = useCallback(
     async (type?: TransactionType) => {
       if (type) {
+        // Clear cache for this type to force refetch
+        cacheRef.current[type] = [];
         await fetchCategories(type);
       } else {
+        // Clear all caches
+        transactionTypes.forEach((t) => {
+          cacheRef.current[t] = [];
+        });
         await Promise.all(transactionTypes.map(fetchCategories));
       }
     },
     [fetchCategories],
   );
 
-  useEffect(() => {
-    reloadCategories();
-  }, [reloadCategories]);
+  // Only fetch categories when explicitly requested
+  const value = useMemo(
+    () => ({
+      categories: state.categories,
+      loading: state.loading,
+      error: state.error,
+      getCategories,
+      reloadCategories,
+    }),
+    [
+      state.categories,
+      state.loading,
+      state.error,
+      getCategories,
+      reloadCategories,
+    ],
+  );
 
   return (
-    <CategoriesContext.Provider
-      value={{ categories, loading, error, reloadCategories }}
-    >
+    <CategoriesContext.Provider value={value}>
       {children}
     </CategoriesContext.Provider>
   );
@@ -106,47 +188,127 @@ export const useCategoriesContext = () => {
   return context;
 };
 
-// Individual hooks
-export const useGainCategories = () => {
-  const { categories, loading, error, reloadCategories } =
-    useCategoriesContext();
+export const useCategories = (type: TransactionType) => {
+  const {
+    getCategories,
+    categories: contextCategories,
+    loading,
+    error,
+    reloadCategories,
+  } = useCategoriesContext();
+  const [isLoading, setIsLoading] = useState(!contextCategories[type]?.length);
+
+  const localCategories = contextCategories[type] || [];
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        if (!localCategories?.length) {
+          setIsLoading(true);
+          await getCategories(type);
+        }
+      } catch (error) {
+        console.error("Error loading categories:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadCategories();
+  }, [type, getCategories, localCategories.length]);
+
+  const reload = useCallback(async () => {
+    await reloadCategories(type);
+    await getCategories(type);
+  }, [reloadCategories, getCategories, type]);
+
   return {
-    categories: categories.GAIN,
-    loading: loading.GAIN,
-    error: error.GAIN,
-    reload: () => reloadCategories(TransactionType.GAIN),
+    categories: localCategories,
+    loading: isLoading || loading[type],
+    error: error[type],
+    reload,
   };
 };
 
-export const useExpenseCategories = () => {
-  const { categories, loading, error, reloadCategories } =
-    useCategoriesContext();
-  return {
-    categories: categories.EXPENSE,
-    loading: loading.EXPENSE,
-    error: error.EXPENSE,
-    reload: () => reloadCategories(TransactionType.EXPENSE),
-  };
-};
+export const useAllCategories = () => {
+  const {
+    getCategories,
+    reloadCategories,
+    categories: contextCategories,
+  } = useCategoriesContext();
+  const [allCategories, setAllCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export const useTransferCategories = () => {
-  const { categories, loading, error, reloadCategories } =
-    useCategoriesContext();
-  return {
-    categories: categories.TRANSFER,
-    loading: loading.TRANSFER,
-    error: error.TRANSFER,
-    reload: () => reloadCategories(TransactionType.TRANSFER),
-  };
-};
+  useEffect(() => {
+    const loadAllCategories = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
 
-export const useInvestmentCategories = () => {
-  const { categories, loading, error, reloadCategories } =
-    useCategoriesContext();
+        // Gets empty categories from context
+        const categoriesToLoad = transactionTypes.filter(
+          (type) => !contextCategories[type as TransactionType]?.length,
+        );
+
+        if (!categoriesToLoad.length) {
+          // If all categories are loaded, uses categories from context
+          const categories = transactionTypes.flatMap(
+            (type) => contextCategories[type as TransactionType] || [],
+          );
+          setAllCategories(categories);
+          return;
+        }
+
+        const loadedCategories = await Promise.all(
+          categoriesToLoad.map((type) =>
+            getCategories(type as TransactionType),
+          ),
+        );
+
+        // Combines loaded categories with existing categories
+        const allFetchedCategories = [
+          ...Object.values(contextCategories).flat(),
+          ...loadedCategories.flat(),
+        ];
+        setAllCategories(allFetchedCategories);
+      } catch (err) {
+        console.error("Error loading all categories:", err);
+        setError("Failed to load categories");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadAllCategories();
+  }, [getCategories, contextCategories]);
+
+  const reload = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      await reloadCategories();
+      const [gain, expense, transfer, investment] = await Promise.all([
+        getCategories("GAIN"),
+        getCategories("EXPENSE"),
+        getCategories("TRANSFER"),
+        getCategories("INVESTMENT"),
+      ]);
+
+      setAllCategories([...gain, ...expense, ...transfer, ...investment]);
+      setError(null);
+    } catch (err) {
+      console.error("Error reloading all categories:", err);
+      setError("Failed to reload categories");
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [getCategories, reloadCategories]);
+
   return {
-    categories: categories.INVESTMENT,
-    loading: loading.INVESTMENT,
-    error: error.INVESTMENT,
-    reload: () => reloadCategories(TransactionType.INVESTMENT),
+    categories: allCategories,
+    loading: isLoading,
+    error,
+    reload,
   };
 };

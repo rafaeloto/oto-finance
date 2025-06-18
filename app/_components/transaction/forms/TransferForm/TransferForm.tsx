@@ -25,7 +25,7 @@ import {
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
-import { useTransferCategories } from "@contexts/CategoriesContext";
+import { useCategories } from "@contexts/CategoriesContext";
 import { Transaction } from "@prisma/client";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { useState } from "react";
@@ -61,7 +61,7 @@ const TransferForm = ({
     categories,
     loading: loadingCategories,
     error: categoriesError,
-  } = useTransferCategories();
+  } = useCategories("TRANSFER");
 
   const loading = loadingAccounts || loadingCategories;
   const error = accountsError || categoriesError;

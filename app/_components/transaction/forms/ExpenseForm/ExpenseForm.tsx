@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from "@shadcn/select";
 import { TRANSACTION_PAYMENT_METHOD_OPTIONS } from "@constants/transaction";
-import { useExpenseCategories } from "@contexts/CategoriesContext";
+import { useCategories } from "@contexts/CategoriesContext";
 import { DatePicker } from "@shadcn/date-picker";
 import { DialogClose, DialogFooter } from "@shadcn/dialog";
 import { Button } from "@shadcn/button";
@@ -75,7 +75,7 @@ const ExpenseForm = ({
     categories,
     loading: loadingCategories,
     error: categoriesError,
-  } = useExpenseCategories();
+  } = useCategories("EXPENSE");
 
   const loading = loadingAccounts || loadingInvoices || loadingCategories;
   const error = accountsError || invoicesError || categoriesError;
