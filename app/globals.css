@@ -122,3 +122,29 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Styles for Clerk */
+.cl-headerTitle {
+  position: relative;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+  margin: 0;
+  margin-top: 45px; /* Espaço para a imagem */
+  margin-bottom: 20px;
+}
+
+.cl-headerTitle::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -45px; /* Posiciona a imagem acima do título */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  background-image: url("/favicon.ico");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}

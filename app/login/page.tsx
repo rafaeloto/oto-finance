@@ -2,7 +2,7 @@ import { leagueSpartan } from "@styles/fonts";
 import Image from "next/image";
 import { Button } from "@shadcn/button";
 import Icon from "@atoms/Icon";
-import { SignInButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
@@ -42,12 +42,23 @@ const LoginPage = async ({ searchParams }: LoginPageProps) => {
           para monitorar suas movimentações, e oferecer insights personalizados,
           facilitando o controle do seu orçamento.
         </p>
-        <SignInButton forceRedirectUrl={redirectUrl}>
-          <Button variant="outline">
-            <Icon name="LogIn" className="mr-2" />
-            Fazer login ou criar conta
-          </Button>
-        </SignInButton>
+        {/* Signin button */}
+        <div className="flex w-full flex-col gap-4">
+          <SignInButton forceRedirectUrl={redirectUrl} mode="modal">
+            <Button>
+              <Icon name="LogIn" className="mr-2" />
+              Entrar
+            </Button>
+          </SignInButton>
+
+          {/* Signup button */}
+          <SignUpButton forceRedirectUrl={redirectUrl} mode="modal">
+            <Button variant="outline">
+              <Icon name="UserPlus" className="mr-2" />
+              Cadastrar
+            </Button>
+          </SignUpButton>
+        </div>
       </div>
 
       {/* Image to the right for desktop */}
