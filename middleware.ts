@@ -1,7 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isPublicRoute = createRouteMatcher(["/login(.*)"]);
+const isPublicRoute = createRouteMatcher(["/welcome(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
@@ -12,12 +12,12 @@ export default clerkMiddleware(async (auth, req) => {
       const url = new URL(req.url);
       const currentPath = url.pathname + url.search;
 
-      // Creates a login URL with redirect back to the original requested page
-      const loginUrl = new URL("/login", req.url);
-      loginUrl.searchParams.set("redirect_url", currentPath);
+      // Creates a welcome URL with redirect back to the original requested page
+      const welcomeUrl = new URL("/welcome", req.url);
+      welcomeUrl.searchParams.set("redirect_url", currentPath);
 
-      // Redirects to login page with the redirect_url
-      return NextResponse.redirect(loginUrl);
+      // Redirects to welcome page with the redirect_url
+      return NextResponse.redirect(welcomeUrl);
     }
   }
 });

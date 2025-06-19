@@ -6,11 +6,11 @@ import { SignInButton, SignUpButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-type LoginPageProps = {
+type WelcomePageProps = {
   searchParams: Promise<{ redirect_url?: string }>;
 };
 
-const LoginPage = async ({ searchParams }: LoginPageProps) => {
+const WelcomePage = async ({ searchParams }: WelcomePageProps) => {
   const { redirect_url } = await searchParams;
   const redirectUrl = redirect_url || "/";
 
@@ -23,7 +23,7 @@ const LoginPage = async ({ searchParams }: LoginPageProps) => {
   return (
     <div className="relative flex h-full flex-col md:grid md:grid-cols-2">
       {/* Background image for mobile */}
-      <div className="absolute inset-0 bg-[url('/login.png')] bg-cover bg-center opacity-10 md:hidden" />
+      <div className="absolute inset-0 bg-[url('/welcome.png')] bg-cover bg-center opacity-10 md:hidden" />
 
       {/* Info and button */}
       <div className="relative z-10 mx-auto flex h-full max-w-[550px] flex-col justify-center p-8">
@@ -64,7 +64,7 @@ const LoginPage = async ({ searchParams }: LoginPageProps) => {
       {/* Image to the right for desktop */}
       <div className="relative hidden h-full w-full md:block">
         <Image
-          src="/login.png"
+          src="/welcome.png"
           alt="Faça login"
           fill
           className="object-cover"
@@ -74,4 +74,4 @@ const LoginPage = async ({ searchParams }: LoginPageProps) => {
   );
 };
 
-export default LoginPage;
+export default WelcomePage;
