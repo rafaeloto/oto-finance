@@ -1,20 +1,12 @@
-import { auth } from "@clerk/nextjs/server";
 import Navbar from "@molecules/Navbar";
 import { ScrollArea } from "@shadcn/scroll-area";
 import AddCreditCardButton from "./_components/AddCreditCardButton";
-import { redirect } from "next/navigation";
 import CreditCardUnity from "./_components/CreditCardUnity";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { getCreditCards } from "@data/getCreditCards";
 import { getUser } from "@data/getUser";
 
 const CreditCards = async () => {
-  const { userId } = await auth();
-
-  if (!userId) {
-    redirect("/login");
-  }
-
   const creditCards = await getCreditCards();
 
   const { fullName: userName } = await getUser();

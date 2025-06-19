@@ -1,18 +1,10 @@
-import { auth } from "@clerk/nextjs/server";
 import Navbar from "@molecules/Navbar";
-import { redirect } from "next/navigation";
 import PlanCard from "./_components/PlanCard";
 import { ScrollArea } from "@shadcn/scroll-area";
 import { getCurrentMonthTransactions } from "@data/getCurrentMonthTransactions";
 import { getUser } from "@data/getUser";
 
 const SubscriptionPage = async () => {
-  const { userId } = await auth();
-
-  if (!userId) {
-    redirect("/login");
-  }
-
   const user = await getUser();
   const hasPremiumPlan = user?.publicMetadata.subscriptionPlan === "premium";
   const currentMonthTransactions = await getCurrentMonthTransactions();

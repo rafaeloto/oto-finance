@@ -6,11 +6,18 @@ import { SignInButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-const LoginPage = async () => {
+type LoginPageProps = {
+  searchParams: Promise<{ redirect_url?: string }>;
+};
+
+const LoginPage = async ({ searchParams }: LoginPageProps) => {
+  const { redirect_url } = await searchParams;
+  const redirectUrl = redirect_url || "/";
+
   const { userId } = await auth();
 
   if (userId) {
-    redirect("/");
+    redirect(redirectUrl);
   }
 
   return (
@@ -35,7 +42,7 @@ const LoginPage = async () => {
           para monitorar suas movimentações, e oferecer insights personalizados,
           facilitando o controle do seu orçamento.
         </p>
-        <SignInButton>
+        <SignInButton forceRedirectUrl={redirectUrl}>
           <Button variant="outline">
             <Icon name="LogIn" className="mr-2" />
             Fazer login ou criar conta

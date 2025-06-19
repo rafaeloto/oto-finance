@@ -1,5 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import Navbar from "@molecules/Navbar";
 import SummaryCards from "./_components/SummaryCards";
 import TransactionsPieChart from "./_components/TransactionsPieChart";
@@ -25,12 +23,6 @@ interface HomeProps {
 const Home = async ({
   searchParams: { month, year, ignoreLoans },
 }: HomeProps) => {
-  const { userId } = await auth();
-
-  if (!userId) {
-    redirect("/login");
-  }
-
   const { validMonth, validYear } = getValidDateFromParams(month, year);
 
   const dashboard = await getDashboard(validMonth, validYear, ignoreLoans);

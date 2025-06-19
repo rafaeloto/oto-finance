@@ -1,5 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import Navbar from "@molecules/Navbar";
 import { getCreditCardById } from "@data/getCreditCardById";
@@ -18,12 +16,6 @@ interface CardDetailsProps {
 const CreditCardDetails = async ({
   searchParams: { id },
 }: CardDetailsProps) => {
-  const { userId } = await auth();
-
-  if (!userId) {
-    redirect("/login");
-  }
-
   const creditCard = await getCreditCardById({ id });
 
   const foundCreditCard = !!creditCard;

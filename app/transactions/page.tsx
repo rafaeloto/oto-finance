@@ -1,7 +1,5 @@
 import AddTransactionButton from "@components/transaction/buttons/AddTransactionButton";
 import Navbar from "@molecules/Navbar";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import { ScrollArea } from "@shadcn/scroll-area";
 import { getCanUserAddTransaction } from "@data/getCanUserAddTransaction";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
@@ -22,12 +20,6 @@ type PageProps = {
 };
 
 const TransactionsPage = async ({ searchParams }: PageProps) => {
-  const { userId } = await auth();
-
-  if (!userId) {
-    redirect("/login");
-  }
-
   const filters = validateSearchParams(searchParams);
   const transactions = await getTransactions(filters);
   const hasNoData = transactions.length === 0;

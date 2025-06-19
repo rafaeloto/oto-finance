@@ -1,8 +1,6 @@
-import { auth } from "@clerk/nextjs/server";
 import Navbar from "@molecules/Navbar";
 import AddAccountButton from "./_components/AddAccountButton";
 import RecalculateBalancesButton from "./_components/RecalculateBalancesButton";
-import { redirect } from "next/navigation";
 import AccountCard from "./_components/AccountCard";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { getAccounts } from "@data/getAccounts";
@@ -12,12 +10,6 @@ import Icon from "@atoms/Icon";
 import ShouldRender from "@atoms/ShouldRender";
 
 const Accounts = async () => {
-  const { userId } = await auth();
-
-  if (!userId) {
-    redirect("/login");
-  }
-
   const accounts = await getAccounts();
   const totalBalance = await getTotalBalance();
 
