@@ -9,89 +9,72 @@ import {
 } from "recharts";
 import { CardContent, CardHeader, CardTitle } from "@shadcn/card";
 import { ChartConfig, ChartContainer, ChartTooltip } from "@shadcn/chart";
-import { TransactionType } from "@prisma/client";
-import type { TransactionPercentagePerType } from "@data/getDashboard/types";
-import Icon from "@atoms/Icon";
+import type { TransactionPerCategory } from "@data/getDashboard/types";
+import Icon, { type LucideIconName } from "@atoms/Icon";
 import PercentageItem from "./PercentageItem";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { formatCurrency } from "@utils/currency";
 import ShouldRender from "@/app/_components/atoms/ShouldRender";
 
-const chartConfig = {
-  [TransactionType.INVESTMENT]: {
-    label: "Investido",
-    color: "#FFFFFF",
-  },
-  [TransactionType.GAIN]: {
-    label: "Receita",
-    color: "#55B02E",
-  },
-  [TransactionType.EXPENSE]: {
-    label: "Despesas",
-    color: "#E93030",
-  },
-} satisfies ChartConfig;
-
 const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
   if (!active || !payload?.length) return null;
 
   const item = payload[0];
-  const type = item.name as keyof typeof chartConfig;
-  const itemConfig = chartConfig[type];
+  const { name, value, payload: itemData } = item;
 
   return (
     <div className="rounded-md border border-border bg-background p-2 text-lg shadow-lg">
       <div className="flex items-center justify-center gap-2">
-        <div
-          className="h-3 w-3 rounded-sm"
-          style={{ backgroundColor: item.payload.fill }}
+        <Icon
+          name={itemData.icon as LucideIconName}
+          size={20}
+          color={itemData.fill}
         />
-        <span className="font-medium">{itemConfig?.label || item.name}</span>
+        <span className="font-medium">{name}</span>
       </div>
-      <div className="mt-1 text-center">
-        {formatCurrency(Number(item.value))}
+      <div className="mt-1 flex items-center justify-center gap-2">
+        {formatCurrency(Number(value))}
+        <span className="text-muted-foreground">({itemData.percentage}%)</span>
       </div>
     </div>
   );
 };
 
 interface TransactionsPieChartProps {
-  typesPercentage: TransactionPercentagePerType;
-  investmentsEvolution: number;
-  gainsTotal: number;
-  expensesTotal: number;
+  categories: TransactionPerCategory[];
+  title: string;
 }
 
 const TransactionsPieChart = ({
-  typesPercentage,
-  investmentsEvolution,
-  gainsTotal,
-  expensesTotal,
+  categories,
+  title,
 }: TransactionsPieChartProps) => {
-  const chartData = [
-    {
-      type: TransactionType.GAIN,
-      amount: gainsTotal,
-      fill: "#55B02E",
-    },
-    {
-      type: TransactionType.EXPENSE,
-      amount: expensesTotal,
-      fill: "#E93030",
-    },
-    {
-      type: TransactionType.INVESTMENT,
-      amount: Math.abs(investmentsEvolution),
-      fill: "#FFFFFF",
-    },
-  ];
+  const chartData = categories.map((category, index) => ({
+    id: index,
+    name: category.name,
+    value: category.totalAmount,
+    fill: category.color,
+    icon: category.icon,
+    percentage: category.percentageOfTotal,
+  }));
 
-  const hasNoData = chartData.every((item) => item.amount === 0);
+  const chartConfig = categories.reduce(
+    (acc, category) => ({
+      ...acc,
+      [category.name]: {
+        label: category.name,
+        color: category.color,
+      },
+    }),
+    {} satisfies ChartConfig,
+  );
+
+  const hasNoData = chartData.every((item) => item.value === 0);
 
   return (
-    <div className="flex max-h-[500px] flex-col rounded-md border pb-6 md:h-auto md:min-h-0 md:flex-1">
+    <div className="flex max-h-[600px] flex-col rounded-md border md:h-auto md:min-h-0 md:flex-1">
       <CardHeader>
-        <CardTitle className="font-bold">Tipos de Transação</CardTitle>
+        <CardTitle className="font-bold">{title}</CardTitle>
       </CardHeader>
 
       <CardContent className="min-h-0 flex-1 overflow-auto">
@@ -109,11 +92,11 @@ const TransactionsPieChart = ({
                     <ChartTooltip cursor={false} content={<CustomTooltip />} />
                     <Pie
                       data={chartData}
-                      dataKey="amount"
-                      nameKey="type"
+                      dataKey="value"
+                      nameKey="name"
                       innerRadius="60%"
                       outerRadius="90%"
-                      paddingAngle={2}
+                      paddingAngle={1}
                       stroke="none"
                     >
                       {chartData.map((entry, index) => (
@@ -125,38 +108,23 @@ const TransactionsPieChart = ({
               </ChartContainer>
             </div>
 
-            {/* Itens de porcentagem - Ocupa 1/3 no desktop, full width no mobile */}
-            <div className="w-full md:w-1/2">
-              <div className="space-y-2">
-                <PercentageItem
-                  icon={
-                    <Icon
-                      name="TrendingUp"
-                      size={16}
-                      className="text-primary"
-                    />
-                  }
-                  title="Receita"
-                  value={typesPercentage[TransactionType.GAIN]}
-                />
-
-                <PercentageItem
-                  icon={
-                    <Icon
-                      name="TrendingDown"
-                      size={16}
-                      className="text-red-500"
-                    />
-                  }
-                  title="Despesas"
-                  value={typesPercentage[TransactionType.EXPENSE]}
-                />
-
-                <PercentageItem
-                  icon={<Icon name="PiggyBank" size={16} />}
-                  title="Investido"
-                  value={typesPercentage[TransactionType.INVESTMENT]}
-                />
+            {/* Percentage items - ocupies full width on mobile and half width on desktop */}
+            <div className="mt-4 h-full max-h-[237px] w-full overflow-y-auto px-4 md:mt-0 md:h-auto md:max-h-full md:w-1/2 md:px-2">
+              <div className="space-y-3">
+                {categories.map((category) => (
+                  <PercentageItem
+                    key={category.name}
+                    icon={
+                      <Icon
+                        name={category.icon as LucideIconName}
+                        size={20}
+                        color={category.color}
+                      />
+                    }
+                    title={category.name}
+                    value={category.percentageOfTotal}
+                  />
+                ))}
               </div>
             </div>
           </div>

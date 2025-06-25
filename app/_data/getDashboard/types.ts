@@ -1,11 +1,7 @@
-import { TransactionType } from "@prisma/client";
-
-export type TransactionPercentagePerType = {
-  [key in Exclude<TransactionType, "TRANSFER">]: number;
-};
-
-export interface TotalExpensePerCategory {
-  category: string;
+export type TransactionPerCategory = {
+  name: string;
+  icon: string;
+  color: string;
   totalAmount: number;
   percentageOfTotal: number;
-}
+};

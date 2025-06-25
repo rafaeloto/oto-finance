@@ -2,7 +2,6 @@ import Navbar from "@molecules/Navbar";
 import SummaryCards from "./_components/SummaryCards";
 import TransactionsPieChart from "./_components/TransactionsPieChart";
 import { getDashboard } from "@data/getDashboard";
-import ExpensesPerCategory from "./_components/ExpensesPerCategory";
 import LastTransactions from "./_components/LastTransactions";
 import { getCanUserAddTransaction } from "@data/getCanUserAddTransaction";
 import AiReportButton from "./_components/AiReportButton";
@@ -65,9 +64,13 @@ const Home = async ({
               period={`${validMonth}/${validYear.slice(-2)}`}
             />
             <div className="space-y-6 md:grid md:h-full md:grid-cols-2 md:grid-rows-1 md:gap-6 md:space-y-0 md:overflow-hidden">
-              <TransactionsPieChart {...dashboard} />
-              <ExpensesPerCategory
-                expensesPerCategory={dashboard.totalExpensePerCategory}
+              <TransactionsPieChart
+                categories={dashboard.expensesPerCategory}
+                title="Gastos por Categoria"
+              />
+              <TransactionsPieChart
+                categories={dashboard.gainsPerCategory}
+                title="Receitas por Categoria"
               />
             </div>
           </div>
