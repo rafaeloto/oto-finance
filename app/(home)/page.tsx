@@ -64,7 +64,7 @@ const Home = async ({
               {...dashboard}
               period={`${validMonth}/${validYear.slice(-2)}`}
             />
-            <div className="space-y-6 md:grid md:h-full md:grid-cols-3 md:grid-rows-1 md:gap-6 md:space-y-0 md:overflow-hidden">
+            <div className="space-y-6 md:grid md:h-full md:grid-cols-2 md:grid-rows-1 md:gap-6 md:space-y-0 md:overflow-hidden">
               <TransactionsPieChart {...dashboard} />
               <ExpensesPerCategory
                 expensesPerCategory={dashboard.totalExpensePerCategory}
