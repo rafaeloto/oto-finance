@@ -48,6 +48,7 @@ import {
 } from "@shadcn/alert-dialog";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import { ScrollArea } from "@shadcn/scroll-area";
+import { getLocalDate } from "@utils/date";
 
 interface PayInvoiceDialogProps {
   isOpen: boolean;
@@ -59,7 +60,7 @@ const formSchema = z.object({
   paymentAmount: z
     .number()
     .min(0, { message: "O valor do pagamento deve ser no mínimo 0." }),
-  paymentDate: z.date().max(new Date(), {
+  paymentDate: z.date().max(getLocalDate(), {
     message: "A data do pagamento não pode ser futura.",
   }),
   paidByAccountId: z.string().min(1, {
@@ -84,7 +85,7 @@ const PayInvoiceDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       paymentAmount: Number(invoice.totalAmount),
-      paymentDate: new Date(),
+      paymentDate: getLocalDate(),
       paidByAccountId: "",
     },
   });

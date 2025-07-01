@@ -1,5 +1,12 @@
 import { format, isMatch } from "date-fns";
 import { MONTH_NAMES } from "@constants/month";
+import { toZonedTime } from "date-fns-tz";
+
+export const getLocalDate = (date?: Date | string): Date => {
+  const timeZone = "America/Sao_Paulo";
+  const inputDate = date ? new Date(date) : new Date();
+  return toZonedTime(inputDate.toISOString(), timeZone);
+};
 
 /**
  * Calculates the card closing and due dates based on the current date and the
@@ -27,7 +34,7 @@ export const calculateClosingAndDueDates = (
     day: currentDay,
     month: currentMonth,
     year: currentYear,
-  } = getImportantDates(new Date());
+  } = getImportantDates();
 
   // Calculates the card's closing date
   let closingMonth = closingDay >= currentDay ? currentMonth : currentMonth + 1;
@@ -61,7 +68,7 @@ export const calculateClosingAndDueDates = (
 };
 
 export const getImportantDates = (date?: Date) => {
-  const validDate = date ?? new Date();
+  const validDate = getLocalDate(date);
 
   const day = validDate.getDate();
   const month = validDate.getMonth() + 1;

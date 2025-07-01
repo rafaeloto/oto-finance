@@ -28,7 +28,7 @@ export const updateCardInvoices = async ({
     day: currentDay,
     month: currentMonth,
     year: currentYear,
-  } = getImportantDates(new Date());
+  } = getImportantDates();
 
   const invoicesToClose = openInvoices.filter((invoice) => {
     const { closingDate, dueDate } = invoice;

@@ -33,6 +33,7 @@ import Icon from "@atoms/Icon";
 import CategoryField, {
   type openCategoryDialogProps,
 } from "@components/category/CategoryField";
+import { getLocalDate } from "@utils/date";
 
 type FormSchema = z.infer<typeof formSchemas.transfer>;
 
@@ -74,7 +75,7 @@ const TransferForm = ({
     categoryId: transaction?.categoryId || categories[0]?.id,
     fromAccountId: transaction?.fromAccountId || "",
     toAccountId: transaction?.toAccountId || "",
-    date: transaction?.date ? new Date(transaction?.date) : new Date(),
+    date: getLocalDate(transaction?.date),
   };
 
   const form = useForm({

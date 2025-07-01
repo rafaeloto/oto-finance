@@ -32,7 +32,7 @@ import { Button } from "@shadcn/button";
 import ShouldRender from "@atoms/ShouldRender";
 import { useMemo, useState } from "react";
 import handleCreditTransaction from "./handleCreditTransaction";
-import { getImportantDates } from "@utils/date";
+import { getImportantDates, getLocalDate } from "@utils/date";
 import CreditCardFields from "./CreditCardFields";
 import type { InstallmentType } from "./CreditCardFields";
 import Icon, { type LucideIconName } from "@atoms/Icon";
@@ -80,9 +80,7 @@ const ExpenseForm = ({
   const loading = loadingAccounts || loadingInvoices || loadingCategories;
   const error = accountsError || invoicesError || categoriesError;
 
-  const { month: currentMonth, year: currentYear } = getImportantDates(
-    new Date(),
-  );
+  const { month: currentMonth, year: currentYear } = getImportantDates();
 
   const defaultInvoice = useMemo(() => {
     const invoice = invoices.find(
@@ -110,7 +108,7 @@ const ExpenseForm = ({
     invoiceMonth: defaultInvoice?.month || currentMonth,
     invoiceYear: defaultInvoice?.year || currentYear,
     installments: 2,
-    date: transaction?.date ? new Date(transaction?.date) : new Date(),
+    date: getLocalDate(transaction?.date),
   };
 
   const form = useForm({

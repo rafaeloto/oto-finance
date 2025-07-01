@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { getLocalDate } from "@utils/date";
 
 const InvoiceUpdater = () => {
   const hasRun = Cookies.get("invoice-update-ran") === "true";
@@ -11,7 +12,7 @@ const InvoiceUpdater = () => {
       fetch("/api/invoices/update-routine", { method: "POST" })
         .then((res) => {
           if (res.ok) {
-            const expires = new Date();
+            const expires = getLocalDate();
             expires.setHours(24, 0, 0, 0);
 
             Cookies.set("invoice-update-ran", "true", {

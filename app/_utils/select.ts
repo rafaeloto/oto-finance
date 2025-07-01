@@ -1,3 +1,5 @@
+import { getImportantDates } from "./date";
+
 export const getMonthsOptions = () => {
   return [
     { value: "01", label: "Janeiro" },
@@ -16,7 +18,7 @@ export const getMonthsOptions = () => {
 };
 
 export const getYearsOptions = () => {
-  const currentYear = new Date().getFullYear();
+  const currentYear = getImportantDates().year;
   const startYear = 2024;
   const endYear = currentYear + 1;
 

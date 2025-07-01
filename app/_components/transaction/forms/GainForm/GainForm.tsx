@@ -33,6 +33,7 @@ import Icon from "@atoms/Icon";
 import CategoryField, {
   type openCategoryDialogProps,
 } from "@components/category/CategoryField";
+import { getLocalDate } from "@utils/date";
 
 type FormSchema = z.infer<typeof formSchemas.gain>;
 
@@ -73,7 +74,7 @@ const GainForm = ({
     amount: Number(transaction?.amount) || 0,
     categoryId: transaction?.categoryId || categories[0]?.id,
     accountId: transaction?.accountId || "",
-    date: transaction?.date ? new Date(transaction?.date) : new Date(),
+    date: getLocalDate(transaction?.date),
   };
 
   const form = useForm({
