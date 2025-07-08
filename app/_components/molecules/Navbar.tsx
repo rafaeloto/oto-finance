@@ -14,6 +14,7 @@ import {
 import Icon from "@atoms/Icon";
 import useIsDesktop from "@utils/useIsDesktop";
 import { cn } from "@/app/_lib/utils";
+import ThemeToggle from "@atoms/ThemeToggle";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -69,6 +70,8 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div className="flex items-center gap-5">
+        <ThemeToggle className="hidden md:block" />
+
         <UserButton showName />
 
         <div className="flex items-center md:hidden">
@@ -80,8 +83,10 @@ const Navbar = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="w-48 border border-white/30 p-3 shadow-sm shadow-primary"
+              className="w-48 p-3 shadow-sm shadow-primary"
             >
+              <ThemeToggle />
+
               {navItems.map(({ href, label }) => (
                 <DropdownMenuItem key={href} asChild>
                   <Link href={href} className="w-full">

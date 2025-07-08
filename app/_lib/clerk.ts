@@ -22,7 +22,7 @@ export const customPtBR = {
   },
 };
 
-export const customAppearance = {
+export const getCustomAppearance = (theme: "dark" | "light") => ({
   elements: {
     modalBackdrop: "flex items-start justify-center md:items-center",
     // FYI: the headerTitle style is set in the global.css file
@@ -36,5 +36,5 @@ export const customAppearance = {
   variables: {
     colorPrimary: "hsl(102 59% 44%)",
   },
-  baseTheme: dark,
-};
+  ...(theme === "dark" && { baseTheme: dark }),
+});

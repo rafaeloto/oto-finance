@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${mulish.className} dark backdrop:antialiased`}>
+      <body className={`${mulish.className} backdrop:antialiased`}>
         <Providers>
           <div className="flex h-full flex-col overflow-hidden">{children}</div>
         </Providers>

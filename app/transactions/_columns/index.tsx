@@ -23,6 +23,7 @@ interface Props {
   accounts: Account[];
   categories: Category[];
   paidInvoices: Invoice[];
+  theme?: string;
 }
 
 export function getTransactionColumns({
@@ -30,6 +31,7 @@ export function getTransactionColumns({
   accounts,
   categories,
   paidInvoices,
+  theme,
 }: Props): ColumnDef<Transaction>[] {
   return [
     {
@@ -65,7 +67,12 @@ export function getTransactionColumns({
           <div className="flex items-center gap-3">
             <Icon
               name={category?.icon as LucideIconName}
-              {...(category?.color && { color: category.color })}
+              {...(category?.color && {
+                color:
+                  category.color === "#ffff" && theme === "light"
+                    ? "#000"
+                    : category.color,
+              })}
             />
             <div className="flex flex-col items-start">
               <span>{category?.name}</span>

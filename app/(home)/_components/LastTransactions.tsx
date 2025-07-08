@@ -36,7 +36,7 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
                 className="flex items-center justify-between gap-3 md:gap-0"
               >
                 <div className="flex items-center gap-3">
-                  <div className="rounded-lg bg-white bg-opacity-[3%] p-3 text-white">
+                  <div className="rounded-lg bg-muted p-3">
                     <Icon
                       name={
                         TRANSACTION_PAYMENT_METHOD_ICONS[
@@ -45,7 +45,6 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
                       }
                       size={20}
                       opacity={0.7}
-                      color="white"
                     />
                   </div>
                   <div className="md:min-w-none flex min-w-0 flex-1 flex-col md:flex-none">

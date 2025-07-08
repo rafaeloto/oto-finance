@@ -116,7 +116,7 @@ const FloatingActionMenu = ({
                         toggleMenu();
                       }}
                       size="sm"
-                      className="flex items-center gap-2 rounded-full border-none bg-muted shadow-[0_0_20px_rgba(0,0,0,0.2)] backdrop-blur-sm"
+                      className="flex items-center gap-2 rounded-full border-none bg-muted text-foreground shadow-[0_0_20px_rgba(0,0,0,0.2)] backdrop-blur-sm"
                     >
                       {option.Icon}
                       <span>{option.label}</span>

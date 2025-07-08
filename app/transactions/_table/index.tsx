@@ -9,6 +9,7 @@ import {
 } from "@prisma/client";
 import { DataTable } from "@shadcn/data-table";
 import { getTransactionColumns } from "../_columns";
+import { useTheme } from "next-themes";
 
 interface TransactionsTableProps {
   transactions: Transaction[];
@@ -25,11 +26,14 @@ export const TransactionsTable = ({
   categories,
   paidInvoices,
 }: TransactionsTableProps) => {
+  const { theme } = useTheme();
+
   const columns = getTransactionColumns({
     creditCards,
     accounts,
     categories,
     paidInvoices,
+    theme,
   });
 
   return (

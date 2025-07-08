@@ -69,7 +69,10 @@ function ColorInput({
   return (
     <div className="relative z-10 min-h-[200px] w-full space-y-2">
       {label && (
-        <label htmlFor="color-input" className="text-sm font-medium text-white">
+        <label
+          htmlFor="color-input"
+          className="text-sm font-medium text-foreground"
+        >
           {label}
         </label>
       )}

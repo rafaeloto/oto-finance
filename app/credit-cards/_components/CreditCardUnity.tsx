@@ -28,7 +28,7 @@ const CreditCardUnity = ({
       className={`relative flex w-[400px] max-w-[100%] flex-col items-center rounded-2xl border-transparent pb-3 ${complete && "duration-150 hover:border-gray-600"}`}
     >
       <Card
-        className={`flex h-[220px] w-[400px] max-w-[100%] flex-col justify-between rounded-2xl bg-gradient-to-r p-5 ${creditCard.color}`}
+        className={`flex h-[220px] w-[400px] max-w-[100%] flex-col justify-between rounded-2xl bg-gradient-to-r p-5 text-white ${creditCard.color}`}
       >
         {/* Cart name and flag logo*/}
         <div className="flex items-center justify-between">

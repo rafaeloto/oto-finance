@@ -1,21 +1,23 @@
-import { ClerkProvider } from "@clerk/nextjs";
+import { CustomClerkProvider } from "../CustomClerkProvider";
 import { AccountsProvider } from "../AccountsContext";
 import { CreditCardsProvider } from "../CreditCardsContext";
 import { InvoicesProvider } from "../InvoicesContext";
 import { CategoriesProvider } from "../CategoriesContext";
-import { customAppearance, customPtBR } from "@/app/_lib/clerk";
+import { ThemeProvider } from "next-themes";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ClerkProvider appearance={customAppearance} localization={customPtBR}>
-      <AccountsProvider>
-        <CategoriesProvider>
-          <CreditCardsProvider>
-            <InvoicesProvider>{children}</InvoicesProvider>
-          </CreditCardsProvider>
-        </CategoriesProvider>
-      </AccountsProvider>
-    </ClerkProvider>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+      <CustomClerkProvider>
+        <AccountsProvider>
+          <CategoriesProvider>
+            <CreditCardsProvider>
+              <InvoicesProvider>{children}</InvoicesProvider>
+            </CreditCardsProvider>
+          </CategoriesProvider>
+        </AccountsProvider>
+      </CustomClerkProvider>
+    </ThemeProvider>
   );
 };
 

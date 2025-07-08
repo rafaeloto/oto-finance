@@ -27,8 +27,12 @@ const TransactionTypeBadge = ({ type }: TransactionTypeBadgeProps) => {
 
   if (type === TransactionType.TRANSFER) {
     return (
-      <Badge className="bg-white bg-opacity-10 font-bold text-white hover:bg-white hover:bg-opacity-10">
-        <Icon name="Circle" className="mr-2 fill-white" size={10} />
+      <Badge className="bg-black bg-opacity-10 font-bold text-foreground hover:bg-black hover:bg-opacity-10 dark:bg-white dark:bg-opacity-10 hover:dark:bg-white hover:dark:bg-opacity-10">
+        <Icon
+          name="Circle"
+          className="mr-2 fill-black dark:fill-white"
+          size={10}
+        />
         Transferência
       </Badge>
     );

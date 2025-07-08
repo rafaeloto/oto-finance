@@ -19,13 +19,13 @@ const getColorAndPrefix = (transaction: Transaction) => {
 
   if (isNegative) {
     return {
-      color: "text-red-500",
+      color: "text-danger",
       prefix: "-",
     };
   }
 
   return {
-    color: "text-white",
+    color: "",
     prefix: "",
   };
 };

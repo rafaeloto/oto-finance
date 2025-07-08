@@ -84,7 +84,7 @@ const InvoiceTransactions = ({
               >
                 <div className="flex w-[35%] items-center gap-3 md:w-[45%]">
                   <ShouldRender if={isDesktop}>
-                    <div className="rounded-lg bg-white bg-opacity-[3%] p-3 text-white">
+                    <div className="rounded-lg bg-muted p-3">
                       <Icon
                         name={
                           TRANSACTION_PAYMENT_METHOD_ICONS[
@@ -93,7 +93,6 @@ const InvoiceTransactions = ({
                         }
                         size={20}
                         opacity={0.7}
-                        color="white"
                       />
                     </div>
                   </ShouldRender>

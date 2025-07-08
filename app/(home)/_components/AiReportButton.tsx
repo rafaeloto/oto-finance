@@ -67,7 +67,7 @@ const AiReportButton = ({
               </DialogDescription>
             </DialogHeader>
 
-            <ScrollArea className="prose max-h-[450px] text-white prose-h2:text-white prose-h3:text-white prose-h4:text-white prose-strong:text-white">
+            <ScrollArea className="prose max-h-[450px] text-foreground prose-h2:text-foreground prose-h3:text-foreground prose-h4:text-foreground prose-strong:text-foreground">
               <Markdown>{report}</Markdown>
             </ScrollArea>
 

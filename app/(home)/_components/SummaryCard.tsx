@@ -23,8 +23,8 @@ const sizeStyles = {
     amount: "text-2xl",
   },
   large: {
-    card: "bg-white bg-opacity-5",
-    title: "text-white opacity-70",
+    card: "bg-muted",
+    title: "", // no extra style
     amount: "text-4xl",
   },
 };
