@@ -33,10 +33,10 @@ const Home = async ({
       <div className="sticky top-0 z-10 md:static md:z-0">
         <Navbar />
         <div className="flex items-center justify-between space-x-2 px-3 py-6 md:space-x-4 md:px-6">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <h1 className="hidden text-2xl font-bold md:block">Dashboard</h1>
             <h1 className="hidden text-2xl font-bold md:block">-</h1>
-            <h1 className="text-2xl font-bold">
+            <h1 className="text-2xl font-bold md:text-muted-foreground">
               {MONTH_NAMES[Number(validMonth)]}/{validYear.slice(-2)}
             </h1>
           </div>

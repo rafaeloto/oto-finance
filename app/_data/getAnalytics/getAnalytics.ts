@@ -7,7 +7,7 @@ import { GAIN_MAP, EXPENSE_MAP } from "@constants/category";
 import { getCategorizedAmounts } from "../getCategorizedAmounts";
 import { getSubCategorizedAmounts } from "../getSubCategorizedAmounts";
 
-export const getControl = async (
+export const getAnalytics = async (
   month: string,
   year: string,
   ignoreLoans?: string,

@@ -25,7 +25,7 @@ const Navbar = () => {
     { href: "/transactions", label: "Transações" },
     { href: "/accounts", label: "Contas" },
     { href: "/credit-cards", label: "Cartões" },
-    { href: "/control", label: "Controle Financeiro" },
+    { href: "/analytics", label: "Análises" },
     { href: "/subscription", label: "Assinatura" },
   ];
 
