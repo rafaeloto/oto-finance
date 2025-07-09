@@ -12,7 +12,7 @@ import {
   NEGATIVE_RETURN_ID,
   POSITIVE_RETURN_ID,
 } from "@constants/category";
-import { getCategorizedAmounts } from "./getCategorizedAmounts";
+import { getCategorizedAmounts } from "../getCategorizedAmounts";
 
 export const getDashboard = async (
   month: string,
@@ -38,25 +38,45 @@ export const getDashboard = async (
     }),
   };
 
-  const gainsTotal = Number(
-    (
-      await db.transaction.aggregate({
+  const [
+    gainsTotal,
+    expensesTotal,
+    categories,
+    lastTransactions,
+    totalBalance,
+  ] = await Promise.all([
+    // gainsTotal
+    db.transaction
+      .aggregate({
         where: { ...where, type: "GAIN" },
         _sum: { amount: true },
       })
-    )?._sum?.amount,
-  );
+      .then((result) => Number(result?._sum?.amount)),
 
-  const expensesTotal = Number(
-    (
-      await db.transaction.aggregate({
+    // expensesTotal
+    db.transaction
+      .aggregate({
         where: { ...where, type: "EXPENSE" },
         _sum: { amount: true },
       })
-    )?._sum?.amount,
-  );
+      .then((result) => Number(result?._sum?.amount)),
+
+    // categories
+    getCategories({}),
+
+    // lastTransactions
+    db.transaction.findMany({
+      where,
+      orderBy: { date: "desc" },
+      take: 15,
+    }),
+
+    // totalBalance
+    getTotalBalance(),
+  ]);
 
   const [positiveReturn, negativeReturn] = await Promise.all([
+    // positiveReturn
     db.transaction.aggregate({
       where: {
         ...where,
@@ -65,6 +85,8 @@ export const getDashboard = async (
       },
       _sum: { amount: true },
     }),
+
+    // negativeReturn
     db.transaction.aggregate({
       where: {
         ...where,
@@ -80,6 +102,7 @@ export const getDashboard = async (
     Number(negativeReturn?._sum?.amount || 0);
 
   const [deposit, withdraw] = await Promise.all([
+    // deposit
     db.transaction.aggregate({
       where: {
         ...where,
@@ -88,6 +111,8 @@ export const getDashboard = async (
       },
       _sum: { amount: true },
     }),
+
+    // withdraw
     db.transaction.aggregate({
       where: {
         ...where,
@@ -105,29 +130,22 @@ export const getDashboard = async (
 
   const result = gainsTotal + investmentsResult - expensesTotal;
 
-  const totalBalance = await getTotalBalance();
-
-  const categories = await getCategories({});
-
-  const expensesPerCategory = await getCategorizedAmounts({
-    transactionType: TransactionType.EXPENSE,
-    categories,
-    whereClause: where,
-    totalAmount: expensesTotal,
-  });
-
-  const gainsPerCategory = await getCategorizedAmounts({
-    transactionType: TransactionType.GAIN,
-    categories,
-    whereClause: where,
-    totalAmount: gainsTotal,
-  });
-
-  const lastTransactions = await db.transaction.findMany({
-    where,
-    orderBy: { date: "desc" },
-    take: 15,
-  });
+  const [expensesPerCategory, gainsPerCategory] = await Promise.all([
+    // expensesPerCategory
+    getCategorizedAmounts({
+      transactionType: TransactionType.EXPENSE,
+      categories,
+      whereClause: where,
+      totalAmount: expensesTotal,
+    }),
+    // gainsPerCategory
+    getCategorizedAmounts({
+      transactionType: TransactionType.GAIN,
+      categories,
+      whereClause: where,
+      totalAmount: gainsTotal,
+    }),
+  ]);
 
   return {
     gainsTotal,

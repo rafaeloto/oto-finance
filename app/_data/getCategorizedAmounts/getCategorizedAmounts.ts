@@ -1,5 +1,5 @@
 import { Category, Prisma, TransactionType } from "@prisma/client";
-import { TransactionPerCategory } from "../types";
+import { TransactionPerCategory } from "./types";
 import { db } from "@/app/_lib/prisma";
 
 type GetCategorizedAmountsParams = {
@@ -47,6 +47,7 @@ export const getCategorizedAmounts = async ({
       const total = Number(result._sum.amount || 0);
 
       return {
+        id: parentCategory.id,
         name: parentCategory.name,
         icon: parentCategory.icon ?? "",
         color: parentCategory.color ?? "",

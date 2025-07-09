@@ -1,6 +1,6 @@
 import Navbar from "@molecules/Navbar";
 import SummaryCards from "./_components/SummaryCards";
-import TransactionsPieChart from "./_components/TransactionsPieChart";
+import CategoriesPieChart from "@components/charts/CategoriesPieChart";
 import { getDashboard } from "@data/getDashboard";
 import LastTransactions from "./_components/LastTransactions";
 import { getCanUserAddTransaction } from "@data/getCanUserAddTransaction";
@@ -8,7 +8,7 @@ import AiReportButton from "./_components/AiReportButton";
 import { getValidDateFromParams } from "@utils/date";
 import AddTransactionButton from "@components/transaction/buttons/AddTransactionButton";
 import { getUser } from "@data/getUser";
-import DashboardFilter from "./_components/DashboardFilter";
+import DashboardFilter from "@molecules/DashboardFilter";
 import { MONTH_NAMES } from "@constants/month";
 
 interface HomeProps {
@@ -64,11 +64,11 @@ const Home = async ({
               period={`${validMonth}/${validYear.slice(-2)}`}
             />
             <div className="space-y-6 md:grid md:h-full md:grid-cols-2 md:grid-rows-1 md:gap-6 md:space-y-0 md:overflow-hidden">
-              <TransactionsPieChart
+              <CategoriesPieChart
                 categories={dashboard.expensesPerCategory}
                 title="Gastos por Categoria"
               />
-              <TransactionsPieChart
+              <CategoriesPieChart
                 categories={dashboard.gainsPerCategory}
                 title="Receitas por Categoria"
               />
