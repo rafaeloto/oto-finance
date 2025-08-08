@@ -34,7 +34,11 @@ const CreditCardFields = ({ transaction }: CreditCardFieldsProps) => {
   const isInstallment = !!transaction?.installmentId;
 
   const { control, watch, setValue, clearErrors } = useFormContext();
-  const { creditCards, loading: loadingCreditCards } = useCreditCards();
+  const {
+    creditCards,
+    loading: loadingCreditCards,
+    error: creditCardsError,
+  } = useCreditCards();
 
   const selectedCardId = watch("cardId");
   const selectedDate = watch("date");
@@ -97,7 +101,9 @@ const CreditCardFields = ({ transaction }: CreditCardFieldsProps) => {
               <Select
                 onValueChange={field.onChange}
                 value={field.value}
-                disabled={loadingCreditCards || isInstallment}
+                disabled={
+                  isInstallment || loadingCreditCards || !!creditCardsError
+                }
               >
                 <FormControl>
                   <SelectTrigger>

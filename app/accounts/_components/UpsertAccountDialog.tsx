@@ -65,7 +65,7 @@ const UpsertAccountDialog = ({
 
   const isUpdate = !!accountId;
 
-  const { reloadAccounts } = useAccounts();
+  const { reload: reloadAccounts } = useAccounts();
 
   const [upserting, setUpserting] = useState(false);
 

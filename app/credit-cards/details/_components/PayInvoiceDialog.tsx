@@ -75,8 +75,14 @@ const PayInvoiceDialog = ({
   setIsOpen,
   invoice,
 }: PayInvoiceDialogProps) => {
-  const { accounts, loading: loadingAccounts } = useAccounts();
-  const { reloadInvoices } = useInvoices();
+  const {
+    accounts,
+    loading: loadingAccounts,
+    error: accountsError,
+  } = useAccounts();
+
+  const { reload: reloadInvoices } = useInvoices();
+
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [formData, setFormData] = useState<FormSchema | null>(null);
   const [paying, setPaying] = useState(false);
@@ -231,7 +237,10 @@ const PayInvoiceDialog = ({
                       Cancelar
                     </Button>
                   </DialogClose>
-                  <Button disabled={loadingAccounts} type="submit">
+                  <Button
+                    type="submit"
+                    disabled={loadingAccounts || !!accountsError}
+                  >
                     Registrar Pagamento
                   </Button>
                 </DialogFooter>

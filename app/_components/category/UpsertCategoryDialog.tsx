@@ -72,7 +72,7 @@ const UpsertCategoryDialog = ({
   const categoryId = initialCategory?.id;
   const isUpdate = !!categoryId;
 
-  const { reload: reloadCategories, categories } = useCategories(type);
+  const { categories, reload: reloadCategories } = useCategories(type);
 
   const [upserting, setUpserting] = useState(false);
   const [selectedParent, setSelectedParent] = useState<Category | null>(

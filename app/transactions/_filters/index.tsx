@@ -22,9 +22,23 @@ import { cn } from "@/app/_lib/utils";
 import { useAllCategories } from "@contexts/CategoriesContext";
 
 const TransactionFilters = () => {
-  const { accounts } = useAccounts();
-  const { creditCards } = useCreditCards();
-  const { categories } = useAllCategories();
+  const {
+    accounts,
+    loading: loadingAccounts,
+    error: accountsError,
+  } = useAccounts();
+
+  const {
+    creditCards,
+    loading: loadingCreditCards,
+    error: creditCardsError,
+  } = useCreditCards();
+
+  const {
+    categories,
+    loading: loadingCategories,
+    error: categoriesError,
+  } = useAllCategories();
 
   const [open, setOpen] = useState(false);
 
@@ -77,7 +91,9 @@ const TransactionFilters = () => {
             ),
           }))}
           placeholder="Categoria"
-          disabled={!searchParams.get("type")}
+          disabled={
+            !searchParams.get("type") || loadingCategories || !!categoriesError
+          }
         />
 
         <SelectFilter
@@ -107,7 +123,11 @@ const TransactionFilters = () => {
             ),
           }))}
           placeholder="Conta"
-          disabled={searchParams.get("paymentMethod") !== "DEBIT"}
+          disabled={
+            searchParams.get("paymentMethod") !== "DEBIT" ||
+            loadingAccounts ||
+            !!accountsError
+          }
         />
 
         <SelectFilter
@@ -122,7 +142,11 @@ const TransactionFilters = () => {
             ),
           }))}
           placeholder="Cartão"
-          disabled={searchParams.get("paymentMethod") !== "CREDIT"}
+          disabled={
+            searchParams.get("paymentMethod") !== "CREDIT" ||
+            loadingCreditCards ||
+            !!creditCardsError
+          }
         />
 
         <TimeSelect />

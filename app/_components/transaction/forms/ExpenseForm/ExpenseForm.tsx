@@ -68,7 +68,7 @@ const ExpenseForm = ({
     invoices,
     loading: loadingInvoices,
     error: invoicesError,
-    reloadInvoices,
+    reload: reloadInvoices,
   } = useInvoices();
 
   const {

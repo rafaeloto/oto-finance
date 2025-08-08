@@ -89,8 +89,8 @@ const CreateCreditCardDialog = ({
   isOpen,
   setIsOpen,
 }: CreateCreditCardDialogProps) => {
-  const { reloadCreditCards } = useCreditCards();
-  const { reloadInvoices } = useInvoices();
+  const { reload: reloadCreditCards } = useCreditCards();
+  const { reload: reloadInvoices } = useInvoices();
 
   const [creating, setCreating] = useState(false);
 

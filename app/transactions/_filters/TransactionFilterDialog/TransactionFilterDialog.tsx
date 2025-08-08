@@ -44,9 +44,23 @@ type TransactionFilterDialogProps = {
 const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
   const { open, setOpen } = params;
 
-  const { accounts } = useAccounts();
-  const { creditCards } = useCreditCards();
-  const { categories } = useAllCategories();
+  const {
+    accounts,
+    loading: loadingAccounts,
+    error: accountsError,
+  } = useAccounts();
+
+  const {
+    creditCards,
+    loading: loadingCreditCards,
+    error: creditCardsError,
+  } = useCreditCards();
+
+  const {
+    categories,
+    loading: loadingCategories,
+    error: categoriesError,
+  } = useAllCategories();
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -155,7 +169,7 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
               }))}
             placeholder="Categoria"
             isInsideModal
-            disabled={!filters.type}
+            disabled={!filters.type || loadingCategories || !!categoriesError}
           />
 
           <SelectFilter
@@ -199,7 +213,11 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
             }))}
             placeholder="Conta"
             isInsideModal
-            disabled={filters.paymentMethod !== "DEBIT"}
+            disabled={
+              filters.paymentMethod !== "DEBIT" ||
+              loadingAccounts ||
+              !!accountsError
+            }
           />
 
           <SelectFilter
@@ -219,7 +237,11 @@ const TransactionFilterDialog = (params: TransactionFilterDialogProps) => {
             }))}
             placeholder="Cartão"
             isInsideModal
-            disabled={filters.paymentMethod !== "CREDIT"}
+            disabled={
+              filters.paymentMethod !== "CREDIT" ||
+              loadingCreditCards ||
+              !!creditCardsError
+            }
           />
 
           <TimeSelect<TransactionFilters>
