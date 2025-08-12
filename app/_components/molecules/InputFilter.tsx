@@ -1,4 +1,5 @@
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "@hooks/useRouter";
 import { Input } from "@shadcn/input";
 import { useEffect, useMemo, useState } from "react";
 import ShouldRender from "@atoms/ShouldRender";

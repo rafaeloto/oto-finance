@@ -3,7 +3,7 @@
 import { leagueSpartan } from "@styles/fonts";
 import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@atoms/Link";
 import { usePathname } from "next/navigation";
 import {
   DropdownMenu,

@@ -1,6 +1,7 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "@hooks/useRouter";
 import { Switch } from "@shadcn/switch";
 import { Label } from "@shadcn/label";
 import ShouldRender from "@atoms/ShouldRender";

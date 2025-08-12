@@ -9,7 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@shadcn/dialog";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@hooks/useRouter";
 import TimeSelect from "@molecules/TimeSelect";
 import { useState, useEffect } from "react";
 import SwitchFilter from "@molecules/SwitchFilter";

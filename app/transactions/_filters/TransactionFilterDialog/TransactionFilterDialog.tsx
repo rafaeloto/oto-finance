@@ -14,7 +14,8 @@ import {
   TRANSACTION_PAYMENT_METHOD_OPTIONS,
   TRANSACTION_TYPE_OPTIONS,
 } from "@constants/transaction";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@hooks/useRouter";
 import { useEffect, useState } from "react";
 import TransactionTypeBadge from "../../_components/TransactionTypeBadge";
 import { TransactionType } from "@prisma/client";
@@ -22,7 +23,7 @@ import { useAccounts } from "@contexts/AccountsContext";
 import { useCreditCards } from "@contexts/CreditCardsContext";
 import { ImageAndLabelOption } from "@molecules/ImageAndLabelOption";
 import ClearFiltersButton from "../ClearFiltersButton";
-import Icon, { type LucideIconName } from "@/app/_components/atoms/Icon";
+import Icon, { type LucideIconName } from "@atoms/Icon";
 import { useAllCategories } from "@contexts/CategoriesContext";
 
 export type TransactionFilters = {

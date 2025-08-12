@@ -28,7 +28,8 @@
       "@contexts/*": ["./app/_contexts/*"],
       "@data/*": ["./app/_data/*"],
       "@styles/*": ["./app/_styles/*"],
-      "@utils/*": ["./app/_utils/*"]
+      "@utils/*": ["./app/_utils/*"],
+      "@hooks/*": ["./app/_hooks/*"]
     }
   },
   "include": [

@@ -3,7 +3,7 @@ import { Card } from "@shadcn/card";
 import Image from "next/image";
 import { calculateClosingAndDueDates } from "@utils/date";
 import { Button } from "@shadcn/button";
-import Link from "next/link";
+import Link from "@atoms/Link";
 import Icon from "@atoms/Icon";
 import ShouldRender from "@atoms/ShouldRender";
 

@@ -1,7 +1,7 @@
 import ShouldRender from "@atoms/ShouldRender";
 import { cn } from "@/app/_lib/utils";
 import { Card, CardHeader, CardContent } from "@shadcn/card";
-import Link from "next/link";
+import Link from "@atoms/Link";
 import { ReactNode } from "react";
 
 interface SummaryCardProps {

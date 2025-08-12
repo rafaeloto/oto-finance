@@ -1,6 +1,7 @@
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useRouter } from "@hooks/useRouter";
 import { Button } from "@shadcn/button";
-import ShouldRender from "@/app/_components/atoms/ShouldRender";
+import ShouldRender from "@atoms/ShouldRender";
 import { useCallback } from "react";
 
 type ClearFiltersButtonParams = {

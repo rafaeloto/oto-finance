@@ -9,7 +9,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@shadcn/popover";
 import Icon from "@atoms/Icon";
 import { useMemo } from "react";
-import useIsDesktop from "@/app/_utils/useIsDesktop";
+import useIsDesktop from "@utils/useIsDesktop";
 
 type LoanTooltipProps = {
   position?: "top" | "right" | "bottom" | "left";

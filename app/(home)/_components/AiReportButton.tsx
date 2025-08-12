@@ -16,7 +16,7 @@ import { useState } from "react";
 import { generateAiReport } from "@actions/outsourced/generateAiReport";
 import { ScrollArea } from "@shadcn/scroll-area";
 import Markdown from "react-markdown";
-import Link from "next/link";
+import Link from "@atoms/Link";
 import useIsDesktop from "@utils/useIsDesktop";
 
 interface AiReportButtonProps {

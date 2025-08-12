@@ -8,7 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shadcn/select";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "@hooks/useRouter";
 import { useEffect, useState } from "react";
 import { Button } from "@shadcn/button";
 import Icon from "@atoms/Icon";

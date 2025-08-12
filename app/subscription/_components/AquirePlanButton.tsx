@@ -4,7 +4,7 @@ import { Button } from "@shadcn/button";
 import { createStripeCheckout } from "@actions/outsourced/createStripeCheckout";
 import { loadStripe } from "@stripe/stripe-js";
 import { useUser } from "@clerk/nextjs";
-import Link from "next/link";
+import Link from "@atoms/Link";
 
 const AquirePlanButton = () => {
   const { user } = useUser();

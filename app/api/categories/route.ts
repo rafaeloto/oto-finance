@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { TransactionType } from "@prisma/client";
-import { getCategories } from "@/app/_data/getCategories";
+import { getCategories } from "@data/getCategories";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

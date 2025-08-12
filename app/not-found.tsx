@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "@hooks/useRouter";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Button } from "@shadcn/button";
 

@@ -6,7 +6,7 @@ import { CardContent, CardHeader, CardTitle } from "@shadcn/card";
 import { ScrollArea } from "@shadcn/scroll-area";
 import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@constants/transaction";
 import { Transaction } from "@prisma/client";
-import Link from "next/link";
+import Link from "@atoms/Link";
 import Icon, { type LucideIconName } from "@atoms/Icon";
 
 interface LastTransactionsProps {
