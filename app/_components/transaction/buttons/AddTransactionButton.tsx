@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@shadcn/tooltip";
 import Icon from "@atoms/Icon";
-import useIsDesktop from "@utils/useIsDesktop";
+import useIsDesktop from "@hooks/useIsDesktop";
 import { TransactionType } from "@prisma/client";
 import FloatingActionMenu from "@shadcn/floating-action-menu";
 import UpsertTransactionDialog from "@components/transaction/dialogs/UpsertTransactionDialog";

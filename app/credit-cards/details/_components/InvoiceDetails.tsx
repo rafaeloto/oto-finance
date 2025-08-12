@@ -11,7 +11,7 @@ import InvoiceTransactions, {
 import { CreditCard, Invoice, InvoiceStatus } from "@prisma/client";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { ScrollArea } from "@shadcn/scroll-area";
-import useIsDesktop from "@utils/useIsDesktop";
+import useIsDesktop from "@hooks/useIsDesktop";
 
 type InvoiceDetailsProps = {
   creditCard: CreditCard;

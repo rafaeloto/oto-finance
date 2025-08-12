@@ -17,7 +17,7 @@ import { generateAiReport } from "@actions/outsourced/generateAiReport";
 import { ScrollArea } from "@shadcn/scroll-area";
 import Markdown from "react-markdown";
 import Link from "@atoms/Link";
-import useIsDesktop from "@utils/useIsDesktop";
+import useIsDesktop from "@hooks/useIsDesktop";
 
 interface AiReportButtonProps {
   hasPremiumPlan: boolean;

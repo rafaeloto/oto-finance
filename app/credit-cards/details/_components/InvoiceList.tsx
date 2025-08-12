@@ -6,7 +6,7 @@ import { formatCurrency } from "@utils/currency";
 import { Invoice } from "@prisma/client";
 import clsx from "clsx";
 import InvoiceButtons from "./InvoiceButtons";
-import useIsDesktop from "@utils/useIsDesktop";
+import useIsDesktop from "@hooks/useIsDesktop";
 
 type params = {
   invoices: Invoice[];

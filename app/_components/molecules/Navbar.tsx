@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@shadcn/dropdown-menu";
 import Icon from "@atoms/Icon";
-import useIsDesktop from "@utils/useIsDesktop";
+import useIsDesktop from "@hooks/useIsDesktop";
 import { cn } from "@/app/_lib/utils";
 import ThemeToggle from "@atoms/ThemeToggle";
 

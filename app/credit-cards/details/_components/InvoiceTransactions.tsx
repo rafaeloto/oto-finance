@@ -10,7 +10,7 @@ import EditTransactionButton from "@components/transaction/buttons/EditTransacti
 import DeleteTransactionButton from "@components/transaction/buttons/DeleteTransactionButton";
 import { Invoice, Transaction } from "@prisma/client";
 import ShouldRender from "@atoms/ShouldRender";
-import useIsDesktop from "@utils/useIsDesktop";
+import useIsDesktop from "@hooks/useIsDesktop";
 import TransactionInstallments from "@molecules/TransactionInstallments";
 import AddExpenseButton from "@components/transaction/buttons/AddExpenseButton";
 import Icon, { type LucideIconName } from "@atoms/Icon";

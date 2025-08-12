@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@shadcn/button";
 import Icon from "@atoms/Icon";
 import CreateCreditCardDialog from "./CreateCreditCardDialog";
-import useIsDesktop from "@utils/useIsDesktop";
+import useIsDesktop from "@hooks/useIsDesktop";
 
 const AddCreditCardButton = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);

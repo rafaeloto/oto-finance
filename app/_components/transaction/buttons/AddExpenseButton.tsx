@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@shadcn/tooltip";
 import Icon from "@atoms/Icon";
-import useIsDesktop from "@utils/useIsDesktop";
+import useIsDesktop from "@hooks/useIsDesktop";
 import UpsertExpenseDialog from "@components/transaction/dialogs/UpsertExpenseDialog";
 import { Button } from "@shadcn/button";
 import ShouldRender from "@atoms/ShouldRender";
