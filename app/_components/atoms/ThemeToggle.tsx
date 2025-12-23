@@ -12,6 +12,19 @@ const ThemeToggle = ({ className }: ThemeToggleProps) => {
   const { theme, setTheme } = useTheme();
   const isDark = theme === "dark";
 
+  const toggleTheme = () => {
+    const newTheme = isDark ? "light" : "dark";
+
+    // Use View Transitions API if available
+    if ("startViewTransition" in document) {
+      (document as Document).startViewTransition(() => {
+        setTheme(newTheme);
+      });
+    } else {
+      setTheme(newTheme);
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -21,13 +34,13 @@ const ThemeToggle = ({ className }: ThemeToggleProps) => {
           : "border border-zinc-200 bg-white",
         className,
       )}
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={toggleTheme}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          setTheme(isDark ? "light" : "dark");
+          toggleTheme();
         }
       }}
     >
