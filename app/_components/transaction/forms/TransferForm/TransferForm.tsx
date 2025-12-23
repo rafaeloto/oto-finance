@@ -75,7 +75,7 @@ const TransferForm = ({
     categoryId: transaction?.categoryId || categories[0]?.id,
     fromAccountId: transaction?.fromAccountId || "",
     toAccountId: transaction?.toAccountId || "",
-    date: getLocalDate(transaction?.date),
+    date: getLocalDate({ date: transaction?.date }),
   };
 
   const form = useForm({

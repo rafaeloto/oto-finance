@@ -108,7 +108,7 @@ const ExpenseForm = ({
     invoiceMonth: defaultInvoice?.month || currentMonth,
     invoiceYear: defaultInvoice?.year || currentYear,
     installments: 2,
-    date: getLocalDate(transaction?.date),
+    date: getLocalDate({ date: transaction?.date }),
   };
 
   const form = useForm({

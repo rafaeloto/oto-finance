@@ -2,10 +2,21 @@ import { format, isMatch } from "date-fns";
 import { MONTH_NAMES } from "@constants/month";
 import { toZonedTime } from "date-fns-tz";
 
-export const getLocalDate = (date?: Date | string): Date => {
+type GetLocalDateParams = {
+  date?: Date | string;
+  endOfDay?: boolean;
+};
+
+export const getLocalDate = (params?: GetLocalDateParams): Date => {
+  const { date, endOfDay } = params || {};
+
   const timeZone = "America/Sao_Paulo";
   const inputDate = date ? new Date(date) : new Date();
-  return toZonedTime(inputDate.toISOString(), timeZone);
+  const zonedDate = toZonedTime(inputDate.toISOString(), timeZone);
+
+  if (endOfDay) zonedDate.setHours(23, 59, 59, 999);
+
+  return zonedDate;
 };
 
 /**
@@ -68,7 +79,7 @@ export const calculateClosingAndDueDates = (
 };
 
 export const getImportantDates = (date?: Date) => {
-  const validDate = getLocalDate(date);
+  const validDate = getLocalDate({ date });
 
   const day = validDate.getDate();
   const month = validDate.getMonth() + 1;

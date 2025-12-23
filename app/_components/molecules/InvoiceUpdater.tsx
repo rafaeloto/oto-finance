@@ -32,8 +32,7 @@ const InvoiceUpdater = () => {
       try {
         await fetch("/api/invoices/update-routine", { method: "POST" });
 
-        const expires = getLocalDate();
-        expires.setHours(24, 0, 0, 0);
+        const expires = getLocalDate({ endOfDay: true });
 
         Cookies.set("invoice-update-ran", "true", {
           expires,

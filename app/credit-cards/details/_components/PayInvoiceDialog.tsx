@@ -60,7 +60,7 @@ const formSchema = z.object({
   paymentAmount: z
     .number()
     .min(0, { message: "O valor do pagamento deve ser no mínimo 0." }),
-  paymentDate: z.date().max(getLocalDate(), {
+  paymentDate: z.date().max(getLocalDate({ endOfDay: true }), {
     message: "A data do pagamento não pode ser futura.",
   }),
   paidByAccountId: z.string().min(1, {
