@@ -1,4 +1,5 @@
 import { db } from "@/app/_lib/prisma";
+import { parseDecimals } from "@utils/transform";
 import { auth } from "@clerk/nextjs/server";
 
 export const getAccounts = async () => {
@@ -8,7 +9,7 @@ export const getAccounts = async () => {
     throw new Error("Unauthorized");
   }
 
-  return db.account.findMany({
+  const accounts = await db.account.findMany({
     where: {
       userId,
     },
@@ -16,4 +17,6 @@ export const getAccounts = async () => {
       createdAt: "asc",
     },
   });
+
+  return parseDecimals(accounts);
 };

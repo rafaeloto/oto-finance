@@ -1,6 +1,7 @@
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { InvoiceStatus } from "@prisma/client";
+import { parseDecimals } from "@utils/transform";
 
 type params = {
   creditCardId?: string;
@@ -14,11 +15,13 @@ export const getInvoices = async ({ creditCardId, status }: params = {}) => {
     throw new Error("Unauthorized");
   }
 
-  return db.invoice.findMany({
+  const invoices = await db.invoice.findMany({
     where: {
       userId,
       ...(creditCardId && { creditCardId }),
       ...(status && { status }),
     },
   });
+
+  return parseDecimals(invoices);
 };

@@ -2,6 +2,7 @@ import { db } from "@/app/_lib/prisma";
 import { getMonthDateRange } from "@utils/date";
 import { auth } from "@clerk/nextjs/server";
 import { TransactionPaymentMethod, TransactionType } from "@prisma/client";
+import { parseDecimals } from "@utils/transform";
 
 export type getTransactionsParams = {
   name?: string;
@@ -75,10 +76,12 @@ export const getTransactions = async (params: getTransactionsParams = {}) => {
     ];
   }
 
-  return db.transaction.findMany({
+  const transactions = await db.transaction.findMany({
     where: filters,
     orderBy: {
       date: "desc",
     },
   });
+
+  return parseDecimals(transactions);
 };

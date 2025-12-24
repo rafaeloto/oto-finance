@@ -1,5 +1,6 @@
 import { db } from "@/app/_lib/prisma";
 import { Prisma } from "@prisma/client";
+import { parseDecimals } from "@utils/transform";
 
 type params = {
   id?: string;
@@ -12,9 +13,11 @@ const getAccount = async ({ id, client }: params) => {
   // Uses the transactional client, if provided, or the default client.
   const prismaClient = client ?? db;
 
-  return prismaClient.account.findUnique({
+  const account = await prismaClient.account.findUnique({
     where: { id },
   });
+
+  return parseDecimals(account);
 };
 
 export default getAccount;

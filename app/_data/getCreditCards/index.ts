@@ -1,5 +1,6 @@
 import { db } from "@/app/_lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { parseDecimals } from "@utils/transform";
 
 export const getCreditCards = async () => {
   const { userId } = await auth();
@@ -8,7 +9,7 @@ export const getCreditCards = async () => {
     throw new Error("Unauthorized");
   }
 
-  return db.creditCard.findMany({
+  const creditCards = await db.creditCard.findMany({
     where: {
       userId,
     },
@@ -16,4 +17,6 @@ export const getCreditCards = async () => {
       createdAt: "asc",
     },
   });
+
+  return parseDecimals(creditCards);
 };
