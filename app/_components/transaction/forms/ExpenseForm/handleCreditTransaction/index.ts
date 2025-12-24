@@ -80,13 +80,30 @@ const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
         const installmentDetails = Array.from({ length: installments! }).map(
           (_, index) => {
             const date = new Date(transactionDate);
-            date.setMonth(date.getMonth() + index);
+            const targetMonth = date.getMonth() + index;
+            date.setMonth(targetMonth);
 
-            const month = ((installmentMonth + index - 1) % 12) + 1;
-            const year =
+            // Handle month transitions when the target month has fewer days than the current date
+            // Example: When adding 1 month to 31/10/2025:
+            // - Target month: 10 (November, 0-indexed)
+            // - date.setMonth(10) would set to 31/11/2025 (invalid)
+            // - JavaScript auto-corrects to 01/12/2025 (December)
+            // - We detect this by checking if the month changed unexpectedly
+            // - If so, set the date to the last day of the target month (30/11/2025)
+            if (date.getMonth() !== targetMonth % 12) {
+              date.setDate(0);
+            }
+
+            const invoiceMonth = ((installmentMonth + index - 1) % 12) + 1;
+            const invoiceYear =
               installmentYear + Math.floor((installmentMonth + index - 1) / 12);
 
-            return { date, month, year, number: index + 1 };
+            return {
+              date,
+              invoiceMonth,
+              invoiceYear,
+              number: index + 1,
+            };
           },
         );
 
@@ -97,8 +114,8 @@ const handleCreditTransaction = async (props: HandleCreditTransactionProps) => {
             const installmentInvoice = await findOrOpenInvoice({
               userId,
               cardId: data.cardId!,
-              invoiceMonth: installment.month,
-              invoiceYear: installment.year,
+              invoiceMonth: installment.invoiceMonth,
+              invoiceYear: installment.invoiceYear,
               client: prismaClient,
             });
 
