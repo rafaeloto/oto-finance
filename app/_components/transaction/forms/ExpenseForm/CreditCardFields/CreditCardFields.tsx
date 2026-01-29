@@ -65,29 +65,35 @@ const CreditCardFields = ({ transaction }: CreditCardFieldsProps) => {
     [invoiceMonth, invoiceOptions],
   );
 
-  // Ensures the selected invoice is valid
+  // Handles invoice validation and setting
   useEffect(() => {
-    if (!invoiceOptions.some((option) => option.value === invoiceMonth)) {
-      setValue("invoiceMonth", undefined);
-      setValue("invoiceYear", undefined);
-    }
-  }, [invoiceOptions, invoiceMonth, setValue]);
-
-  // Clears the invoiceMonth and invoiceYear when
-  // the card or date are undefined, and selects the first
-  // available invoice when those values change
-  useEffect(() => {
+    // Clear invoice if no date or card selected
     if (!selectedDate || !selectedCard) {
       setValue("invoiceMonth", undefined);
       setValue("invoiceYear", undefined);
       return;
     }
 
-    const fisrtInvoice = invoiceOptions[1];
-    setValue("invoiceMonth", fisrtInvoice?.value);
-    setValue("invoiceYear", fisrtInvoice?.year);
-    clearErrors(["invoiceMonth", "invoiceYear"]);
-  }, [selectedDate, selectedCard, invoiceOptions, setValue, clearErrors]);
+    // Check if current invoice is valid for the selected date/card
+    const iscurrentInvoiceValid = invoiceOptions.some(
+      (option) => option.value === invoiceMonth,
+    );
+
+    if (!iscurrentInvoiceValid) {
+      // Set to middle invoice for creation flow or when current invoice is invalid
+      const middleInvoice = invoiceOptions[1];
+      setValue("invoiceMonth", middleInvoice?.value);
+      setValue("invoiceYear", middleInvoice?.year);
+      clearErrors(["invoiceMonth", "invoiceYear"]);
+    }
+  }, [
+    selectedDate,
+    selectedCard,
+    invoiceOptions,
+    invoiceMonth,
+    setValue,
+    clearErrors,
+  ]);
 
   return (
     <>
