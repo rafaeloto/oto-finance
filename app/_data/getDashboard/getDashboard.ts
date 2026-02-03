@@ -128,7 +128,7 @@ export const getDashboard = async (
 
   const investmentsEvolution = investmentsBalance + investmentsResult;
 
-  const result = gainsTotal + investmentsResult - expensesTotal;
+  const result = gainsTotal - expensesTotal;
 
   const [expensesPerCategory, gainsPerCategory] = await Promise.all([
     // expensesPerCategory
