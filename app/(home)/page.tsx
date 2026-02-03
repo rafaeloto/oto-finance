@@ -16,15 +16,21 @@ interface HomeProps {
     month: string;
     year: string;
     ignoreLoans?: string;
+    cashflowView?: string;
   };
 }
 
 const Home = async ({
-  searchParams: { month, year, ignoreLoans },
+  searchParams: { month, year, ignoreLoans, cashflowView },
 }: HomeProps) => {
   const { validMonth, validYear } = getValidDateFromParams(month, year);
 
-  const dashboard = await getDashboard(validMonth, validYear, ignoreLoans);
+  const dashboard = await getDashboard(
+    validMonth,
+    validYear,
+    ignoreLoans,
+    cashflowView,
+  );
   const canUserAddTransaction = await getCanUserAddTransaction();
   const user = await getUser();
 

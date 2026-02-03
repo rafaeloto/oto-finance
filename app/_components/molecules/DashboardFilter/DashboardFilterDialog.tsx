@@ -15,11 +15,13 @@ import TimeSelect from "@molecules/TimeSelect";
 import { useState, useEffect } from "react";
 import SwitchFilter from "@molecules/SwitchFilter";
 import LoanTooltip from "@molecules/LoanTooltip";
+import CashflowTooltip from "@molecules/CashflowTooltip";
 
 export type DashboardFilters = {
   month: string;
   year: string;
   ignoreLoans: boolean;
+  cashflowView: boolean;
 };
 
 type DashboardFilterDialogProps = {
@@ -38,6 +40,7 @@ const DashboardFilterDialog = ({
     month: "",
     year: "",
     ignoreLoans: false,
+    cashflowView: false,
   });
 
   // Fills the filters with the URL values when opening the modal
@@ -47,6 +50,7 @@ const DashboardFilterDialog = ({
         month: searchParams.get("month") || "",
         year: searchParams.get("year") || "",
         ignoreLoans: searchParams.get("ignoreLoans") === "true",
+        cashflowView: searchParams.get("cashflowView") === "true",
       });
     }
   }, [open, searchParams]);
@@ -82,6 +86,18 @@ const DashboardFilterDialog = ({
             }
             isInsideModal
             tooltip={<LoanTooltip context="dashboard" />}
+            label="Ignorar empréstimos"
+          />
+
+          <SwitchFilter
+            paramKey="cashflowView"
+            value={filters.cashflowView}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, cashflowView: value }))
+            }
+            isInsideModal
+            tooltip={<CashflowTooltip />}
+            label="Visão caixa"
           />
         </div>
 

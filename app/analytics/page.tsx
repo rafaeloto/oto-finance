@@ -12,15 +12,21 @@ interface HomeProps {
     month: string;
     year: string;
     ignoreLoans?: string;
+    cashflowView?: string;
   };
 }
 
 const Analytics = async ({
-  searchParams: { month, year, ignoreLoans },
+  searchParams: { month, year, ignoreLoans, cashflowView },
 }: HomeProps) => {
   const { validMonth, validYear } = getValidDateFromParams(month, year);
 
-  const analytics = await getAnalytics(validMonth, validYear, ignoreLoans);
+  const analytics = await getAnalytics(
+    validMonth,
+    validYear,
+    ignoreLoans,
+    cashflowView,
+  );
 
   return (
     <>

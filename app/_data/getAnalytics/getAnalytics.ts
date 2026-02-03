@@ -1,9 +1,8 @@
 import { db } from "@/app/_lib/prisma";
 import { TransactionType } from "@prisma/client";
-import { getMonthDateRange } from "@utils/date";
+import { getTransactionsWhereClause } from "@/app/_utils/transaction";
 import { auth } from "@clerk/nextjs/server";
 import { getCategories } from "@data/getCategories";
-import { GAIN_MAP, EXPENSE_MAP } from "@constants/category";
 import { getCategorizedAmounts } from "../getCategorizedAmounts";
 import { getSubCategorizedAmounts } from "../getSubCategorizedAmounts";
 
@@ -11,6 +10,7 @@ export const getAnalytics = async (
   month: string,
   year: string,
   ignoreLoans?: string,
+  cashflowView?: string,
 ) => {
   const { userId } = await auth();
 
@@ -18,18 +18,13 @@ export const getAnalytics = async (
     throw new Error("Unauthorized");
   }
 
-  const { start, end } = getMonthDateRange(month, year);
-
-  const where = {
+  const where = getTransactionsWhereClause(
+    month,
+    year,
     userId,
-    date: {
-      gte: start,
-      lte: end,
-    },
-    ...(ignoreLoans === "true" && {
-      NOT: [{ categoryId: GAIN_MAP.LOAN }, { categoryId: EXPENSE_MAP.LOAN }],
-    }),
-  };
+    ignoreLoans === "true",
+    cashflowView === "true",
+  );
 
   const [gainsTotal, expensesTotal, categories, lastTransactions] =
     await Promise.all([

@@ -9,6 +9,7 @@ import { useState } from "react";
 import DashboardFilterDialog from "./DashboardFilterDialog";
 import { useSearchParams } from "next/navigation";
 import LoanTooltip from "@molecules/LoanTooltip";
+import CashflowTooltip from "@molecules/CashflowTooltip";
 
 const DashboardFilter = () => {
   const [open, setOpen] = useState(false);
@@ -27,9 +28,17 @@ const DashboardFilter = () => {
       {/* Desktop */}
       <div className="hidden space-x-4 md:flex">
         <TimeSelect />
+
         <SwitchFilter
           paramKey="ignoreLoans"
           tooltip={<LoanTooltip context="dashboard" />}
+          label="Ignorar empréstimos"
+        />
+
+        <SwitchFilter
+          paramKey="cashflowView"
+          tooltip={<CashflowTooltip />}
+          label="Visão caixa"
         />
       </div>
 

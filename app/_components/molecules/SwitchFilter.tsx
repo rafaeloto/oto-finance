@@ -10,6 +10,7 @@ import { cn } from "@/app/_lib/utils";
 
 type SwitchFilterProps = {
   paramKey: string;
+  label: string;
   value?: boolean;
   onChange?: (value: boolean) => void;
   className?: string;
@@ -19,6 +20,7 @@ type SwitchFilterProps = {
 
 const SwitchFilter = ({
   paramKey,
+  label,
   value,
   onChange,
   className,
@@ -83,7 +85,7 @@ const SwitchFilter = ({
             }
           }}
         >
-          Ignorar empréstimos
+          {label}
         </Label>
       </div>
 

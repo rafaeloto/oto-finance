@@ -1,12 +1,10 @@
 import { db } from "@/app/_lib/prisma";
 import { TransactionType } from "@prisma/client";
-import { getMonthDateRange } from "@utils/date";
+import { getTransactionsWhereClause } from "@utils/transaction";
 import { auth } from "@clerk/nextjs/server";
 import { getTotalBalance } from "@data/getTotalBalance";
 import { getCategories } from "@data/getCategories";
 import {
-  GAIN_MAP,
-  EXPENSE_MAP,
   INVESTMENT_DEPOSIT_ID,
   INVESTMENT_WITHDRAW_ID,
   NEGATIVE_RETURN_ID,
@@ -18,6 +16,7 @@ export const getDashboard = async (
   month: string,
   year: string,
   ignoreLoans?: string,
+  cashflowView?: string,
 ) => {
   const { userId } = await auth();
 
@@ -25,18 +24,13 @@ export const getDashboard = async (
     throw new Error("Unauthorized");
   }
 
-  const { start, end } = getMonthDateRange(month, year);
-
-  const where = {
+  const where = getTransactionsWhereClause(
+    month,
+    year,
     userId,
-    date: {
-      gte: start,
-      lte: end,
-    },
-    ...(ignoreLoans === "true" && {
-      NOT: [{ categoryId: GAIN_MAP.LOAN }, { categoryId: EXPENSE_MAP.LOAN }],
-    }),
-  };
+    ignoreLoans === "true",
+    cashflowView === "true",
+  );
 
   const [
     gainsTotal,
