@@ -5,6 +5,7 @@ import CreditCardUnity from "./_components/CreditCardUnity";
 import EmptyListFeedback from "@atoms/EmptyListFeedback";
 import { getCreditCards } from "@data/getCreditCards";
 import { getUser } from "@data/getUser";
+import InvoiceUpdater from "@molecules/InvoiceUpdater";
 
 const CreditCards = async () => {
   const creditCards = await getCreditCards();
@@ -39,6 +40,8 @@ const CreditCards = async () => {
           </ScrollArea>
         )}
       </div>
+
+      <InvoiceUpdater />
     </>
   );
 };

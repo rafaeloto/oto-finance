@@ -3,7 +3,6 @@ import { Mulish } from "next/font/google";
 import "./globals.css";
 import Providers from "@contexts/Providers";
 import { Toaster } from "sonner";
-import InvoiceUpdater from "@molecules/InvoiceUpdater";
 
 const mulish = Mulish({
   subsets: ["latin-ext"],
@@ -26,7 +25,6 @@ export default function RootLayout({
           <div className="flex h-full flex-col overflow-hidden">{children}</div>
         </Providers>
 
-        <InvoiceUpdater />
         <Toaster />
       </body>
     </html>
