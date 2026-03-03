@@ -37,24 +37,37 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
   } = props;
   const isDesktop = useIsDesktop();
 
+  type GetFilteredInvoicesProps = {
+    status: InvoiceStatus;
+    orderBy?: "ASC" | "DESC";
+  };
+
   // Function to filter invoices by status and sort them
   const getFilteredInvoices = useCallback(
-    (status: InvoiceStatus) =>
+    ({ status, orderBy = "ASC" }: GetFilteredInvoicesProps) =>
       invoices
         .filter((invoice) => invoice.status === status)
         .sort((a, b) => {
           if (a.year === b.year) {
-            return a.month - b.month;
+            return orderBy === "ASC" ? a.month - b.month : b.month - a.month;
           }
-          return a.year - b.year;
+          return orderBy === "ASC" ? a.year - b.year : b.year - a.year;
         }),
+    [invoices],
+  );
+
+  const hasClosedInvoice = useMemo(
+    () => invoices.some((invoice) => invoice.status === "CLOSED"),
     [invoices],
   );
 
   const [updatingInvoices, setUpdatingInvoices] = useState(false);
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<
     string | undefined
-  >(getFilteredInvoices("OPEN")[0]?.id);
+  >(
+    getFilteredInvoices({ status: hasClosedInvoice ? "CLOSED" : "OPEN" })[0]
+      ?.id,
+  );
 
   const transactionsRef = useRef<HTMLDivElement | null>(null);
 
@@ -128,7 +141,7 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
         {/* Tabs */}
         <Card className="flex flex-1 flex-col overflow-hidden">
           <Tabs
-            defaultValue="OPEN"
+            defaultValue={hasClosedInvoice ? "CLOSED" : "OPEN"}
             className="flex h-full w-full flex-1 flex-col"
           >
             <TabsList className="flex h-14 justify-between px-10">
@@ -148,7 +161,10 @@ const InvoiceDetails = (props: InvoiceDetailsProps) => {
               <TabsContent key={status} value={status} className="h-0 flex-1">
                 <ScrollArea className="h-full">
                   <InvoiceList
-                    invoices={getFilteredInvoices(status)}
+                    invoices={getFilteredInvoices({
+                      status,
+                      orderBy: status === "PAID" ? "DESC" : "ASC",
+                    })}
                     onSelectInvoice={onSelectInvoice}
                     selectedInvoiceId={selectedInvoiceId}
                   />
