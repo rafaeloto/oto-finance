@@ -5,16 +5,18 @@ import { toZonedTime } from "date-fns-tz";
 type GetLocalDateParams = {
   date?: Date | string;
   endOfDay?: boolean;
+  noon?: boolean;
 };
 
 export const getLocalDate = (params?: GetLocalDateParams): Date => {
-  const { date, endOfDay } = params || {};
+  const { date, endOfDay, noon } = params || {};
 
   const timeZone = "America/Sao_Paulo";
   const inputDate = date ? new Date(date) : new Date();
   const zonedDate = toZonedTime(inputDate.toISOString(), timeZone);
 
   if (endOfDay) zonedDate.setHours(23, 59, 59, 999);
+  if (noon) zonedDate.setHours(12, 0, 0, 0);
 
   return zonedDate;
 };

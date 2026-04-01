@@ -74,7 +74,7 @@ const InvestmentForm = ({
     amount: Number(transaction?.amount) || 0,
     categoryId: transaction?.categoryId || categories[0]?.id,
     accountId: transaction?.accountId || "",
-    date: getLocalDate({ date: transaction?.date }),
+    date: getLocalDate({ date: transaction?.date, noon: true }),
   };
 
   const form = useForm({

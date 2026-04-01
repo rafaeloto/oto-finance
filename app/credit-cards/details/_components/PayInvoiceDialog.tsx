@@ -91,7 +91,7 @@ const PayInvoiceDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       paymentAmount: Number(invoice.totalAmount),
-      paymentDate: getLocalDate(),
+      paymentDate: getLocalDate({ noon: true }),
       paidByAccountId: "",
     },
   });
