@@ -64,6 +64,14 @@ export const deleteTransaction = async ({
               accountId,
               transaction: prismaClient,
             });
+          } else if (invoiceId) {
+            // Reverting the credit return: adds the amount back to the invoice total
+            await updateInvoiceAmount({
+              operation: "increment",
+              amount: Number(amount),
+              invoiceId,
+              transaction: prismaClient,
+            });
           }
           break;
 

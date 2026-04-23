@@ -12,7 +12,7 @@ import { Invoice, Transaction } from "@prisma/client";
 import ShouldRender from "@atoms/ShouldRender";
 import useIsDesktop from "@hooks/useIsDesktop";
 import TransactionInstallments from "@molecules/TransactionInstallments";
-import AddExpenseButton from "@components/transaction/buttons/AddExpenseButton";
+import AddTransactionButton from "@components/transaction/buttons/AddTransactionButton";
 import Icon, { type LucideIconName } from "@atoms/Icon";
 
 export type TransactionsByInvoice = {
@@ -66,9 +66,10 @@ const InvoiceTransactions = ({
           </ShouldRender>
         </div>
 
-        <AddExpenseButton
+        <AddTransactionButton
           canUserAddTransaction={canUserAddTransaction}
           short={!isDesktop}
+          visibleOptions={["EXPENSE", "RETURN"]}
         />
       </CardHeader>
 
@@ -77,58 +78,71 @@ const InvoiceTransactions = ({
       ) : (
         <ScrollArea className="flex-1">
           <CardContent className="space-y-6 px-3 py-0 md:px-6">
-            {invoiceTransactions.map((transaction) => (
-              <div
-                key={transaction.id}
-                className="border-b-1 flex items-center justify-between border-b pb-4"
-              >
-                <div className="flex w-[35%] items-center gap-3 md:w-[45%]">
-                  <ShouldRender if={isDesktop}>
-                    <div className="rounded-lg bg-muted p-3">
-                      <Icon
-                        name={
-                          TRANSACTION_PAYMENT_METHOD_ICONS[
-                            transaction.paymentMethod
-                          ] as LucideIconName
-                        }
-                        size={20}
-                        opacity={0.7}
+            {invoiceTransactions.map((transaction) => {
+              const isReturn =
+                transaction.type === "GAIN" &&
+                transaction.paymentMethod === "CREDIT";
+
+              return (
+                <div
+                  key={transaction.id}
+                  className="border-b-1 flex items-center justify-between border-b pb-4"
+                >
+                  <div className="flex w-[35%] items-center gap-3 md:w-[45%]">
+                    <ShouldRender if={isDesktop}>
+                      <div
+                        className={`rounded-lg p-3 ${isReturn ? "bg-primary/30" : "bg-muted"}`}
+                      >
+                        <Icon
+                          name={
+                            TRANSACTION_PAYMENT_METHOD_ICONS[
+                              transaction.paymentMethod
+                            ] as LucideIconName
+                          }
+                          size={20}
+                          opacity={0.7}
+                        />
+                      </div>
+                    </ShouldRender>
+                    <div className="flex gap-3">
+                      <p
+                        className={`text-sm font-bold md:text-base ${isReturn ? "text-primary" : ""}`}
+                      >
+                        {transaction.name}
+                      </p>
+                      <TransactionInstallments transaction={transaction} />
+                    </div>
+                  </div>
+
+                  <p className="w-10 text-sm text-muted-foreground md:w-20 md:text-base">
+                    {new Date(transaction.date).toLocaleDateString("pt-BR", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      ...(isDesktop && { year: "2-digit" }),
+                    })}
+                  </p>
+                  <p
+                    className={`w-20 text-sm font-bold md:w-24 md:text-lg ${isReturn ? "text-primary" : ""}`}
+                  >
+                    {isReturn ? "-" : ""}
+                    {formatCurrency(Number(transaction.amount))}
+                  </p>
+
+                  <ShouldRender if={canChangeTransactions}>
+                    <div className="space-x-3 md:space-x-1">
+                      <EditTransactionButton
+                        transaction={transaction}
+                        noPadding={!isDesktop}
+                      />
+                      <DeleteTransactionButton
+                        transactionId={transaction.id}
+                        noPadding={!isDesktop}
                       />
                     </div>
                   </ShouldRender>
-                  <div className="flex gap-3">
-                    <p className="text-sm font-bold md:text-base">
-                      {transaction.name}
-                    </p>
-                    <TransactionInstallments transaction={transaction} />
-                  </div>
                 </div>
-
-                <p className="w-10 text-sm text-muted-foreground md:w-20 md:text-base">
-                  {new Date(transaction.date).toLocaleDateString("pt-BR", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    ...(isDesktop && { year: "2-digit" }),
-                  })}
-                </p>
-                <p className="w-20 text-sm font-bold md:w-24 md:text-lg">
-                  {formatCurrency(Number(transaction.amount))}
-                </p>
-
-                <ShouldRender if={canChangeTransactions}>
-                  <div className="space-x-3 md:space-x-1">
-                    <EditTransactionButton
-                      transaction={transaction}
-                      noPadding={!isDesktop}
-                    />
-                    <DeleteTransactionButton
-                      transactionId={transaction.id}
-                      noPadding={!isDesktop}
-                    />
-                  </div>
-                </ShouldRender>
-              </div>
-            ))}
+              );
+            })}
           </CardContent>
         </ScrollArea>
       )}

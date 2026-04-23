@@ -28,9 +28,13 @@ export type InstallmentType = "once" | "split" | undefined;
 
 type CreditCardFieldsProps = {
   transaction?: Transaction;
+  hideInstallments?: boolean;
 };
 
-const CreditCardFields = ({ transaction }: CreditCardFieldsProps) => {
+const CreditCardFields = ({
+  transaction,
+  hideInstallments = false,
+}: CreditCardFieldsProps) => {
   const isInstallment = !!transaction?.installmentId;
 
   const { control, watch, setValue, clearErrors } = useFormContext();
@@ -132,7 +136,7 @@ const CreditCardFields = ({ transaction }: CreditCardFieldsProps) => {
           )}
         />
 
-        <ShouldRender if={!isInstallment}>
+        <ShouldRender if={!isInstallment && !hideInstallments}>
           <FormField
             control={control}
             name="installmentType"
@@ -164,7 +168,7 @@ const CreditCardFields = ({ transaction }: CreditCardFieldsProps) => {
           />
         </ShouldRender>
 
-        <ShouldRender if={isInstallment}>
+        <ShouldRender if={isInstallment && !hideInstallments}>
           <div className="flex flex-col items-center gap-2">
             <Label>Parcela</Label>
             <TransactionInstallments transaction={transaction!} />

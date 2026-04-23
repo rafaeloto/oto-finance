@@ -31,6 +31,13 @@ const InvoiceList = ({
     CLOSED: "text-red-500",
   };
 
+  const getAmountColorClass = (invoice: Invoice) => {
+    if (Number(invoice.totalAmount) < 0) {
+      return "text-primary";
+    }
+    return "text-foreground";
+  };
+
   return (
     <div className="flex flex-col space-y-4 pt-4 md:px-4 md:py-4">
       {invoices.map((invoice) => (
@@ -51,7 +58,9 @@ const InvoiceList = ({
             >
               {INVOICE_STATUS_LABELS[invoice.status]}
             </p>
-            <p className="w-1/4 text-sm font-semibold md:text-lg">
+            <p
+              className={`w-1/4 text-sm font-semibold md:text-lg ${getAmountColorClass(invoice)}`}
+            >
               {formatCurrency(Number(invoice.totalAmount))}
             </p>
             <InvoiceButtons
