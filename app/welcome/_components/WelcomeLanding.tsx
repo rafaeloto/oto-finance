@@ -6,13 +6,13 @@ import { SignInButton, SignUpButton } from "@clerk/nextjs";
 import {
   motion,
   type MotionValue,
+  useMotionValue,
   useReducedMotion,
-  useScroll,
   useSpring,
   useTransform,
 } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Button } from "@/app/_components/ui/button";
 
 type WelcomeLandingProps = {
@@ -504,12 +504,45 @@ function AppStory({
 }) {
   const storyRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    container: scrollContainer,
-    target: storyRef,
-    offset: ["start start", "end end"],
-  });
-  const smoothProgress = useSpring(scrollYProgress, {
+  const storyProgress = useMotionValue(0);
+
+  useEffect(() => {
+    const container = scrollContainer.current;
+    const story = storyRef.current;
+
+    if (!container || !story) return;
+
+    const updateProgress = () => {
+      const containerRect = container.getBoundingClientRect();
+      const storyRect = story.getBoundingClientRect();
+      const storyStart =
+        storyRect.top - containerRect.top + container.scrollTop;
+      const storyEnd = storyStart + story.offsetHeight - container.clientHeight;
+      const scrollRange = storyEnd - storyStart;
+      const progress =
+        scrollRange > 0
+          ? (container.scrollTop - storyStart) / scrollRange
+          : container.scrollTop >= storyStart
+            ? 1
+            : 0;
+
+      storyProgress.set(Math.min(1, Math.max(0, progress)));
+    };
+
+    updateProgress();
+    container.addEventListener("scroll", updateProgress, { passive: true });
+
+    const resizeObserver = new ResizeObserver(updateProgress);
+    resizeObserver.observe(container);
+    resizeObserver.observe(story);
+
+    return () => {
+      container.removeEventListener("scroll", updateProgress);
+      resizeObserver.disconnect();
+    };
+  }, [scrollContainer, storyProgress]);
+
+  const smoothProgress = useSpring(storyProgress, {
     stiffness: prefersReducedMotion ? 1000 : 110,
     damping: prefersReducedMotion ? 100 : 30,
     mass: prefersReducedMotion ? 0.01 : 0.28,
